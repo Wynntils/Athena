@@ -53,7 +53,7 @@ object CapeManager {
             description = "➡️ **Choose:** [Approve](${generalConfig.baseUrl}capes/queue/approve/$token/$sha1) " +
                     "or [Ban](${generalConfig.baseUrl}capes/queue/ban/$token/$sha1)\n**SHA-1:** $sha1",
             color = 16776960,
-            imageUrl = "${generalConfig.baseUrl}/capes/queue/get/$sha1"
+            imageUrl = "${generalConfig.baseUrl}capes/queue/get/$sha1"
         )
     }
 
