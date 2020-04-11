@@ -7,10 +7,13 @@ import com.wynntils.athena.core.cache.data.CacheContainer
 import com.wynntils.athena.core.cache.interfaces.DataCache
 import com.wynntils.athena.core.currentTimeMillis
 import com.wynntils.athena.core.enums.Hash
+import com.wynntils.athena.core.getOrCreate
 import com.wynntils.athena.core.runAsync
 import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.core.utils.Logger
 import com.wynntils.athena.errorLog
+import org.json.simple.JSONAware
+import org.json.simple.JSONObject
 import java.nio.charset.StandardCharsets
 import kotlin.reflect.full.findAnnotation
 
@@ -27,7 +30,7 @@ object CacheManager {
     fun refreshCache(cache: DataCache) {
         val info = cache.javaClass.kotlin.findAnnotation<CacheInfo>() ?: return
 
-        fun registerResult(result: JSONOrderedObject) {
+        fun registerResult(result: JSONAware) {
             val resultString = result.toJSONString()
             val resultHash = Hash.MD5.hash(resultString.toByteArray(StandardCharsets.UTF_8))
             val nextRefresh = if (info.refreshRate == 0) 0L else {
@@ -43,16 +46,22 @@ object CacheManager {
                 val ms = currentTimeMillis()
                 val generated = cache.generateCache()
 
-                val request = generated.getOrCreate<JSONOrderedObject>("request")
-                request["lastRefresh"] = ms
+                // applying the request stuff
+                if (generated is JSONObject) {
+                    val request = generated.getOrCreate<JSONObject>("request")
+                    request["lastRefresh"] = ms
+                } else if (generated is JSONOrderedObject) {
+                    val request = generated.getOrCreate<JSONOrderedObject>("request")
+                    request["lastRefresh"] = ms
+                }
 
                 registerResult(generated)
                 cacheLog.info("Successfully Refreshed ${info.name} cache in ${currentTimeMillis() - ms}ms.")
             } catch (ex: Exception) {
+                errorLog.exception("Caught an error while trying to refresh cache ${info.name}", ex)
+
                 if (cacheTable.hasFile("${info.name}.json"))
                     registerResult(cacheTable.getFile("${info.name}.json")!!.asString().asSimpleJson())
-
-                errorLog.exception("Caught an error while trying to refresh cache ${info.name}", ex)
             }
         }
 
@@ -83,7 +92,9 @@ object CacheManager {
             refreshCache(cache.holderReference)
         }
 
-        (cache.value["request"] as JSONOrderedObject)["timeStamp"] = currentTimeMillis()
+        if (cache.value is JSONOrderedObject)
+            (cache.value["request"] as JSONOrderedObject)["timeStamp"] = currentTimeMillis()
+
         return loadedCaches[name]
     }
 

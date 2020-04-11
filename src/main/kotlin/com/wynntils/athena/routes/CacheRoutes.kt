@@ -7,6 +7,7 @@ import com.wynntils.athena.core.routes.annotations.Route
 import com.wynntils.athena.core.routes.enums.RouteType
 import com.wynntils.athena.core.utils.JSONOrderedObject
 import io.javalin.http.Context
+import org.json.simple.JSONAware
 import org.json.simple.JSONObject
 
 /**
@@ -24,10 +25,10 @@ class CacheRoutes {
      * Returns the cache based on the provided name
      */
     @Route(path = "/get/:name", type = RouteType.GET)
-    fun getCache(ctx: Context): JSONOrderedObject {
+    fun getCache(ctx: Context): JSONAware {
         val cache = ctx.pathParam("name")
         if (!CacheManager.isCached(cache)) {
-            ctx.status(400)
+            ctx.status(404)
 
             val result = JSONOrderedObject()
             result["message"] = "There's not a cache with the provided name."

@@ -76,7 +76,7 @@ fun Exception.toPlainString(): String {
 }
 
 fun Context.validIp(): String {
-    return if (headerMap().containsKey("x-forwarded-for")) header("x-forwarded-for")!! // proxies use this header
+    return if (headerMap().containsKey("X-Real-IP")) header("X-Real-IP")!! // proxies use this header
     else ip()
 }
 

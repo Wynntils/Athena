@@ -1,9 +1,9 @@
 package com.wynntils.athena.core.cache.interfaces
 
-import com.wynntils.athena.core.utils.JSONOrderedObject
+import org.json.simple.JSONAware
 
 interface DataCache {
 
-    fun generateCache(): JSONOrderedObject
+    fun generateCache(): JSONAware
 
 }
