@@ -3,6 +3,7 @@ package com.wynntils.athena.routes
 import com.wynntils.athena.core.configs.generalConfig
 import com.wynntils.athena.core.enums.Hash
 import com.wynntils.athena.core.getOrCreate
+import com.wynntils.athena.core.isHuman
 import com.wynntils.athena.core.routes.annotations.BasePath
 import com.wynntils.athena.core.routes.annotations.Route
 import com.wynntils.athena.core.routes.enums.RouteType
@@ -122,6 +123,10 @@ class CapeRoutes {
     @Route(path = "/queue/approve/:token/:sha1", type = RouteType.GET)
     fun approveCape(ctx: Context): JSONObject {
         val result = JSONObject()
+        if (!ctx.isHuman()) {
+            result["message"] = "Hello bot! Unfortunately you're not a human!."
+            return result
+        }
         if (!verifyToken(ctx.pathParam("token"))) {
             result["message"] = "Invalid authorization token."
             return result
@@ -141,6 +146,10 @@ class CapeRoutes {
     @Route(path = "/queue/ban/:token/:sha1", type = RouteType.GET)
     fun banCape(ctx: Context): JSONObject {
         val result = JSONObject()
+        if (!ctx.isHuman()) {
+            result["message"] = "Hello bot! Unfortunately you're not a human!."
+            return result
+        }
         if (!verifyToken(ctx.pathParam("token"))) {
             result["message"] = "Invalid authorization token."
             return result

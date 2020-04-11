@@ -31,6 +31,7 @@ private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
 private val usernamePattern = Pattern.compile("[a-zA-Z0-9_]{1,16}")
 private val uuidPattern = Pattern.compile("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})")
+private val userAgentPattern = Pattern.compile("(Chrome|Opera|Firefox|Safari|Edge)")
 
 fun currentTimeMillis():Long {
     return System.currentTimeMillis()
@@ -99,6 +100,10 @@ fun Context.toInputStream(input: String): InputStream {
 
 fun Context.isAuthenticated(): Boolean {
     return generalConfig.apiKeys.contains(pathParam("apiKey"))
+}
+
+fun Context.isHuman(): Boolean {
+    return userAgent() != null && userAgentPattern.matcher(userAgent().toString()).find()
 }
 
 fun InputStream.toPlainString(): String {
