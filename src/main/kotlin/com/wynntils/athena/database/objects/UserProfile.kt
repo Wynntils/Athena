@@ -2,11 +2,13 @@ package com.wynntils.athena.database.objects
 
 import com.wynntils.athena.core.currentTimeMillis
 import com.wynntils.athena.core.enums.AccountType
+import com.wynntils.athena.core.utils.ZLibHelper
 import com.wynntils.athena.database.data.CosmeticInfo
 import com.wynntils.athena.database.data.DiscordInfo
 import com.wynntils.athena.database.files.FileCabinet
 import com.wynntils.athena.database.files.objects.FileTable
 import com.wynntils.athena.database.interfaces.RethinkObject
+import java.nio.charset.StandardCharsets
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -42,7 +44,7 @@ data class UserProfile(
         val configMap = mutableMapOf<String, String>()
 
         for (name in (getConfigTable().listFiles())) {
-            configMap[name] = getConfigTable().getFile(name)!!.asString()
+            configMap[name] = ZLibHelper.inflate(getConfigTable().getFile(name)!!.retrieveBytes()).toString(StandardCharsets.UTF_8)
         }
 
         return configMap

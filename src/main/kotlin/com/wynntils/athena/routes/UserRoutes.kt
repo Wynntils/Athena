@@ -6,6 +6,7 @@ import com.wynntils.athena.core.getOrCreate
 import com.wynntils.athena.core.routes.annotations.BasePath
 import com.wynntils.athena.core.routes.annotations.Route
 import com.wynntils.athena.core.routes.enums.RouteType
+import com.wynntils.athena.core.utils.ZLibHelper
 import com.wynntils.athena.database.DatabaseManager
 import io.javalin.http.Context
 import org.json.simple.JSONArray
@@ -82,7 +83,9 @@ class UserRoutes {
             uploadResult.add(fileResult)
             fileResult["name"] = file.filename
 
-            if (file.size > 200000) { // bigger than 200kbp
+            val content = ZLibHelper.deflate(file.content.readBytes())
+
+            if (content.size > 200000) { // bigger than 200kbp
                 fileResult["message"] = "The provided configuration is bigger than 200 kilobytes."
                 continue
             }
@@ -91,7 +94,7 @@ class UserRoutes {
                 continue
             }
 
-            user.setConfig(file.filename, file.content.readBytes())
+            user.setConfig(file.filename, content)
             fileResult["message"] = "Configuration stored successfully."
         }
 
