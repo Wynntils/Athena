@@ -1,7 +1,6 @@
 package com.wynntils.athena.routes
 
-import com.google.gson.JsonObject
-import com.wynntils.athena.core.asJson
+import com.wynntils.athena.core.asJSON
 import com.wynntils.athena.core.getOrCreate
 import com.wynntils.athena.core.routes.annotations.BasePath
 import com.wynntils.athena.core.routes.annotations.Route
@@ -31,16 +30,16 @@ class UserRoutes {
     @Route(path = "/updateDiscord", type = RouteType.POST)
     fun updateDiscord(ctx: Context): JSONObject {
         val response = JSONObject()
-        val body = ctx.body().asJson<JsonObject>()
+        val body = ctx.body().asJSON<JSONObject>()
 
-        if (!body.has("authToken") || !body.has("id") || !body.has("username")) {
+        if (!body.contains("authToken") || !body.contains("id") || !body.contains("username")) {
             ctx.status(400)
 
             response["message"] = "Expecting parameters 'authToken', 'id' and 'username'."
             return response
         }
 
-        val user = DatabaseManager.getUserProfile(body["authToken"].asString)
+        val user = DatabaseManager.getUserProfile(body["authToken"] as String)
         if (user == null) {
             ctx.status(400)
 
@@ -48,7 +47,7 @@ class UserRoutes {
             return response
         }
 
-        user.updateDiscord(body["id"].asString, body["username"].asString)
+        user.updateDiscord(body["id"] as String, body["username"] as String)
 
         ctx.status(200)
         response["message"] = "Successfully updated ${user.username} Discord Information."

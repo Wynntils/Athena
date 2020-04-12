@@ -1,6 +1,6 @@
 package com.wynntils.athena.routes.caches
 
-import com.wynntils.athena.core.asSimpleJson
+import com.wynntils.athena.core.asJSON
 import com.wynntils.athena.core.cache.annotations.CacheInfo
 import com.wynntils.athena.core.cache.exceptions.UnexpectedCacheResponse
 import com.wynntils.athena.core.cache.interfaces.DataCache
@@ -25,7 +25,7 @@ class ItemListCache: DataCache {
         connection.readTimeout = 20000
         connection.connectTimeout = 20000
 
-        val input = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asSimpleJson<JSONObject>()
+        val input = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>()
         if (!input.containsKey("items")) throw UnexpectedCacheResponse()
 
         val result = JSONOrderedObject()

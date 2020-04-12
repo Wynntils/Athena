@@ -1,7 +1,7 @@
 package com.wynntils.athena.core.cache
 
 import com.wynntils.athena.cacheDatabase
-import com.wynntils.athena.core.asSimpleJson
+import com.wynntils.athena.core.asJSON
 import com.wynntils.athena.core.cache.annotations.CacheInfo
 import com.wynntils.athena.core.cache.data.CacheContainer
 import com.wynntils.athena.core.cache.interfaces.DataCache
@@ -61,7 +61,7 @@ object CacheManager {
                 errorLog.exception("Caught an error while trying to refresh cache ${info.name}", ex)
 
                 if (cacheTable.hasFile("${info.name}.json"))
-                    registerResult(cacheTable.getFile("${info.name}.json")!!.asString().asSimpleJson())
+                    registerResult(cacheTable.getFile("${info.name}.json")!!.asString().asJSON())
             }
         }
 

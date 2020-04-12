@@ -1,11 +1,11 @@
 package com.wynntils.athena.database.files.data
 
-import com.google.gson.JsonElement
 import com.wynntils.athena.core.enums.Hash
 import com.wynntils.athena.core.profiler.profile
 import com.wynntils.athena.database.files.enums.ActionResult
 import com.wynntils.athena.database.files.objects.FileTable
-import com.wynntils.athena.gson
+import com.wynntils.athena.mapper
+import org.json.simple.JSONAware
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.FileInputStream
@@ -128,8 +128,8 @@ data class FileReference(
      * Converts the file bytes into an JsonElement of T
      * @return a JsonElement equivalent to T
      */
-    inline fun <reified T: JsonElement> asJson(): T {
-        return gson.fromJson(retrieveBytes().toString(StandardCharsets.UTF_8), T::class.java)
+    inline fun <reified T: JSONAware> asJson(): T {
+        return mapper.readValue(retrieveBytes(), T::class.java)
     }
 
     /**

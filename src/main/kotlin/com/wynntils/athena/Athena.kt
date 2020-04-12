@@ -1,6 +1,9 @@
 package com.wynntils.athena
 
-import com.google.gson.Gson
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.rethinkdb.RethinkDB
 import com.wynntils.athena.core.cache.CacheManager
 import com.wynntils.athena.core.configs.generalConfig
 import com.wynntils.athena.core.enums.AsciiColor
@@ -21,7 +24,9 @@ import java.io.File
 
 lateinit var server: Javalin
 
-val gson = Gson()
+val mapper = ObjectMapper()
+    .registerModule(KotlinModule())
+    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
 val generalLog = Logger("general")
 val errorLog = Logger("error")
@@ -29,6 +34,8 @@ val errorLog = Logger("error")
 val cacheDatabase = FileCabinet.getOrCreateDatabase("caches")
 
 private fun main() {
+    RethinkDB.setResultMapper(mapper) // updates jackson mapper to support kotlin data classes
+
     printCoolLogo()
 
     FileCabinet.loadDatabases()

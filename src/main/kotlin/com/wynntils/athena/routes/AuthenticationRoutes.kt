@@ -1,7 +1,6 @@
 package com.wynntils.athena.routes
 
-import com.google.gson.JsonObject
-import com.wynntils.athena.core.asJson
+import com.wynntils.athena.core.asJSON
 import com.wynntils.athena.core.cache.CacheManager
 import com.wynntils.athena.core.getOrCreate
 import com.wynntils.athena.core.routes.annotations.BasePath
@@ -44,15 +43,15 @@ class AuthenticationRoutes {
     @Route(path = "/responseEncryption", type = RouteType.POST)
     fun responseEncryption(ctx: Context): JSONObject {
         val response = JSONObject()
-        val body = ctx.body().asJson<JsonObject>()
+        val body = ctx.body().asJSON<JSONObject>()
 
-        if (!body.has("username") || !body.has("key") || !body.has("version")) {
+        if (!body.containsKey("username") || !body.containsKey("key") || !body.containsKey("version")) {
             ctx.status(400)
             response["message"] = "Expecting parameters 'username', 'key' and 'version'."
             return response
         }
 
-        val profile = authManager.getGameProfile(body["username"].asString, body["key"].asString)
+        val profile = authManager.getGameProfile(body["username"] as String, body["key"] as String)
         if (profile == null) {
             ctx.status(401)
             response["message"] = "The provided username or key is invalid."
@@ -60,7 +59,7 @@ class AuthenticationRoutes {
         }
 
         val user = DatabaseManager.getUserProfile(profile.id.toDashedUUID())!!
-        user.updateAccount(profile.name, body["version"].asString)
+        user.updateAccount(profile.name, body["version"] as String)
 
         ctx.status(200)
         response["message"] = "Authentication code generated."
@@ -73,7 +72,7 @@ class AuthenticationRoutes {
             hashes[entry.key] = entry.value.hash
         }
 
-        generalLog.info("${body["username"].asString} authenticated successfully using ${body["version"].asString}")
+        generalLog.info("${body["username"]} authenticated successfully using ${body["version"]}")
         return response
     }
 

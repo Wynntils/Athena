@@ -2,7 +2,6 @@ package com.wynntils.athena.database.interfaces
 
 import com.rethinkdb.RethinkDB.r
 import com.wynntils.athena.database.DatabaseManager
-import com.wynntils.athena.gson
 
 interface RethinkObject {
 
@@ -10,10 +9,7 @@ interface RethinkObject {
     val id: Any
 
     private fun save(): RethinkObject {
-        val map = gson.fromJson<HashMap<*, *>>(gson.toJson(this), HashMap<Any, Any>().javaClass)
-        map.remove("table")
-
-        r.table(table).insert(map).optArg("conflict", "replace").runNoReply(DatabaseManager.connection)
+        r.table(table).insert(this).optArg("conflict", "replace").runNoReply(DatabaseManager.connection)
         return this
     }
 

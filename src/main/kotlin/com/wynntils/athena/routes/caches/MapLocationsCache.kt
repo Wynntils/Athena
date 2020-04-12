@@ -1,6 +1,6 @@
 package com.wynntils.athena.routes.caches
 
-import com.wynntils.athena.core.asSimpleJson
+import com.wynntils.athena.core.asJSON
 import com.wynntils.athena.core.cache.annotations.CacheInfo
 import com.wynntils.athena.core.cache.exceptions.UnexpectedCacheResponse
 import com.wynntils.athena.core.cache.interfaces.DataCache
@@ -22,7 +22,7 @@ class MapLocationsCache: DataCache {
         connection.readTimeout = 5000
         connection.connectTimeout = 5000
 
-        val result = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asSimpleJson<JSONObject>();
+        val result = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>();
         if (!result.containsKey("locations")) throw UnexpectedCacheResponse()
 
         return result;

@@ -6,7 +6,7 @@ import com.wynntils.athena.core.enums.Hash
 import com.wynntils.athena.core.toPlainString
 import com.wynntils.athena.core.utils.CryptManager
 import com.wynntils.athena.errorLog
-import com.wynntils.athena.gson
+import com.wynntils.athena.mapper
 import java.math.BigInteger
 import java.net.URL
 import java.nio.charset.StandardCharsets
@@ -60,7 +60,7 @@ class MinecraftFakeAuth {
             connection.inputStream.close()
             if (!result.contains("{")) return null // just a simple verification to check if it's a valid json
 
-            return gson.fromJson(result, GameProfile::class.java) // converts the json result to GameProfile
+            return mapper.readValue(result, GameProfile::class.java) // converts the json result to GameProfile
         } catch (ex: java.lang.Exception) {
             return null
         }

@@ -1,6 +1,6 @@
 package com.wynntils.athena.routes.caches
 
-import com.wynntils.athena.core.asSimpleJson
+import com.wynntils.athena.core.asJSON
 import com.wynntils.athena.core.cache.annotations.CacheInfo
 import com.wynntils.athena.core.cache.interfaces.DataCache
 import com.wynntils.athena.core.configs.apiConfig
@@ -28,7 +28,7 @@ class ServerListCache: DataCache {
         connection.readTimeout = 5000
         connection.connectTimeout = 5000
 
-        val onlinePlayers =  connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asSimpleJson<JSONObject>()
+        val onlinePlayers =  connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>()
 
         val servers = result.getOrCreate<JSONOrderedObject>("servers")
 

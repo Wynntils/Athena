@@ -1,6 +1,6 @@
 package com.wynntils.athena.routes.caches
 
-import com.wynntils.athena.core.asSimpleJson
+import com.wynntils.athena.core.asJSON
 import com.wynntils.athena.core.cache.annotations.CacheInfo
 import com.wynntils.athena.core.cache.interfaces.DataCache
 import com.wynntils.athena.core.configs.apiConfig
@@ -24,7 +24,7 @@ class TerritoryListCache: DataCache {
         connection.readTimeout = 5000
         connection.connectTimeout = 5000
 
-        val scyuTerritories =  connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asSimpleJson<JSONArray>()
+        val scyuTerritories =  connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONArray>()
 
         connection = URL(apiConfig.wynnTerritories).openConnection()
         connection.setRequestProperty("User-Agent", generalConfig.userAgent)
@@ -32,7 +32,7 @@ class TerritoryListCache: DataCache {
         connection.connectTimeout = 5000
 
         val wynnTerritories = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8)
-            .asSimpleJson<JSONObject>()["territories"] as JSONObject
+            .asJSON<JSONObject>()["territories"] as JSONObject
 
         val response = JSONOrderedObject()
         val result = response.getOrCreate<JSONOrderedObject>("territories")

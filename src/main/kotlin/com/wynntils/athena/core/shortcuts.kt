@@ -1,9 +1,7 @@
 package com.wynntils.athena.core
 
-import com.google.gson.JsonElement
 import com.wynntils.athena.core.configs.generalConfig
 import com.wynntils.athena.core.enums.AsciiColor
-import com.wynntils.athena.gson
 import io.javalin.core.util.Header
 import io.javalin.http.Context
 import org.json.simple.JSONAware
@@ -109,11 +107,7 @@ fun InputStream.toPlainString(): String {
     return bufferedReader(StandardCharsets.UTF_8).use(BufferedReader::readText)
 }
 
-inline fun <reified T: JsonElement> String.asJson(): T {
-    return gson.fromJson(this, T::class.java)
-}
-
-inline fun <reified T: JSONAware> String.asSimpleJson(): T {
+inline fun <reified T: JSONAware> String.asJSON(): T {
     return JSONParser().parse(this) as T
 }
 

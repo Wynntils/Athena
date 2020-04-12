@@ -1,6 +1,6 @@
 package com.wynntils.athena.routes.managers
 
-import com.wynntils.athena.core.asSimpleJson
+import com.wynntils.athena.core.asJSON
 import com.wynntils.athena.core.configs.apiConfig
 import com.wynntils.athena.core.configs.generalConfig
 import com.wynntils.athena.database.DatabaseManager
@@ -28,7 +28,7 @@ object GuildManager {
         connection.connectTimeout = 5000
         connection.readTimeout = 5000
 
-        val input = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asSimpleJson<JSONObject>()
+        val input = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>()
         if (input.containsKey("error")) return null
 
         val profile = GuildProfile(name, input["prefix"] as String)

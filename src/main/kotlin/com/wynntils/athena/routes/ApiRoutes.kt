@@ -8,7 +8,7 @@ import com.wynntils.athena.core.routes.annotations.BasePath
 import com.wynntils.athena.core.routes.annotations.Route
 import com.wynntils.athena.core.routes.enums.RouteType
 import com.wynntils.athena.database.DatabaseManager
-import com.wynntils.athena.gson
+import com.wynntils.athena.mapper
 import io.javalin.http.Context
 import org.json.simple.JSONObject
 import java.util.*
@@ -54,7 +54,7 @@ class ApiRoutes {
         }
 
         response["message"] = "Successfully reached player information."
-        response["result"] = gson.fromJson<HashMap<*, *>>(gson.toJson(user), HashMap<Any, Any>().javaClass)
+        response["result"] = mapper.readValue(mapper.writeValueAsBytes(user), JSONObject::class.java)
 
         return response
     }
