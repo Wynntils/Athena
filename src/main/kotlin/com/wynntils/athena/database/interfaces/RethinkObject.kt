@@ -1,8 +1,10 @@
 package com.wynntils.athena.database.interfaces
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.rethinkdb.RethinkDB.r
 import com.wynntils.athena.database.DatabaseManager
 
+@JsonIgnoreProperties(value = [ "table" ])
 interface RethinkObject {
 
     val table: String

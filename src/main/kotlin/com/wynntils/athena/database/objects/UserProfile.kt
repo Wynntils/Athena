@@ -1,5 +1,6 @@
 package com.wynntils.athena.database.objects
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.wynntils.athena.core.currentTimeMillis
 import com.wynntils.athena.core.enums.AccountType
 import com.wynntils.athena.core.utils.ZLibHelper
@@ -31,7 +32,7 @@ data class UserProfile(
     override val table: String = "users"
 ): RethinkObject {
 
-    @Transient
+    @JsonIgnore
     private var configFiles: FileTable? = null
 
     private fun getConfigTable(): FileTable {

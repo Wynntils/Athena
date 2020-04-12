@@ -21,17 +21,15 @@ object DatabaseManager {
 
     fun getUserProfile(id: UUID, create: Boolean = true): UserProfile? {
         val requestResult = r.table("users").get(id.toString()).run(connection, UserProfile::class.java)
-        if (requestResult.hasNext()) return requestResult.next()
 
-        return if (create) UserProfile(id) else null
+        return requestResult.first() ?: if (create) UserProfile(id) else null
     }
 
     fun getUserProfile(token: String): UserProfile? {
         val requestResult = r.table("users").filter(r.hashMap("authToken", token))
             .limit(1).run(connection, UserProfile::class.java)
-        if (!requestResult.hasNext()) return null
 
-        return requestResult.next()
+        return requestResult.first()
     }
 
     fun getUsersProfiles(name: String): List<UserProfile> {
@@ -47,9 +45,8 @@ object DatabaseManager {
 
     fun getGuildProfile(name: String): GuildProfile? {
         val requestResult = r.table("guilds").get(name).run(connection, GuildProfile::class.java)
-        if (!requestResult.hasNext()) return null;
 
-        return requestResult.next()
+        return requestResult.first()
     }
 
 }

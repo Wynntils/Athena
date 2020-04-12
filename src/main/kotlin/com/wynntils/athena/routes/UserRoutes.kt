@@ -41,7 +41,7 @@ class UserRoutes {
 
         val user = DatabaseManager.getUserProfile(body["authToken"] as String)
         if (user == null) {
-            ctx.status(400)
+            ctx.status(401)
 
             response["message"] = "The provided Authorization Token is invalid."
             return response
@@ -70,7 +70,7 @@ class UserRoutes {
 
         val user = DatabaseManager.getUserProfile(ctx.formParams("authToken").first())
         if (user == null) {
-            ctx.status(400)
+            ctx.status(401)
 
             response["message"] = "The provided Authorization Token is invalid."
             return response
