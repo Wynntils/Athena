@@ -57,7 +57,6 @@ inline fun <reified T: JSONAware> JSONObject.getOrCreate(key: String): T {
     return getOrPut(key, { T::class.java.newInstance() }) as T
 }
 
-
 fun <K: Any, V: Any?> HashMap<K, V>.cleanNull() {
     val it = iterator()
     while (it.hasNext()) {
@@ -117,7 +116,6 @@ inline fun <reified T: JsonElement> String.asJson(): T {
 inline fun <reified T: JSONAware> String.asSimpleJson(): T {
     return JSONParser().parse(this) as T
 }
-
 
 fun printCoolLogo() {
     println(AsciiColor.RED.ascii + "\n" +

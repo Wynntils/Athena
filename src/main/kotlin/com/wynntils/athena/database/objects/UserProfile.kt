@@ -5,6 +5,7 @@ import com.wynntils.athena.core.enums.AccountType
 import com.wynntils.athena.database.data.CosmeticInfo
 import com.wynntils.athena.database.data.DiscordInfo
 import com.wynntils.athena.database.files.FileCabinet
+import com.wynntils.athena.database.files.objects.FileTable
 import com.wynntils.athena.database.interfaces.RethinkObject
 import java.util.*
 import kotlin.collections.HashMap
@@ -29,24 +30,30 @@ data class UserProfile(
 ): RethinkObject {
 
     @Transient
-    private var configFiles = FileCabinet.getOrCreateDatabase("userConfigs").getOrCreateTable(id.toString())
+    private var configFiles: FileTable? = null
+
+    private fun getConfigTable(): FileTable {
+        if (configFiles == null) configFiles = FileCabinet.getOrCreateDatabase("userConfigs").getOrCreateTable(id.toString());
+
+        return configFiles!!
+    }
 
     fun getConfigFiles(): Map<String, String> {
         val configMap = mutableMapOf<String, String>()
 
-        for (name in configFiles.listFiles()) {
-            configMap[name] = configFiles.getFile(name)!!.asString()
+        for (name in (getConfigTable().listFiles())) {
+            configMap[name] = getConfigTable().getFile(name)!!.asString()
         }
 
         return configMap
     }
 
     fun getConfigAmount(): Int {
-        return configFiles.fileAmount()
+        return getConfigTable().fileAmount()
     }
 
     fun setConfig(name: String, data: ByteArray) {
-        configFiles.insertFile(name, data, true)
+        getConfigTable().insertFile(name, data, true)
     }
 
     fun updateAccount(name: String, version: String): UUID {

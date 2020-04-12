@@ -62,7 +62,7 @@ class TerritoryListCache: DataCache {
             final["guild"] = guild.id
             final["guildPrefix"] = guild.prefix
             final["guildColor"] = guild.color
-            final["acquire"] = wynn["acquired"]
+            final["acquired"] = wynn["acquired"]
             final["attacker"] = wynn["attacker"]
             final["level"] = territory["level"]
             final["location"] = location

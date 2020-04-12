@@ -62,7 +62,6 @@ class MinecraftFakeAuth {
 
             return gson.fromJson(result, GameProfile::class.java) // converts the json result to GameProfile
         } catch (ex: java.lang.Exception) {
-            println("DEU ERRO PORRA " + ex.toPlainString())
             return null
         }
     }
