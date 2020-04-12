@@ -4,3 +4,7 @@ build
 ~/data
 gradle
 out
+.classpath
+/bin/
+.project
+/.settings/

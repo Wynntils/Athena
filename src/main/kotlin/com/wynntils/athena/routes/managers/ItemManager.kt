@@ -97,7 +97,7 @@ object ItemManager {
             if (value !is Long || value == 0L) continue
             val translatedName = translateStatusName(key as String) ?: continue
 
-            val status = statuses.getOrCreate<JSONOrderedObject>(key)
+            val status = statuses.getOrCreate<JSONOrderedObject>(translatedName)
             status["type"] = getStatusType(translatedName)
             status["isFixed"] = isFixed(translatedName)
             status["baseValue"] = value
