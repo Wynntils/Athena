@@ -1,19 +1,14 @@
 package com.wynntils.athena.core.cache
 
 import com.wynntils.athena.cacheDatabase
-import com.wynntils.athena.core.asJSON
 import com.wynntils.athena.core.cache.annotations.CacheInfo
 import com.wynntils.athena.core.cache.data.CacheContainer
 import com.wynntils.athena.core.cache.interfaces.DataCache
 import com.wynntils.athena.core.currentTimeMillis
 import com.wynntils.athena.core.enums.Hash
-import com.wynntils.athena.core.getOrCreate
 import com.wynntils.athena.core.runAsync
-import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.core.utils.Logger
 import com.wynntils.athena.errorLog
-import org.json.simple.JSONAware
-import org.json.simple.JSONObject
 import java.nio.charset.StandardCharsets
 import kotlin.reflect.full.findAnnotation
 
@@ -30,14 +25,13 @@ object CacheManager {
     fun refreshCache(cache: DataCache) {
         val info = cache.javaClass.kotlin.findAnnotation<CacheInfo>() ?: return
 
-        fun registerResult(result: JSONAware) {
-            val resultString = result.toJSONString()
-            val resultHash = Hash.MD5.hash(resultString.toByteArray(StandardCharsets.UTF_8))
+        fun registerResult(result: String) {
+            val resultHash = Hash.MD5.hash(result.toByteArray(StandardCharsets.UTF_8))
             val nextRefresh = if (info.refreshRate == 0) 0L else {
                     currentTimeMillis() + (1000 * info.refreshRate)
             }
 
-            cacheTable.insertFile("${info.name}.json", resultString.toByteArray(StandardCharsets.UTF_8), true)
+            cacheTable.insertFile("${info.name}.json", result.toByteArray(StandardCharsets.UTF_8), true)
             loadedCaches[info.name] = CacheContainer(result, resultHash, nextRefresh, cache)
         }
 
@@ -46,22 +40,13 @@ object CacheManager {
                 val ms = currentTimeMillis()
                 val generated = cache.generateCache()
 
-                // applying the request stuff
-                if (generated is JSONObject) {
-                    val request = generated.getOrCreate<JSONObject>("request")
-                    request["lastRefresh"] = ms
-                } else if (generated is JSONOrderedObject) {
-                    val request = generated.getOrCreate<JSONOrderedObject>("request")
-                    request["lastRefresh"] = ms
-                }
-
-                registerResult(generated)
+                registerResult(generated.toJSONString())
                 cacheLog.info("Successfully Refreshed ${info.name} cache in ${currentTimeMillis() - ms}ms.")
             } catch (ex: Exception) {
                 errorLog.exception("Caught an error while trying to refresh cache ${info.name}", ex)
 
                 if (cacheTable.hasFile("${info.name}.json"))
-                    registerResult(cacheTable.getFile("${info.name}.json")!!.asString().asJSON())
+                    registerResult(cacheTable.getFile("${info.name}.json")!!.asString())
             }
         }
 
@@ -91,9 +76,6 @@ object CacheManager {
             cache.nextRefresh = 0 // avoids that an async thread executes the refresh multiple times
             refreshCache(cache.holderReference)
         }
-
-        if (cache.value is JSONOrderedObject)
-            (cache.value["request"] as JSONOrderedObject)["timeStamp"] = currentTimeMillis()
 
         return loadedCaches[name]
     }
