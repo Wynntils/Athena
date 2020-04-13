@@ -24,6 +24,7 @@ class MapLocationsCache: DataCache {
 
         val result = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>();
         if (!result.containsKey("locations")) throw UnexpectedCacheResponse()
+        result.remove("request")
 
         return result;
     }
