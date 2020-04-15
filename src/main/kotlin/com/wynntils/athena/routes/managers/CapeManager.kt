@@ -25,6 +25,18 @@ object CapeManager {
     }
 
     /**
+     * Get's the approved cape image base64 based on the cape SHA-1
+     *
+     * @param sha1 the cape identification SHA-1
+     * @return a Base64 string with the cape data
+     */
+    fun getCapeAsBase64(sha1: String): String? {
+        val table = database.getOrCreateTable("approved")
+
+        return table.getFile(sha1)?.asBase64()
+    }
+
+    /**
      * Get's the queued cape image file based on the cape SHA-1
      *
      * @param sha1 the cape identification SHA-1

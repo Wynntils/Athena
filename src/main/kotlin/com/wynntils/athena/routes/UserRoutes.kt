@@ -5,11 +5,14 @@ import com.wynntils.athena.core.getOrCreate
 import com.wynntils.athena.core.routes.annotations.BasePath
 import com.wynntils.athena.core.routes.annotations.Route
 import com.wynntils.athena.core.routes.enums.RouteType
+import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.core.utils.ZLibHelper
 import com.wynntils.athena.database.DatabaseManager
+import com.wynntils.athena.routes.managers.CapeManager
 import io.javalin.http.Context
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
+import java.util.*
 
 /**
  * All user related routes
@@ -96,6 +99,36 @@ class UserRoutes {
             user.setConfig(file.filename, content)
             fileResult["message"] = "Configuration stored successfully."
         }
+
+        return response
+    }
+
+    @Route(path = "/getCosmetics", type = RouteType.POST)
+    fun getCosmetics(ctx: Context): JSONOrderedObject {
+        val response = JSONOrderedObject()
+
+        val body = ctx.body().asJSON<JSONObject>()
+        if (!body.contains("uuid")) {
+            ctx.status(400)
+
+            response["message"] = "Expecting parameters 'uuid'."
+            return response
+        }
+
+        val user = DatabaseManager.getUserProfile(UUID.fromString(body["uuid"] as String), false)
+        if (user == null) {
+            ctx.status(400)
+
+            response["message"] = "The provided user does not exists."
+            return response
+        }
+
+        val result = response.getOrCreate<JSONOrderedObject>("result")
+        result["hasEars"] = user.cosmeticInfo.earsEnabled
+        result["hasCape"] = user.cosmeticInfo.hasCape()
+        result["hasElytra"] = user.cosmeticInfo.hasElytra()
+
+        result["texture"] = CapeManager.getCapeAsBase64(user.cosmeticInfo.getFormattedTexture())
 
         return response
     }

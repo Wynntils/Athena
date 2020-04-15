@@ -1,5 +1,6 @@
 package com.wynntils.athena.database.data
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.wynntils.athena.routes.managers.CapeManager
 
 data class CosmeticInfo(
@@ -15,6 +16,7 @@ data class CosmeticInfo(
         return capeTexture.isNotEmpty() && CapeManager.isApproved(capeTexture)
     }
 
+    @JsonIgnore
     fun getFormattedTexture(): String {
         if (isTextureValid()) return capeTexture
         return "defaultCape"

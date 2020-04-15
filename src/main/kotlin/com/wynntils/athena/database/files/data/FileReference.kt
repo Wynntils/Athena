@@ -14,6 +14,7 @@ import java.io.InputStream
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.StandardOpenOption
+import java.util.*
 import javax.imageio.ImageIO
 import javax.imageio.stream.ImageInputStream
 
@@ -130,6 +131,14 @@ data class FileReference(
      */
     inline fun <reified T: JSONAware> asJson(): T {
         return mapper.readValue(retrieveBytes(), T::class.java)
+    }
+
+    /**
+     * Converts the file bytes into a Base64 string
+     * @return a String containing the Base64
+     */
+    fun asBase64(): String {
+        return Base64.getEncoder().encodeToString(retrieveBytes())
     }
 
     /**

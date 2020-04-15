@@ -9,6 +9,7 @@ import com.wynntils.athena.core.enums.Hash
 import com.wynntils.athena.core.runAsync
 import com.wynntils.athena.core.utils.Logger
 import com.wynntils.athena.errorLog
+import java.net.SocketTimeoutException
 import java.nio.charset.StandardCharsets
 import kotlin.reflect.full.findAnnotation
 
@@ -16,7 +17,7 @@ object CacheManager {
 
     private val loadedCaches = HashMap<String, CacheContainer>()
     private val cacheTable = cacheDatabase.getOrCreateTable("data")
-    private val cacheLog = Logger("cache")
+    private val cacheLog = Logger("cache", false)
 
     /**
      * Refreshes and registers cache class
@@ -43,7 +44,8 @@ object CacheManager {
                 registerResult(generated.toJSONString())
                 cacheLog.info("Successfully Refreshed ${info.name} cache in ${currentTimeMillis() - ms}ms.")
             } catch (ex: Exception) {
-                errorLog.exception("Caught an error while trying to refresh cache ${info.name}", ex)
+                if (ex !is SocketTimeoutException)
+                    errorLog.exception("Caught an error while trying to refresh cache ${info.name}", ex)
 
                 if (cacheTable.hasFile("${info.name}.json"))
                     registerResult(cacheTable.getFile("${info.name}.json")!!.asString())
