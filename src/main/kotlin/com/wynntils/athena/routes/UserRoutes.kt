@@ -103,7 +103,7 @@ class UserRoutes {
         return response
     }
 
-    @Route(path = "/getCosmetics", type = RouteType.POST)
+    @Route(path = "/getInfo", type = RouteType.POST)
     fun getCosmetics(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
 
@@ -115,20 +115,23 @@ class UserRoutes {
             return response
         }
 
-        val user = DatabaseManager.getUserProfile(UUID.fromString(body["uuid"] as String), false)
-        if (user == null) {
+        val userProfile = DatabaseManager.getUserProfile(UUID.fromString(body["uuid"] as String), false)
+        if (userProfile == null) {
             ctx.status(400)
 
             response["message"] = "The provided user does not exists."
             return response
         }
 
-        val result = response.getOrCreate<JSONOrderedObject>("result")
-        result["hasEars"] = user.cosmeticInfo.earsEnabled
-        result["hasCape"] = user.cosmeticInfo.hasCape()
-        result["hasElytra"] = user.cosmeticInfo.hasElytra()
+        val user = response.getOrCreate<JSONOrderedObject>("user")
+        user["accountType"] = userProfile.accountType
 
-        result["texture"] = CapeManager.getCapeAsBase64(user.cosmeticInfo.getFormattedTexture())
+        val cosmetic = user.getOrCreate<JSONOrderedObject>("cosmetics")
+        cosmetic["hasEars"] = userProfile.cosmeticInfo.earsEnabled
+        cosmetic["hasCape"] = userProfile.cosmeticInfo.hasCape()
+        cosmetic["hasElytra"] = userProfile.cosmeticInfo.hasElytra()
+
+        cosmetic["texture"] = CapeManager.getCapeAsBase64(userProfile.cosmeticInfo.getFormattedTexture())
 
         return response
     }
