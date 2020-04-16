@@ -7,6 +7,14 @@ enum class AccountType {
     DONATOR,
     CONTENT_TEAM,
     HELPER,
-    MODERATOR,
+    MODERATOR;
+
+    companion object {
+
+        fun valueOr(input: String, or: AccountType = NORMAL): AccountType {
+            return try { valueOf(input) }catch (ex: Exception) { or }
+        }
+
+    }
 
 }

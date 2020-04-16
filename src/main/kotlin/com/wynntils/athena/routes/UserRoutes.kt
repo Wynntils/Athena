@@ -104,7 +104,7 @@ class UserRoutes {
     }
 
     @Route(path = "/getInfo", type = RouteType.POST)
-    fun getCosmetics(ctx: Context): JSONOrderedObject {
+    fun getInfo(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
 
         val body = ctx.body().asJSON<JSONObject>()
