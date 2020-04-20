@@ -46,7 +46,7 @@ class TerritoryListCache: DataCache {
 
             // location stuff
             val start = territory["start"].toString().split(",")
-            val end = territory["start"].toString().split(",")
+            val end = territory["end"].toString().split(",")
 
             val location = final.getOrCreate<JSONOrderedObject>("location")
             location["startX"] = start[0].toInt()
