@@ -79,7 +79,7 @@ object ItemManager {
         val statuses = result.getOrCreate<JSONOrderedObject>("statuses")
 
         result["majorIds"] = input.getOrDefault("majorIds", null)
-        result["restrictions"] = input["restriction"]
+        result["restriction"] = input["restrictions"]
         result["lore"] = input["addedLore"]
 
         for (key in input.keys) {
