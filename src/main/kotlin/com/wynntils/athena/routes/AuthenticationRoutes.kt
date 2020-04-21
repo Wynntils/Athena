@@ -51,6 +51,12 @@ class AuthenticationRoutes {
             return response
         }
 
+        if (body["username"] !is String || body["key"] !is String) {
+            ctx.status(401)
+            response["message"] = "Username or Key is null."
+            return response
+        }
+
         val profile = authManager.getGameProfile(body["username"] as String, body["key"] as String)
         if (profile == null) {
             ctx.status(401)
