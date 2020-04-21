@@ -1,9 +1,7 @@
 package com.wynntils.athena.routes
 
+import com.wynntils.athena.core.*
 import com.wynntils.athena.core.enums.AccountType
-import com.wynntils.athena.core.getOrCreate
-import com.wynntils.athena.core.isAuthenticated
-import com.wynntils.athena.core.isMinecraftUsername
 import com.wynntils.athena.core.profiler.getSections
 import com.wynntils.athena.core.routes.annotations.BasePath
 import com.wynntils.athena.core.routes.annotations.Route
@@ -12,6 +10,7 @@ import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.database.DatabaseManager
 import com.wynntils.athena.database.objects.UserProfile
 import com.wynntils.athena.mapper
+import com.wynntils.athena.routes.managers.GuildManager
 import io.javalin.http.Context
 import org.json.simple.JSONObject
 import java.util.*
@@ -25,6 +24,7 @@ import java.util.*
  *  GET /getUser/:apiKey/:user
  *  GET /setAccountType/:apiKey/:user/:type
  *  GET /setCosmeticTexture/:apiKey/:user/:sha1
+ *  POST /setGuildColor
  *  GET /timings
  */
 @BasePath("/api")
@@ -37,7 +37,7 @@ class ApiRoutes {
     fun getUser(ctx: Context): JSONObject {
         val response = JSONObject()
         if (!ctx.isAuthenticated()) {
-            ctx.status(400)
+            ctx.status(401)
 
             response["message"] = "Invalid API Authorization Key."
             return response;
@@ -64,7 +64,7 @@ class ApiRoutes {
     fun setUserAccount(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
-            ctx.status(400)
+            ctx.status(401)
 
             response["message"] = "Invalid API Authorization Key."
             return response;
@@ -93,7 +93,7 @@ class ApiRoutes {
     fun setCosmeticTexture(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
-            ctx.status(400)
+            ctx.status(401)
 
             response["message"] = "Invalid API Authorization Key."
             return response;
@@ -111,6 +111,47 @@ class ApiRoutes {
         user.asyncSave()
 
         response["message"] = "Successfully set player cosmetic texture sha1."
+        return response
+    }
+
+    @Route(path = "/setGuildColor/:apiKey", type = RouteType.POST)
+    fun setGuildColor(ctx: Context): JSONOrderedObject {
+        val response = JSONOrderedObject()
+        if (!ctx.isAuthenticated()) {
+            ctx.status(401)
+
+            response["message"] = "Invalid API Authorization Key."
+            return response;
+        }
+
+        val body = ctx.body().asJSON<JSONObject>()
+        if (!body.contains("guild") || !body.containsKey("color")) {
+            ctx.status(400)
+
+            response["message"] = "Invalid body, expecting 'guild' and 'color'."
+            return response
+        }
+
+        val guild = GuildManager.getGuildData(body["guild"] as String)
+        if (guild == null) {
+            ctx.status(400)
+
+            response["message"] = "There's not a guild with the provided name."
+            return response;
+        }
+
+        val color = body["color"] as String
+        if (!color.isColorHex()) {
+            ctx.status(400)
+
+            response["message"] = "The provided color is not in the HEX format."
+            return response;
+        }
+
+        guild.color = color
+        guild.asyncSave()
+
+        response["message"] = "Successfully set guild color."
         return response
     }
 

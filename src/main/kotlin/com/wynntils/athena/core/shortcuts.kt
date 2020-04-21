@@ -30,6 +30,7 @@ private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 private val usernamePattern = Pattern.compile("[a-zA-Z0-9_]{1,16}")
 private val uuidPattern = Pattern.compile("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})")
 private val userAgentPattern = Pattern.compile("(Chrome|Opera|Firefox|Safari|Edge)")
+private val colorHexPattern = Pattern.compile("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\$")
 
 fun currentTimeMillis():Long {
     return System.currentTimeMillis()
@@ -49,6 +50,10 @@ fun String.toDashedUUID(): UUID {
 
 fun String.isMinecraftUsername(): Boolean {
     return usernamePattern.matcher(this).matches()
+}
+
+fun String.isColorHex(): Boolean {
+    return colorHexPattern.matcher(this).matches()
 }
 
 inline fun <reified T: JSONAware> JSONObject.getOrCreate(key: String): T {
