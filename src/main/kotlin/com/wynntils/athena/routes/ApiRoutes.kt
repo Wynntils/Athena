@@ -21,9 +21,9 @@ import java.util.*
  * Required Parameters: apiKey
  *
  * Routes:
- *  GET /getUser/:apiKey/:user
- *  GET /setAccountType/:apiKey/:user/:type
- *  GET /setCosmeticTexture/:apiKey/:user/:sha1
+ *  POST /getUser/:apiKey/:user
+ *  POST /setAccountType/:apiKey/:user/:type
+ *  POST /setCosmeticTexture/:apiKey/:user/:sha1
  *  POST /setGuildColor
  *  GET /timings
  */
@@ -33,9 +33,9 @@ class ApiRoutes {
     /**
      * Returns information about the provided user
      */
-    @Route("/getUser/:apiKey/:user", type = RouteType.GET)
-    fun getUser(ctx: Context): JSONObject {
-        val response = JSONObject()
+    @Route("/getUser/:apiKey", type = RouteType.POST)
+    fun getUser(ctx: Context): JSONOrderedObject {
+        val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
             ctx.status(401)
 
@@ -43,7 +43,15 @@ class ApiRoutes {
             return response;
         }
 
-        val user = getUser(ctx.pathParam("user"))
+        val body = ctx.body().asJSON<JSONObject>()
+        if (!body.contains("user")) {
+            ctx.status(400)
+
+            response["message"] = "Invalid body, expecting 'user' param."
+            return response
+        }
+
+        val user = getUser(body["user"] as String)
         if (user == null) {
             ctx.status(400)
 
@@ -60,7 +68,7 @@ class ApiRoutes {
     /**
      * Sets the user account type
      */
-    @Route(path = "/setAccountType/:apiKey/:user/:type", type = RouteType.GET)
+    @Route(path = "/setAccountType/:apiKey", type = RouteType.POST)
     fun setUserAccount(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
@@ -70,7 +78,15 @@ class ApiRoutes {
             return response;
         }
 
-        val user = getUser(ctx.pathParam("user"))
+        val body = ctx.body().asJSON<JSONObject>()
+        if (!body.contains("user") || !body.containsKey("type")) {
+            ctx.status(400)
+
+            response["message"] = "Invalid body, expecting 'user' and 'type'."
+            return response
+        }
+
+        val user = getUser(body["user"] as String)
         if (user == null) {
             ctx.status(400)
 
@@ -78,7 +94,7 @@ class ApiRoutes {
             return response;
         }
 
-        val accountType = AccountType.valueOr(ctx.pathParam("type"))
+        val accountType = AccountType.valueOr(body["type"] as String)
         user.accountType = accountType
         user.asyncSave()
 
@@ -89,7 +105,7 @@ class ApiRoutes {
     /**
      * Sets the user cosmetic texture based on it SHA-1
      */
-    @Route(path = "/setCosmeticTexture/:apiKey/:user/:sha1", type = RouteType.GET)
+    @Route(path = "/setCosmeticTexture/:apiKey", type = RouteType.POST)
     fun setCosmeticTexture(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
@@ -99,7 +115,15 @@ class ApiRoutes {
             return response;
         }
 
-        val user = getUser(ctx.pathParam("user"))
+        val body = ctx.body().asJSON<JSONObject>()
+        if (!body.contains("user") || !body.containsKey("sha1")) {
+            ctx.status(400)
+
+            response["message"] = "Invalid body, expecting 'user' and 'sha1'."
+            return response
+        }
+
+        val user = getUser(body["user"] as String)
         if (user == null) {
             ctx.status(400)
 
@@ -107,7 +131,7 @@ class ApiRoutes {
             return response;
         }
 
-        user.cosmeticInfo.capeTexture = ctx.pathParam("sha1")
+        user.cosmeticInfo.capeTexture = body["sha1"] as String
         user.asyncSave()
 
         response["message"] = "Successfully set player cosmetic texture sha1."
