@@ -39,7 +39,7 @@ class TerritoryListCache: DataCache {
         for(territory in scyuTerritories) {
             territory as JSONObject
 
-            val name = territory["name"] as String ?: continue
+            val name = territory["name"] as String
             val wynn = wynnTerritories[name] as JSONObject
 
             val final = result.getOrCreate<JSONOrderedObject>(name)

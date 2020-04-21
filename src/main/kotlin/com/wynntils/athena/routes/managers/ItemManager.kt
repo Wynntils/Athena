@@ -86,7 +86,7 @@ object ItemManager {
             val value = input[key]
 
             if (key == "armorType") {
-                itemInfo["material"] = "minecraft:${value}_${itemInfo["type"]}".toLowerCase()
+                itemInfo["material"] = "minecraft:${value}_${itemInfo["type"]}".toLowerCase().replace("chain", "chainmail")
                 continue
             }
             if (key == "material" && value != null) {
