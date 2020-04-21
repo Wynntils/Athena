@@ -8,6 +8,7 @@ import com.wynntils.athena.core.routes.annotations.BasePath
 import com.wynntils.athena.core.routes.annotations.Route
 import com.wynntils.athena.core.routes.enums.RouteType
 import com.wynntils.athena.core.toInputStream
+import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.core.utils.Logger
 import com.wynntils.athena.core.validIp
 import com.wynntils.athena.errorLog
@@ -44,6 +45,10 @@ fun Javalin.registerRoutes(clazz: KClass<*>) {
 
                     if (result is InputStream) return result
                     if (result is String) return ctx.toInputStream(result)
+                    if (result is JSONOrderedObject) {
+                        result["request"] = ctx.generateRequestObject()
+                        return ctx.toInputStream(result.toString())
+                    }
                     if (result !is JSONObject) return ctx.toInputStream(result.toString())
 
                     result["request"] = ctx.generateRequestObject()
