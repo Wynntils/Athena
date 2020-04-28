@@ -20,7 +20,7 @@ data class FileTable(
         if (loaded) return
         val files = path.list() ?: return
 
-        profile("FileCabinet-FileTable-Load-${this.name}") { // performance profiling
+        profile("FileCabinet-FileTable-Load-${this.name.replace("-", "")}") { // performance profiling
             files.forEach { this.files += it }
         }
 
@@ -35,7 +35,7 @@ data class FileTable(
     fun getFile(name: String): FileReference? {
         if (!files.contains(name)) return null
 
-        return profile("FileCabinet-FileTable-Get-${this.name}") {
+        return profile("FileCabinet-FileTable-Get-${this.name.replace("-", "")}") {
             FileReference(File(path, name), this)
         }
     }
@@ -65,12 +65,12 @@ data class FileTable(
         if (files.contains(name) && !overlap) return ActionResult.ALREADY_EXISTS
         files += name // adds to the name cache
 
-        profile("FileCabinet-FileTable-Insert-${this.name}") { // performance profiling
-            val file = File(path, name)
+        profile("FileCabinet-FileTable-Insert-${this.name.replace("-", "")}") { // performance profiling
+            if (data == null) return@profile
 
+            val file = File(path, name)
             file.createNewFile()
 
-            if (data == null) return@profile
             val writer = FileOutputStream(file)
             writer.write(data)
             writer.close()
@@ -123,7 +123,7 @@ data class FileTable(
     fun totalSize(): Long {
         var sizeSum = 0L
 
-        profile("FileCabinet-FileTable-TotalSize-$name") { // performance profiling
+        profile("FileCabinet-FileTable-TotalSize-${this.name.replace("-", "")}") { // performance profiling
             files.map { c -> getFile(c) }.forEach {
                 sizeSum += it?.file?.length() ?: 0
             }

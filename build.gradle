@@ -20,6 +20,7 @@ dependencies {
     implementation "io.javalin:javalin:3.7.0"
     implementation "com.googlecode.json-simple:json-simple:1.1.1"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.10.+"
+    implementation "org.mindrot:jbcrypt:0.4"
 }
 
 compileKotlin {

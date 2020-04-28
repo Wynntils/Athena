@@ -162,5 +162,7 @@ class JSONOrderedObject : LinkedHashMap<Any?, Any?>, MutableMap<Any?, Any?>, JSO
         fun escape(s: String?): String {
             return JSONValue.escape(s)
         }
+
     }
+
 }
