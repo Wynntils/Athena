@@ -223,6 +223,7 @@ class ApiRoutes {
         }
 
         user.password = BCrypt.hashpw(body["password"] as String, BCrypt.gensalt(12))
+        user.asyncSave()
 
         response["message"] = "Successfully set user account password."
         return response
@@ -258,7 +259,7 @@ class ApiRoutes {
             return response;
         }
 
-        if (!BCrypt.checkpw(body["password"] as String, user.password)) {
+        if (user.password.isEmpty() || !BCrypt.checkpw(body["password"] as String, user.password)) {
             ctx.status(401)
 
             response["message"] = "The provided password for the selected user is invalid."
