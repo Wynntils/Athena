@@ -39,7 +39,7 @@ data class FileDatabase(
         val folder = File(path, name)
         folder.mkdirs()
 
-        val table = FileTable(name, folder, folder.list()?.asList() ?: ArrayList())
+        val table = FileTable(name, folder, folder.list()?.toHashSet() ?: HashSet())
         table.load()
 
         tables[name] = table

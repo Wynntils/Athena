@@ -11,7 +11,7 @@ data class FileTable(
     val name: String,
     val path: File,
 
-    private var files: List<String>,
+    private var files: HashSet<String>,
     private var loaded: Boolean = false
 
 ) {
@@ -21,7 +21,7 @@ data class FileTable(
         val files = path.list() ?: return
 
         profile("FileCabinet-FileTable-Load-${this.name.replace("-", "")}") { // performance profiling
-            files.forEach { this.files += it }
+            files.forEach { this.files.add(it) }
         }
 
         loaded = true
@@ -63,7 +63,7 @@ data class FileTable(
      */
     fun insertFile(name: String, data: ByteArray? = null, overlap: Boolean = false): ActionResult {
         if (files.contains(name) && !overlap) return ActionResult.ALREADY_EXISTS
-        files += name // adds to the name cache
+        files.add(name) // adds to the name cache
 
         profile("FileCabinet-FileTable-Insert-${this.name.replace("-", "")}") { // performance profiling
             if (data == null) return@profile
@@ -87,7 +87,7 @@ data class FileTable(
      */
     fun deleteFile(name: String): ActionResult {
         if (!files.contains(name)) return ActionResult.INVALID_FILE
-        files -= name
+        files.remove(name)
 
         File(path, name).delete() // wait if the file is being used somewhere
         return ActionResult.SUCCESS
@@ -105,7 +105,7 @@ data class FileTable(
     /**
      * @return a list containing all files **names**
      */
-    fun listFiles(): List<String> {
+    fun listFiles(): HashSet<String> {
         return files
     }
 
