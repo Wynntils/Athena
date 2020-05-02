@@ -208,6 +208,10 @@ object ItemManager {
             "spellCostPct2" -> "2ndSpellCost"
             "spellCostPct3" -> "3rdSpellCost"
             "spellCostPct4" -> "4thSpellCost"
+            "spellCost1Pct" -> "1stSpellCost" // Only Demon Tide uses this format for spell cost
+            "spellCost2Pct" -> "2ndSpellCost"
+            "spellCost3Pct" -> "3rdSpellCost"
+            "spellCost4Pct" -> "4thSpellCost"
             "spellCostRaw1" -> "raw1stSpellCost"
             "spellCostRaw2" -> "raw2ndSpellCost"
             "spellCostRaw3" -> "raw3rdSpellCost"
