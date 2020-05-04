@@ -269,7 +269,7 @@ class ApiRoutes {
         val result = response.getOrCreate<JSONOrderedObject>("result")
         result["uuid"] = user.id.toString()
         result["username"] = user.username
-        result["accountType"] = user.accountType
+        result["accountType"] = user.accountType.toString()
         result["authToken"] = user.authToken.toString()
 
         val versions = result.getOrCreate<JSONOrderedObject>("versions")
