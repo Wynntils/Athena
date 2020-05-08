@@ -34,6 +34,7 @@ class CapeRoutes {
 
     @Route(path = "/get/:id", type = RouteType.GET)
     fun getCape(ctx: Context): InputStream {
+        ctx.header("Access-Control-Allow-Origin", "*")
         ctx.contentType("image/png")
 
         return CapeManager.getCape(ctx.pathParam("id"))
@@ -41,6 +42,7 @@ class CapeRoutes {
 
     @Route(path = "/user/:uuid", type = RouteType.GET)
     fun getUserCape(ctx: Context): InputStream {
+        ctx.header("Access-Control-Allow-Origin", "*")
         ctx.contentType("image/png")
 
         val user = DatabaseManager.getUserProfile(UUID.fromString(ctx.pathParam("uuid")))!!
