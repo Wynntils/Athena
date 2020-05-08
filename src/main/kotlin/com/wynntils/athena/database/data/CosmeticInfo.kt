@@ -8,7 +8,7 @@ data class CosmeticInfo(
     var capeTexture: String = "",
     var elytraEnabled: Boolean = false,
 
-    var earsEnabled: Boolean = false
+    var parts: HashMap<String, Boolean> = HashMap()
 
 ) {
 
@@ -20,6 +20,10 @@ data class CosmeticInfo(
     fun getFormattedTexture(): String {
         if (isTextureValid()) return capeTexture
         return "defaultCape"
+    }
+
+    fun hasPart(part: String): Boolean {
+        return parts.getOrDefault(part, false)
     }
 
     fun hasCape(): Boolean {

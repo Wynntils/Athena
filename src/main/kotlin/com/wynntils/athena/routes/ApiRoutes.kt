@@ -1,10 +1,7 @@
 package com.wynntils.athena.routes
 
-import com.wynntils.athena.core.asJSON
+import com.wynntils.athena.core.*
 import com.wynntils.athena.core.enums.AccountType
-import com.wynntils.athena.core.isAuthenticated
-import com.wynntils.athena.core.isColorHex
-import com.wynntils.athena.core.isMinecraftUsername
 import com.wynntils.athena.core.profiler.getSections
 import com.wynntils.athena.core.routes.annotations.BasePath
 import com.wynntils.athena.core.routes.annotations.Route
@@ -12,7 +9,6 @@ import com.wynntils.athena.core.routes.enums.RouteType
 import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.database.DatabaseManager
 import com.wynntils.athena.database.objects.UserProfile
-import com.wynntils.athena.mapper
 import com.wynntils.athena.routes.managers.GuildManager
 import io.javalin.http.Context
 import org.json.simple.JSONObject
@@ -66,9 +62,32 @@ class ApiRoutes {
             return response
         }
 
-        response["message"] = "Successfully reached player information."
-        response["result"] = mapper.readValue(mapper.writeValueAsBytes(user), JSONObject::class.java)
+        val result = response.getOrCreate<JSONOrderedObject>("result")
+        result["uuid"] = user.id.toString()
+        result["username"] = user.username
+        result["accountType"] = user.accountType.toString()
+        result["authToken"] = user.authToken.toString()
 
+        val versions = result.getOrCreate<JSONOrderedObject>("versions")
+        versions["latest"] = user.latestVersion
+        versions["used"] = user.usedVersions
+
+        val discord = result.getOrCreate<JSONOrderedObject>("discord")
+        discord["username"] = user.discordInfo?.username ?: ""
+        discord["id"] = user.discordInfo?.id ?: ""
+
+        val cosmetics = result.getOrCreate<JSONOrderedObject>("cosmetics")
+        cosmetics["texture"] = user.cosmeticInfo.capeTexture
+        cosmetics["isElytra"] = user.cosmeticInfo.elytraEnabled
+
+        val parts = cosmetics.getOrCreate<JSONOrderedObject>("parts")
+        if (user.cosmeticInfo.parts.isNotEmpty()) {
+            for (part in user.cosmeticInfo.parts) {
+                parts[part.key] = part.value
+            }
+        }
+
+        response["message"] = "Successfully found user account."
         return response
     }
 
@@ -114,7 +133,7 @@ class ApiRoutes {
      * Sets the user cosmetic texture based on it SHA-1
      * Required Body: user, sha1
      */
-    @Route(path = "/setCosmeticTexture/:apiKey", type = RouteType.POST)
+    @Route(path = "/updateCosmetics/:apiKey", type = RouteType.POST)
     fun setCosmeticTexture(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
@@ -125,10 +144,10 @@ class ApiRoutes {
         }
 
         val body = ctx.body().asJSON<JSONObject>()
-        if (!body.contains("user") || !body.containsKey("sha1")) {
+        if (!body.contains("user") || !body.contains("cosmetics")) {
             ctx.status(400)
 
-            response["message"] = "Invalid body, expecting 'user' and 'sha1'."
+            response["message"] = "Invalid body, expecting 'user' and 'cosmetics'."
             return response
         }
 
@@ -140,10 +159,22 @@ class ApiRoutes {
             return response;
         }
 
-        user.cosmeticInfo.capeTexture = body["sha1"] as String
+        val cosmetics = body.getOrCreate<JSONObject>("cosmetics")
+        if (cosmetics.contains("texture"))
+            user.cosmeticInfo.capeTexture = cosmetics["texture"] as String
+        if (cosmetics.contains("isElytra"))
+            user.cosmeticInfo.elytraEnabled = cosmetics["isElytra"] as Boolean
+
+        if (cosmetics.contains("parts")) {
+            val parts = cosmetics.getOrCreate<JSONObject>("parts")
+            for (part in parts.keys) {
+                user.cosmeticInfo.parts[part as String] = parts[part] as Boolean
+            }
+        }
+
         user.asyncSave()
 
-        response["message"] = "Successfully set player cosmetic texture sha1."
+        response["message"] = "Updated users cosmetics successfully."
         return response
     }
 
@@ -285,7 +316,11 @@ class ApiRoutes {
         cosmetics["isElytra"] = user.cosmeticInfo.elytraEnabled
 
         val parts = cosmetics.getOrCreate<JSONOrderedObject>("parts")
-        parts["ears"] = user.cosmeticInfo.earsEnabled
+        if (user.cosmeticInfo.parts.isNotEmpty()) {
+            for (part in user.cosmeticInfo.parts) {
+                parts[part.key] = part.value
+            }
+        }
 
         response["message"] = "Successfully found and validated user account."
         return response

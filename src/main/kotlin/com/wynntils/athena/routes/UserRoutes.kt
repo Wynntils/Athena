@@ -127,9 +127,11 @@ class UserRoutes {
         user["accountType"] = userProfile.accountType
 
         val cosmetic = user.getOrCreate<JSONOrderedObject>("cosmetics")
-        cosmetic["hasEars"] = userProfile.cosmeticInfo.earsEnabled
         cosmetic["hasCape"] = userProfile.cosmeticInfo.hasCape()
         cosmetic["hasElytra"] = userProfile.cosmeticInfo.hasElytra()
+
+        // TODO add parts
+        cosmetic["hasEars"] = userProfile.cosmeticInfo.hasPart("ears")
 
         cosmetic["texture"] = CapeManager.getCapeAsBase64(userProfile.cosmeticInfo.getFormattedTexture())
 
