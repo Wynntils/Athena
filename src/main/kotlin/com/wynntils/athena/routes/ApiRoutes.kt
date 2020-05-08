@@ -131,7 +131,7 @@ class ApiRoutes {
 
     /**
      * Sets the user cosmetic texture based on it SHA-1
-     * Required Body: user, sha1
+     * Required Body: user, cosmeticObject
      */
     @Route(path = "/updateCosmetics/:apiKey", type = RouteType.POST)
     fun setCosmeticTexture(ctx: Context): JSONOrderedObject {
@@ -225,7 +225,7 @@ class ApiRoutes {
 
     /**
      * Sets the user password
-     * Required Body: user, password
+     * Required Body: token, password
      */
     @Route(path = "/setUserPassword/:apiKey", type = RouteType.POST)
     fun setUserPassword(ctx: Context): JSONOrderedObject {
@@ -238,14 +238,14 @@ class ApiRoutes {
         }
 
         val body = ctx.body().asJSON<JSONObject>()
-        if (!body.contains("user") || !body.contains("password")) {
+        if (!body.contains("token") || !body.contains("password")) {
             ctx.status(400)
 
-            response["message"] = "Invalid body, expecting 'user' and 'password'."
+            response["message"] = "Invalid body, expecting 'token' and 'password'."
             return response
         }
 
-        val user = getUser(body["user"] as String)
+        val user = DatabaseManager.getUserProfile(body["token"] as String)
         if (user == null) {
             ctx.status(400)
 
