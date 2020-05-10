@@ -7,6 +7,7 @@ import com.wynntils.athena.core.isHuman
 import com.wynntils.athena.core.routes.annotations.BasePath
 import com.wynntils.athena.core.routes.annotations.Route
 import com.wynntils.athena.core.routes.enums.RouteType
+import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.database.DatabaseManager
 import com.wynntils.athena.routes.managers.CapeManager
 import io.javalin.http.Context
@@ -24,6 +25,7 @@ import javax.imageio.ImageIO
  * Routes:
  *  GET /get/:id
  *  GET /user/:uuid
+ *  GET /list
  *  GET /queue/get/:id
  *  GET /queue/approve/:token/:sha1
  *  GET /queue/ban/:token/:sha1
@@ -47,6 +49,16 @@ class CapeRoutes {
 
         val user = DatabaseManager.getUserProfile(UUID.fromString(ctx.pathParam("uuid")))!!
         return CapeManager.getCape(user.cosmeticInfo.getFormattedTexture())
+    }
+
+    @Route(path = "/list", type = RouteType.GET)
+    fun list(ctx: Context): JSONOrderedObject {
+        val response = JSONOrderedObject()
+
+        val result = response.getOrCreate<JSONArray>("result")
+        CapeManager.listCapes().forEach { result.add(it) }
+
+        return response;
     }
 
     @Route(path = "/queue/get/:id", type = RouteType.GET)

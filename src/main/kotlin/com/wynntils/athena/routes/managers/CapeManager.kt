@@ -37,6 +37,15 @@ object CapeManager {
     }
 
     /**
+     * List all approved capes
+     *
+     * @return a HashSet containing all approved capes SHA-1
+     */
+    fun listCapes(): HashSet<String> {
+        return database.getOrCreateTable("approved").listFiles()
+    }
+
+    /**
      * Get's the queued cape image file based on the cape SHA-1
      *
      * @param sha1 the cape identification SHA-1
