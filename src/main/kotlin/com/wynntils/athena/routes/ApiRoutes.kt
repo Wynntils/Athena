@@ -23,7 +23,7 @@ import java.util.*
  * Routes:
  *  POST /getUser/:apiKey
  *  POST /setAccountType/:apiKey
- *  POST /setCosmeticTexture/:apiKey
+ *  POST /updateCosmetics/:apiKey
  *  POST /setGuildColor/:apiKey
  *  POST /setUserPassword/:apiKey
  *  POST /getUserByPassword/:apiKey

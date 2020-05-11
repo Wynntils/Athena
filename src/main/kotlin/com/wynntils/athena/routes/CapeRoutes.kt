@@ -1,5 +1,6 @@
 package com.wynntils.athena.routes
 
+import com.wynntils.athena.core.asJSON
 import com.wynntils.athena.core.configs.generalConfig
 import com.wynntils.athena.core.enums.Hash
 import com.wynntils.athena.core.getOrCreate
@@ -30,6 +31,7 @@ import javax.imageio.ImageIO
  *  GET /queue/approve/:token/:sha1
  *  GET /queue/ban/:token/:sha1
  *  POST /queue/upload/:token
+ *  POST /delete/:token
  */
 @BasePath("/capes")
 class CapeRoutes {
@@ -59,6 +61,36 @@ class CapeRoutes {
         CapeManager.listCapes().forEach { result.add(it) }
 
         return response;
+    }
+
+    @Route(path = "/delete/:token", type = RouteType.POST)
+    fun delete(ctx: Context): JSONOrderedObject {
+        val result = JSONOrderedObject()
+        if (!verifyToken(ctx.pathParam("token"))) {
+            ctx.status(400)
+
+            result["message"] = "Invalid authorization token."
+            return result
+        }
+
+        val body = ctx.body().asJSON<JSONObject>()
+        if (!body.containsKey("sha-1")) {
+            ctx.status(400)
+
+            result["message"] = "Invalid body, expecting 'sha-1'."
+            return result
+        }
+
+        val sha1 = body["sha-1"] as String
+        if (!CapeManager.deleteCape(sha1)) {
+            ctx.status(400)
+
+            result["message"] = "The provided cape SHA-1 doesn't exists."
+            return result
+        }
+
+        result["message"] = "The provided cape was deleted successfully."
+        return result
     }
 
     @Route(path = "/queue/get/:id", type = RouteType.GET)

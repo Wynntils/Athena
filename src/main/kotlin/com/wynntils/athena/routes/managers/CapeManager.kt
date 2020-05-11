@@ -25,6 +25,24 @@ object CapeManager {
     }
 
     /**
+     * @return if the provided sha-1 is registered
+     */
+    fun hasCape(sha1: String): Boolean {
+        return database.getOrCreateTable("approved").hasFile(sha1)
+    }
+
+    /**
+     * Tries to delete the provided cape
+     * @return if the cape was deleted successfully
+     */
+    fun deleteCape(sha1: String): Boolean {
+        if (!hasCape(sha1)) return false
+
+        database.getOrCreateTable("approved").deleteFile(sha1)
+        return true
+    }
+
+    /**
      * Get's the approved cape image base64 based on the cape SHA-1
      *
      * @param sha1 the cape identification SHA-1
