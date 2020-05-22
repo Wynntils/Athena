@@ -9,9 +9,14 @@ data class ApiConfig (
 
     val wynnTerritories: String = "https://api.wynncraft.com/public_api.php?action=territoryList",
     val scyuTerritories: String = "https://raw.githubusercontent.com/DevScyu/Wynn/master/territories.json",
+
     val wynnMapLocations: String = "https://api.wynncraft.com/public_api.php?action=mapLocations",
+    val wynnMapLabels: String = "https://raw.githubusercontent.com/Wynntils/Data-Storage/master/map-labels.json",
+
     val wynnItems: String = "https://api.wynncraft.com/public_api.php?action=itemDB&category=all",
+
     val wynnGuildInfo: String = "https://api.wynncraft.com/public_api.php?action=guildStats&command=",
+
     val wynnOnlinePlayers: String = "https://api.wynncraft.com/public_api.php?action=onlinePlayers"
 
 )

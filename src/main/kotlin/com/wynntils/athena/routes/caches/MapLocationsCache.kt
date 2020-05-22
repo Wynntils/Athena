@@ -17,16 +17,24 @@ class MapLocationsCache: DataCache {
      * A direct cache of wynn's map locations API
      */
     override fun generateCache(): JSONObject {
-        val connection = URL(apiConfig.wynnMapLocations).openConnection()
+        var connection = URL(apiConfig.wynnMapLocations).openConnection()
         connection.setRequestProperty("User-Agent", generalConfig.userAgent)
         connection.readTimeout = 5000
         connection.connectTimeout = 5000
 
-        val result = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>();
-        if (!result.containsKey("locations")) throw UnexpectedCacheResponse()
-        result.remove("request")
+        val locations = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>();
+        if (!locations.containsKey("locations")) throw UnexpectedCacheResponse()
+        locations.remove("request")
 
-        return result;
+        connection = URL(apiConfig.wynnMapLabels).openConnection()
+        connection.setRequestProperty("User-Agent", generalConfig.userAgent)
+        connection.readTimeout = 5000
+        connection.connectTimeout = 5000
+
+        val labels = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>();
+
+        locations["labels"] = labels["labels"]
+        return locations
     }
 
 }
