@@ -15,10 +15,7 @@ import com.wynntils.athena.core.utils.ExternalNotifications
 import com.wynntils.athena.core.utils.Logger
 import com.wynntils.athena.database.files.FileCabinet
 import com.wynntils.athena.routes.*
-import com.wynntils.athena.routes.caches.ItemListCache
-import com.wynntils.athena.routes.caches.MapLocationsCache
-import com.wynntils.athena.routes.caches.ServerListCache
-import com.wynntils.athena.routes.caches.TerritoryListCache
+import com.wynntils.athena.routes.caches.*
 import io.javalin.Javalin
 import java.io.File
 
@@ -57,6 +54,7 @@ private fun main() {
     server.registerRoutes(ApiRoutes::class)
     server.registerRoutes(UserRoutes::class)
     server.registerRoutes(CacheRoutes::class)
+    server.registerRoutes(TelemetryRoutes::class)
 
     generalLog.info("Starting data caches refresh...")
     // caches
@@ -64,6 +62,7 @@ private fun main() {
     CacheManager.refreshCache(ItemListCache())
     CacheManager.refreshCache(TerritoryListCache())
     CacheManager.refreshCache(ServerListCache())
+    CacheManager.refreshCache(GatheringSpotsCache())
 
     generalLog.info(AsciiColor.GREEN + "All done, startup sequence completed!")
     ExternalNotifications.sendMessage(description = "Athena is online!", color = 65280)

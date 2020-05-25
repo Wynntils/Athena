@@ -2,11 +2,14 @@ package com.wynntils.athena.database
 
 import com.rethinkdb.RethinkDB.r
 import com.wynntils.athena.core.configs.databaseConfig
+import com.wynntils.athena.core.data.Location
+import com.wynntils.athena.database.objects.GatheringSpotProfile
 import com.wynntils.athena.database.objects.GuildProfile
 import com.wynntils.athena.database.objects.UserProfile
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.collections.ArrayList
 
 object DatabaseManager {
 
@@ -50,6 +53,25 @@ object DatabaseManager {
         if (!requestResult.hasNext()) return null
 
         return requestResult.first()
+    }
+
+    fun getGatheringSpot(location: Location): GatheringSpotProfile? {
+        val requestResult = r.table("gathering").get(location.toString()).run(connection, GatheringSpotProfile::class.java)
+        if (!requestResult.hasNext()) return null
+
+        return requestResult.first()
+    }
+
+    fun getAllGatheringSpots(): List<GatheringSpotProfile> {
+        val requestResult = r.table("gathering").run(connection, GatheringSpotProfile::class.java)
+        if (!requestResult.hasNext()) return emptyList();
+
+        val result = ArrayList<GatheringSpotProfile>()
+        while (requestResult.hasNext()) {
+            result += requestResult.next() ?: continue
+        }
+
+        return result
     }
 
 }
