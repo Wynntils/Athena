@@ -2,6 +2,7 @@ package com.wynntils.athena.routes.caches
 
 import com.wynntils.athena.core.cache.annotations.CacheInfo
 import com.wynntils.athena.core.cache.interfaces.DataCache
+import com.wynntils.athena.core.getOrCreate
 import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.database.DatabaseManager
 import com.wynntils.athena.database.enums.GatheringType
@@ -28,7 +29,12 @@ class GatheringSpotsCache: DataCache {
             obj["type"] = spot.material
             obj["lastSeen"] = spot.lastSeen
             obj["reliability"] = spot.calculateReliability()
-            obj["location"] = spot.getLocation()
+
+            val location = obj.getOrCreate<JSONOrderedObject>("location")
+            location["x"] = spot.getLocation().x
+            location["y"] = spot.getLocation().y
+            location["z"] = spot.getLocation().z
+
 
             when (spot.type) {
                 GatheringType.WOODCUTTING -> woodCutting.add(obj)

@@ -34,7 +34,7 @@ data class GatheringSpotProfile(
         // 1296000000 is 15 days in milliseconds
         return (100 * (
                 (1.0 - ((currentTimeMillis() - lastSeen) / 1296000000)) // calculates scalable factor | 15 days = 0
-                * (25 / 25.coerceAtLeast(users.size)) // multiply the scalable factor based on the amount players | max = 25
+                * (25.coerceAtLeast(users.size) / 25) // multiply the scalable factor based on the amount players | max = 25
                 ))
             .toInt()
     }
