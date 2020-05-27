@@ -96,8 +96,10 @@ class CapeRoutes {
     @Route(path = "/queue/get/:id", type = RouteType.GET)
     fun getAnalyseCape(ctx: Context): InputStream {
         ctx.contentType("image/png")
+        val id = ctx.pathParam("id")
+        if (CapeManager.isApproved(id)) return CapeManager.getCape(id)
 
-        return CapeManager.getQueuedCape(ctx.pathParam("id"))
+        return CapeManager.getQueuedCape(id)
     }
 
     @Route(path = "/queue/upload/:token", type = RouteType.POST)
