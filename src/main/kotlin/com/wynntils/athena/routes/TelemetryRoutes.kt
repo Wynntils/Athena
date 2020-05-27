@@ -43,7 +43,7 @@ class TelemetryRoutes {
             return response
         }
 
-        val location = Location(spotData["x"] as Int, spotData["y"] as Int, spotData["z"] as Int)
+        val location = Location((spotData["x"] as Long).toInt(), (spotData["y"] as Long).toInt(), (spotData["z"] as Long).toInt())
         val spot = DatabaseManager.getGatheringSpot(location)
             ?: GatheringSpotProfile(location.toString(),
                 GatheringType.valueOf(spotData["type"] as String),
