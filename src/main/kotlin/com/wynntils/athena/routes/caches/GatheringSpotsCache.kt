@@ -15,9 +15,9 @@ class GatheringSpotsCache: DataCache {
         val result = JSONOrderedObject()
 
         val woodCutting = result.getOrCreate<JSONArray>("woodCutting")
-        val mining = result.getOrCreate<JSONArray>("woodCutting")
-        val farming = result.getOrCreate<JSONArray>("woodCutting")
-        val fishing = result.getOrCreate<JSONArray>("woodCutting")
+        val mining = result.getOrCreate<JSONArray>("mining")
+        val farming = result.getOrCreate<JSONArray>("farming")
+        val fishing = result.getOrCreate<JSONArray>("fishing")
 
         val spots = DatabaseManager.getAllGatheringSpots()
         if (spots.isEmpty()) return result
