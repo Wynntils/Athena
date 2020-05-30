@@ -78,6 +78,8 @@ fun Exception.toPlainString(): String {
     return writer.toString()
 }
 
+// Context Stuff
+
 fun Context.validIp(): String {
     return if (headerMap().containsKey("X-Real-IP")) header("X-Real-IP")!! // proxies use this header
     else ip()
@@ -108,12 +110,24 @@ fun Context.isHuman(): Boolean {
     return userAgent() != null && userAgentPattern.matcher(userAgent().toString()).find()
 }
 
+// String and JSON Conversions
+
 fun InputStream.toPlainString(): String {
     return bufferedReader(StandardCharsets.UTF_8).use(BufferedReader::readText)
 }
 
 inline fun <reified T: JSONAware> String.asJSON(): T {
     return JSONParser().parse(this) as T
+}
+
+// Math Stuff
+
+fun maxLimit(max: Double, current: Double): Double {
+    return if (current > max) max else current
+}
+
+fun maxLimit(max: Int, current: Int): Int {
+    return if (current > max) max else current
 }
 
 fun printCoolLogo() {

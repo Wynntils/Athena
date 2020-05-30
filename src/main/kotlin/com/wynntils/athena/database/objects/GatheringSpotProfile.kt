@@ -3,6 +3,7 @@ package com.wynntils.athena.database.objects
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.wynntils.athena.core.currentTimeMillis
 import com.wynntils.athena.core.data.Location
+import com.wynntils.athena.core.maxLimit
 import com.wynntils.athena.database.enums.GatheringMaterial
 import com.wynntils.athena.database.enums.GatheringType
 import com.wynntils.athena.database.interfaces.RethinkObject
@@ -33,8 +34,8 @@ data class GatheringSpotProfile(
     fun calculateReliability(): Int {
         // 1296000000 is 15 days in milliseconds
         return (100 * (
-                (1.0 - ((currentTimeMillis() - lastSeen) / 1296000000)) // calculates scalable factor | 15 days = 0
-                * (25.coerceAtLeast(users.size) / 25) // multiply the scalable factor based on the amount players | max = 25
+                (1.0 - ((currentTimeMillis() - lastSeen) / 1296000000.0)) // calculates scalable factor | 15 days = 0
+                * (maxLimit(25, users.size) / 25.0) // multiply the scalable factor based on the amount players | max = 25
                 ))
             .toInt()
     }

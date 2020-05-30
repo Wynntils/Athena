@@ -26,7 +26,7 @@ class GatheringSpotsCache: DataCache {
         for (spot in spots) {
             val obj = JSONObject()
 
-            obj["type"] = spot.material
+            obj["type"] = spot.material.toString()
             obj["lastSeen"] = spot.lastSeen
             obj["reliability"] = spot.calculateReliability()
 
