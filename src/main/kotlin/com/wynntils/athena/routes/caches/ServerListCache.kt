@@ -7,6 +7,7 @@ import com.wynntils.athena.core.configs.apiConfig
 import com.wynntils.athena.core.configs.generalConfig
 import com.wynntils.athena.core.currentTimeMillis
 import com.wynntils.athena.core.utils.JSONOrderedObject
+import com.wynntils.athena.mapper
 import org.json.simple.JSONObject
 import java.net.URL
 import java.nio.charset.StandardCharsets
@@ -14,7 +15,7 @@ import java.nio.charset.StandardCharsets
 @CacheInfo(name = "serverList", refreshRate = 180)
 class ServerListCache: DataCache {
 
-    private val firstSeem = HashMap<String, Long>()
+    private var firstSeem = HashMap<String, Long>()
 
     /**
      * Generates the cache based on the wynn online players api and calculates the server uptime
@@ -56,6 +57,22 @@ class ServerListCache: DataCache {
         }
 
         return result
+    }
+
+    /**
+     * Loads server uptime persistent data
+     */
+    override fun loadPersistentData(input: String?) {
+        if (input == null) return;
+
+        firstSeem = mapper.readValue(input, HashMap::class.java) as HashMap<String, Long>
+    }
+
+    /**
+     * Saves the server uptime inside the persistent data
+     */
+    override fun generatePersistentData(): String? {
+        return mapper.writeValueAsString(firstSeem)
     }
 
 }

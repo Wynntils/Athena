@@ -23,7 +23,7 @@ object CacheManager {
      * Refreshes and registers cache class
      * Cache classes needs to implement DataCache and have the annotation CacheInfo on it's header
      */
-    fun refreshCache(cache: DataCache) {
+    fun refreshCache(cache: DataCache, firstLoad: Boolean = true) {
         val info = cache.javaClass.kotlin.findAnnotation<CacheInfo>() ?: return
 
         fun registerResult(result: String) {
@@ -36,12 +36,31 @@ object CacheManager {
             loadedCaches[info.name] = CacheContainer(result, resultHash, nextRefresh, cache)
         }
 
+        fun getPersistentData(): String? {
+            if (!cacheTable.hasFile("${info.name}-persistent.json")) return null;
+            return cacheTable.getFile("${info.name}-persistent.json")?.asString()
+        }
+
+        fun savePersistentData(input: String?) {
+            if (input == null) return;
+
+            cacheTable.getOrCreateFile("${info.name}-persistent.json").write(input)
+        }
+
         fun runExecutor() {
             try {
                 val ms = currentTimeMillis()
-                val generated = cache.generateCache()
 
+                // loads the persistent data if it's the first time generating the cache
+                if (firstLoad) cache.loadPersistentData(getPersistentData())
+
+                // generates and registers the cache result
+                val generated = cache.generateCache()
                 registerResult(generated.toJSONString())
+
+                // save the provided persistent data
+                savePersistentData(cache.generatePersistentData())
+
                 cacheLog.info("Successfully Refreshed ${info.name} cache in ${currentTimeMillis() - ms}ms.")
             } catch (ex: Exception) {
                 if (ex !is SocketTimeoutException)
@@ -76,7 +95,7 @@ object CacheManager {
 
         if (cache.nextRefresh != 0L && currentTimeMillis() >= cache.nextRefresh) {
             cache.nextRefresh = 0 // avoids that an async thread executes the refresh multiple times
-            refreshCache(cache.holderReference)
+            refreshCache(cache.holderReference, false)
         }
 
         return loadedCaches[name]
