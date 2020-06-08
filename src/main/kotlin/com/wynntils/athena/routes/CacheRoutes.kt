@@ -1,6 +1,7 @@
 package com.wynntils.athena.routes
 
 import com.wynntils.athena.core.cache.CacheManager
+import com.wynntils.athena.core.currentTimeMillis
 import com.wynntils.athena.core.getOrCreate
 import com.wynntils.athena.core.routes.annotations.BasePath
 import com.wynntils.athena.core.routes.annotations.Route
@@ -35,6 +36,7 @@ class CacheRoutes {
             return result.toJSONString()
         }
 
+        ctx.header("timestamp", currentTimeMillis().toString())
         return CacheManager.getCache(cache)!!.value
     }
 

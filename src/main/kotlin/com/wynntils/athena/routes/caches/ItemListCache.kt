@@ -22,6 +22,7 @@ class ItemListCache: DataCache {
     override fun generateCache(): JSONOrderedObject {
         val connection = URL(apiConfig.wynnItems).openConnection()
         connection.setRequestProperty("User-Agent", generalConfig.userAgent)
+        connection.setRequestProperty("apikey", apiConfig.wynnApiToken)
         connection.readTimeout = 20000
         connection.connectTimeout = 20000
 

@@ -28,6 +28,8 @@ class TerritoryListCache: DataCache {
 
         connection = URL(apiConfig.wynnTerritories).openConnection()
         connection.setRequestProperty("User-Agent", generalConfig.userAgent)
+        connection.setRequestProperty("apikey", apiConfig.wynnApiToken)
+
         connection.readTimeout = 5000
         connection.connectTimeout = 5000
 

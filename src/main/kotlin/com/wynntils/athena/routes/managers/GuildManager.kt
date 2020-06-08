@@ -25,6 +25,7 @@ object GuildManager {
     private fun generateGuildData(name: String): GuildProfile? {
         val connection = URL("${apiConfig.wynnGuildInfo}${name.replace(" ", "%20")}").openConnection()
         connection.setRequestProperty("User-Agent", generalConfig.userAgent)
+        connection.setRequestProperty("apikey", apiConfig.wynnApiToken)
         connection.connectTimeout = 5000
         connection.readTimeout = 5000
 

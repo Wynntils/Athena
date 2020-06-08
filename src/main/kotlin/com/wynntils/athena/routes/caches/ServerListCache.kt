@@ -25,6 +25,7 @@ class ServerListCache: DataCache {
 
         val connection = URL(apiConfig.wynnOnlinePlayers).openConnection()
         connection.setRequestProperty("User-Agent", generalConfig.userAgent)
+        connection.setRequestProperty("apikey", apiConfig.wynnApiToken)
         connection.readTimeout = 5000
         connection.connectTimeout = 5000
 
