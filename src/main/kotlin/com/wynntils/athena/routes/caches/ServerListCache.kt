@@ -12,7 +12,7 @@ import org.json.simple.JSONObject
 import java.net.URL
 import java.nio.charset.StandardCharsets
 
-@CacheInfo(name = "serverList", refreshRate = 180)
+@CacheInfo(name = "serverList", refreshRate = 30)
 class ServerListCache: DataCache {
 
     private var firstSeem = HashMap<String, Long>()
