@@ -19,7 +19,6 @@ class MapLocationsCache: DataCache {
     override fun generateCache(): JSONObject {
         var connection = URL(apiConfig.wynnMapLocations).openConnection()
         connection.setRequestProperty("User-Agent", generalConfig.userAgent)
-        connection.setRequestProperty("apikey", apiConfig.wynnApiToken)
         connection.readTimeout = 5000
         connection.connectTimeout = 5000
 
