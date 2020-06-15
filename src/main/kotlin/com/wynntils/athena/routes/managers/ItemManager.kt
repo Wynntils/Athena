@@ -30,6 +30,10 @@ object ItemManager {
             else "PERCENTAGE"
         }
 
+        fun ignoreZero(input: Int?): Int? {
+            return if (input == null || input == 0) null else input
+        }
+
         // outside tags
         result["displayName"] = input.getOrDefault("displayName", input["name"]).toString().replace("֎", "") // cancer has ֎ in it name for a random reason
         result["tier"] = (input["tier"] as String).toUpperCase()
@@ -59,21 +63,21 @@ object ItemManager {
 
         // damageTypes
         val damageTypes = result.getOrCreate<JSONOrderedObject>("damageTypes")
-        damageTypes["neutral"] = input.getOrDefault("damage", null)
-        damageTypes["earth"] = input.getOrDefault("earthDamage", null)
-        damageTypes["thunder"] = input.getOrDefault("thunderDamage", null)
-        damageTypes["water"] = input.getOrDefault("waterDamage", null)
-        damageTypes["fire"] = input.getOrDefault("fireDamage", null)
-        damageTypes["air"] = input.getOrDefault("airDamage", null)
+        damageTypes["neutral"] = ignoreZero(input.getOrDefault("damage", null) as Int)
+        damageTypes["earth"] = ignoreZero(input.getOrDefault("earthDamage", null) as Int)
+        damageTypes["thunder"] = ignoreZero(input.getOrDefault("thunderDamage", null) as Int)
+        damageTypes["water"] = ignoreZero(input.getOrDefault("waterDamage", null) as Int)
+        damageTypes["fire"] = ignoreZero(input.getOrDefault("fireDamage", null) as Int)
+        damageTypes["air"] = ignoreZero(input.getOrDefault("airDamage", null) as Int)
 
         // defenseTypes
         val defenseTypes = result.getOrCreate<JSONOrderedObject>("defenseTypes")
-        defenseTypes["health"] = input.getOrDefault("health", null)
-        defenseTypes["earth"] = input.getOrDefault("earthDefense", null)
-        defenseTypes["thunder"] = input.getOrDefault("thunderDefense", null)
-        defenseTypes["water"] = input.getOrDefault("waterDefense", null)
-        defenseTypes["fire"] = input.getOrDefault("fireDefense", null)
-        defenseTypes["air"] = input.getOrDefault("airDefense", null)
+        defenseTypes["health"] = ignoreZero(input.getOrDefault("health", null) as Int)
+        defenseTypes["earth"] = ignoreZero(input.getOrDefault("earthDefense", null) as Int)
+        defenseTypes["thunder"] = ignoreZero(input.getOrDefault("thunderDefense", null) as Int)
+        defenseTypes["water"] = ignoreZero(input.getOrDefault("waterDefense", null) as Int)
+        defenseTypes["fire"] = ignoreZero(input.getOrDefault("fireDefense", null) as Int)
+        defenseTypes["air"] = ignoreZero(input.getOrDefault("airDefense", null) as Int)
 
         // Pure Copy
         val statuses = result.getOrCreate<JSONOrderedObject>("statuses")
