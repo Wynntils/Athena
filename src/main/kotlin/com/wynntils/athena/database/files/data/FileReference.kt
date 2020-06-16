@@ -7,10 +7,7 @@ import com.wynntils.athena.database.files.objects.FileTable
 import com.wynntils.athena.mapper
 import org.json.simple.JSONAware
 import java.awt.image.BufferedImage
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.InputStream
+import java.io.*
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.StandardOpenOption
@@ -52,7 +49,7 @@ data class FileReference(
      * @param data the data you want to write
      */
     fun write(data: ByteArray) {
-        profile("FileCabinet-FileTable-FileReference-Write-${file.name}") { // performance profiling
+        profile("FileCabinet-FileTable-FileReference-WriteBytes-${file.name}") { // performance profiling
             val writer = FileOutputStream(file)
             writer.write(data)
             writer.close()
@@ -65,7 +62,11 @@ data class FileReference(
      * @param data the data you want to write
      */
     fun write(data: String) {
-        write(data.toByteArray(StandardCharsets.UTF_8))
+        profile("FileCabinet-FileTable-FileReference-WriteString-${file.name}") {
+            val writer = FileWriter(file)
+            writer.write(data)
+            writer.close()
+        }
     }
 
     /**

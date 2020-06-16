@@ -33,8 +33,8 @@ object ItemManager {
         fun ignoreZero(input: Any?): Any? {
             if (input == null) return null
 
-            if (input is String) return if (input.isEmpty() || input == "0-0") return null else input
-            else if (input is Int) return if (input == 0) null else input
+            if (input is Number) return if (input.toInt() == 0) null else input
+            else if (input is String) return if (input.isEmpty() || input == "0-0") return null else input
             return input
         }
 
