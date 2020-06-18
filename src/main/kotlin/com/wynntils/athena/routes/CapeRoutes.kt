@@ -141,7 +141,7 @@ class CapeRoutes {
                 fileResult["message"] = "The provided file is not a PNG image."
                 continue
             }
-            if ((image.width + image.height) % 32 != 0 || (image.width != image.height * 2)) {
+            if ((image.width + image.height) % 32 != 0) {
                 fileResult["message"] = "The image needs to be multiple of 64x32."
                 continue
             }
