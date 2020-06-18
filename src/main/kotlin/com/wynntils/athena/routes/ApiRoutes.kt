@@ -8,6 +8,7 @@ import com.wynntils.athena.core.routes.annotations.Route
 import com.wynntils.athena.core.routes.enums.RouteType
 import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.database.DatabaseManager
+import com.wynntils.athena.database.enums.TextureResolution
 import com.wynntils.athena.database.objects.UserProfile
 import com.wynntils.athena.routes.managers.GuildManager
 import io.javalin.http.Context
@@ -79,6 +80,8 @@ class ApiRoutes {
         val cosmetics = result.getOrCreate<JSONOrderedObject>("cosmetics")
         cosmetics["texture"] = user.cosmeticInfo.capeTexture
         cosmetics["isElytra"] = user.cosmeticInfo.elytraEnabled
+        cosmetics["maxResolution"] = user.cosmeticInfo.maxResolution
+        cosmetics["allowAnimated"] = user.cosmeticInfo.allowAnimated
 
         val parts = cosmetics.getOrCreate<JSONOrderedObject>("parts")
         if (user.cosmeticInfo.parts.isNotEmpty()) {
@@ -164,6 +167,10 @@ class ApiRoutes {
             user.cosmeticInfo.capeTexture = cosmetics["texture"] as String
         if (cosmetics.contains("isElytra"))
             user.cosmeticInfo.elytraEnabled = cosmetics["isElytra"] as Boolean
+        if (cosmetics.containsKey("maxResolution"))
+            user.cosmeticInfo.maxResolution = TextureResolution.valueOf(cosmetics["maxResolution"] as String)
+        if (cosmetics.containsKey("allowAnimated"))
+            user.cosmeticInfo.allowAnimated = cosmetics["allowAnimated"] as Boolean
 
         if (cosmetics.contains("parts")) {
             val parts = cosmetics.getOrCreate<JSONObject>("parts")
@@ -314,6 +321,8 @@ class ApiRoutes {
         val cosmetics = result.getOrCreate<JSONOrderedObject>("cosmetics")
         cosmetics["texture"] = user.cosmeticInfo.capeTexture
         cosmetics["isElytra"] = user.cosmeticInfo.elytraEnabled
+        cosmetics["maxResolution"] = user.cosmeticInfo.maxResolution
+        cosmetics["allowAnimated"] = user.cosmeticInfo.allowAnimated
 
         val parts = cosmetics.getOrCreate<JSONOrderedObject>("parts")
         if (user.cosmeticInfo.parts.isNotEmpty()) {
