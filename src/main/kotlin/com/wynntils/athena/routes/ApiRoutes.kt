@@ -80,7 +80,7 @@ class ApiRoutes {
         val cosmetics = result.getOrCreate<JSONOrderedObject>("cosmetics")
         cosmetics["texture"] = user.cosmeticInfo.capeTexture
         cosmetics["isElytra"] = user.cosmeticInfo.elytraEnabled
-        cosmetics["maxResolution"] = user.cosmeticInfo.maxResolution
+        cosmetics["maxResolution"] = user.cosmeticInfo.maxResolution.toString()
         cosmetics["allowAnimated"] = user.cosmeticInfo.allowAnimated
 
         val parts = cosmetics.getOrCreate<JSONOrderedObject>("parts")
@@ -321,7 +321,7 @@ class ApiRoutes {
         val cosmetics = result.getOrCreate<JSONOrderedObject>("cosmetics")
         cosmetics["texture"] = user.cosmeticInfo.capeTexture
         cosmetics["isElytra"] = user.cosmeticInfo.elytraEnabled
-        cosmetics["maxResolution"] = user.cosmeticInfo.maxResolution
+        cosmetics["maxResolution"] = user.cosmeticInfo.maxResolution.toString()
         cosmetics["allowAnimated"] = user.cosmeticInfo.allowAnimated
 
         val parts = cosmetics.getOrCreate<JSONOrderedObject>("parts")
