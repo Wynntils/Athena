@@ -24,6 +24,17 @@ class GatheringSpotsCache: DataCache {
         if (spots.isEmpty()) return result
 
         for (spot in spots) {
+            val reliability = spot.calculateReliability()
+
+            // delete if not reliable anymore
+            if (spot.shouldRemove() || reliability == 0) {
+                spot.asyncDelete()
+                continue
+            }
+
+            // does not display nodes with less than 50 of reliability
+            if (reliability < 50) continue
+
             val obj = JSONObject()
 
             obj["type"] = spot.material.toString()
@@ -34,7 +45,6 @@ class GatheringSpotsCache: DataCache {
             location["x"] = spot.getLocation().x
             location["y"] = spot.getLocation().y
             location["z"] = spot.getLocation().z
-
 
             when (spot.type) {
                 GatheringType.WOODCUTTING -> woodCutting.add(obj)
