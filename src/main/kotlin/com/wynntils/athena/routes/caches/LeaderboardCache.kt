@@ -44,7 +44,7 @@ class LeaderboardCache: DataCache {
         val weaponSmithing = result.getOrCreate<JSONArray>("WEAPONSMITHING")
         val overall = result.getOrCreate<JSONArray>("OVERALL")
 
-        for (i in 100 downTo 91) {
+        for (i in 99 downTo 90) {
             woodCutting.add(generateProfile(wynnWoodCutting[i]))
             mining.add(generateProfile(wynnMining[i]))
             fishing.add(generateProfile(wynnFishing[i]))
