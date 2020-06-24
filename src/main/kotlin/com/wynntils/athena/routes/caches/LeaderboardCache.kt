@@ -77,7 +77,7 @@ class LeaderboardCache: DataCache {
     }
 
     private fun getLeaderBoard(type: String, prof: String): JSONObject  {
-        val connection = URL("${apiConfig.wynnLeaderboards}/$type/$prof").openConnection()
+        val connection = URL("${apiConfig.wynnLeaderboards}$type/$prof").openConnection()
         connection.setRequestProperty("User-Agent", generalConfig.userAgent)
         connection.setRequestProperty("apikey", apiConfig.wynnApiToken)
         connection.readTimeout = 20000
