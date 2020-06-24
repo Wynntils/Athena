@@ -29,49 +29,38 @@ class LeaderboardCache: DataCache {
         val wynnScribing = getLeaderBoard("solo", "scribing")["data"] as JSONArray
         val wynnTailoring = getLeaderBoard("solo", "tailoring")["data"] as JSONArray
         val wynnWeaponSmithing = getLeaderBoard("solo", "weaponsmithing")["data"] as JSONArray
+        val wynnWoodWorking = getLeaderBoard("solo", "woodworking")["data"] as JSONArray
         val wynnOverall = getLeaderBoard("overall", "all")["data"] as JSONArray
 
-        val woodCutting = result.getOrCreate<JSONArray>("WOODCUTTING")
-        val mining = result.getOrCreate<JSONArray>("MINING")
-        val fishing = result.getOrCreate<JSONArray>("FISHING")
-        val farming = result.getOrCreate<JSONArray>("FARMING")
-        val alchemism = result.getOrCreate<JSONArray>("ALCHEMISM")
-        val armouring = result.getOrCreate<JSONArray>("ARMOURING")
-        val cooking = result.getOrCreate<JSONArray>("COOKING")
-        val jeweling = result.getOrCreate<JSONArray>("JEWELING")
-        val scribing = result.getOrCreate<JSONArray>("SCRIBING")
-        val tailoring = result.getOrCreate<JSONArray>("TAILORING")
-        val weaponSmithing = result.getOrCreate<JSONArray>("WEAPONSMITHING")
-        val overall = result.getOrCreate<JSONArray>("OVERALL")
+        for (i in 99 downTo 91) {
+            val uWc = wynnWoodCutting[i] as JSONObject
+            val uMi = wynnMining[i] as JSONObject
+            val uFi = wynnFishing[i] as JSONObject
+            val uFa = wynnFarming[i] as JSONObject
+            val uAl = wynnAlchemism[i] as JSONObject
+            val uAr = wynnArmouring[i] as JSONObject
+            val uCo = wynnCooking[i] as JSONObject
+            val uJe = wynnJeweling[i] as JSONObject
+            val uSc = wynnScribing[i] as JSONObject
+            val uTa = wynnTailoring[i] as JSONObject
+            val uWe = wynnWeaponSmithing[i] as JSONObject
+            val uWo = wynnWoodWorking[i] as JSONObject
+            val uOv = wynnOverall[i] as JSONObject
 
-        for (i in 99 downTo 90) {
-            woodCutting.add(generateProfile(wynnWoodCutting[i]))
-            mining.add(generateProfile(wynnMining[i]))
-            fishing.add(generateProfile(wynnFishing[i]))
-            farming.add(generateProfile(wynnFarming[i]))
-            alchemism.add(generateProfile(wynnAlchemism[i]))
-            armouring.add(generateProfile(wynnArmouring[i]))
-            cooking.add(generateProfile(wynnCooking[i]))
-            jeweling.add(generateProfile(wynnJeweling[i]))
-            scribing.add(generateProfile(wynnScribing[i]))
-            tailoring.add(generateProfile(wynnTailoring[i]))
-            weaponSmithing.add(generateProfile(wynnWeaponSmithing[i]))
-            overall.add(generateProfile(wynnOverall[i]))
+            result.getOrCreate<JSONOrderedObject>(uWc["uuid"] as String)["WOODCUTTING"] = uWc["pos"]
+            result.getOrCreate<JSONOrderedObject>(uMi["uuid"] as String)["MINING"] = uWc["pos"]
+            result.getOrCreate<JSONOrderedObject>(uFi["uuid"] as String)["FISHING"] = uWc["pos"]
+            result.getOrCreate<JSONOrderedObject>(uFa["uuid"] as String)["FARMING"] = uWc["pos"]
+            result.getOrCreate<JSONOrderedObject>(uAl["uuid"] as String)["ACLEHMISM"] = uWc["pos"]
+            result.getOrCreate<JSONOrderedObject>(uAr["uuid"] as String)["ARMOURING"] = uWc["pos"]
+            result.getOrCreate<JSONOrderedObject>(uCo["uuid"] as String)["COOKING"] = uWc["pos"]
+            result.getOrCreate<JSONOrderedObject>(uJe["uuid"] as String)["JEWELING"] = uWc["pos"]
+            result.getOrCreate<JSONOrderedObject>(uSc["uuid"] as String)["SCRIBING"] = uWc["pos"]
+            result.getOrCreate<JSONOrderedObject>(uTa["uuid"] as String)["TAILORING"] = uWc["pos"]
+            result.getOrCreate<JSONOrderedObject>(uWe["uuid"] as String)["WEAPONSMITHING"] = uWc["pos"]
+            result.getOrCreate<JSONOrderedObject>(uWo["uuid"] as String)["WOODWORKING"] = uWc["pos"]
+            result.getOrCreate<JSONOrderedObject>(uOv["uuid"] as String)["OVERALL"] = uWc["pos"]
         }
-
-        return result
-    }
-
-    private fun generateProfile(input: Any?): JSONOrderedObject {
-        input as JSONObject
-        val classObj = input["class"] as JSONObject
-
-        val result = JSONOrderedObject()
-        result["uuid"] = input["uuid"]
-        result["name"] = input["name"]
-        result["level"] = classObj["level"]
-        result["xp"] = classObj["xp"]
-        result["position"] = input["pos"]
 
         return result
     }
