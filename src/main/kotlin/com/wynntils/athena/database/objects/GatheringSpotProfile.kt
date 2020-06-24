@@ -5,7 +5,7 @@ import com.wynntils.athena.core.currentTimeMillis
 import com.wynntils.athena.core.data.Location
 import com.wynntils.athena.core.maxLimit
 import com.wynntils.athena.database.enums.GatheringMaterial
-import com.wynntils.athena.database.enums.GatheringType
+import com.wynntils.athena.database.enums.ProfessionType
 import com.wynntils.athena.database.interfaces.RethinkObject
 import java.util.*
 import kotlin.collections.HashSet
@@ -13,7 +13,7 @@ import kotlin.collections.HashSet
 data class GatheringSpotProfile(
     override val id: String,
 
-    val type: GatheringType,
+    val type: ProfessionType,
     val material: GatheringMaterial,
 
     var lastSeen: Long = currentTimeMillis(),

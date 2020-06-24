@@ -5,7 +5,7 @@ import com.wynntils.athena.core.cache.interfaces.DataCache
 import com.wynntils.athena.core.getOrCreate
 import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.database.DatabaseManager
-import com.wynntils.athena.database.enums.GatheringType
+import com.wynntils.athena.database.enums.ProfessionType
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 
@@ -47,10 +47,10 @@ class GatheringSpotsCache: DataCache {
             location["z"] = spot.getLocation().z
 
             when (spot.type) {
-                GatheringType.WOODCUTTING -> woodCutting.add(obj)
-                GatheringType.MINING -> mining.add(obj)
-                GatheringType.FARMING -> farming.add(obj)
-                GatheringType.FISHING -> fishing.add(obj)
+                ProfessionType.WOODCUTTING -> woodCutting.add(obj)
+                ProfessionType.MINING -> mining.add(obj)
+                ProfessionType.FARMING -> farming.add(obj)
+                ProfessionType.FISHING -> fishing.add(obj)
             }
         }
 

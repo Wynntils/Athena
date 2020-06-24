@@ -9,7 +9,7 @@ import com.wynntils.athena.core.routes.enums.RouteType
 import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.database.DatabaseManager
 import com.wynntils.athena.database.enums.GatheringMaterial
-import com.wynntils.athena.database.enums.GatheringType
+import com.wynntils.athena.database.enums.ProfessionType
 import com.wynntils.athena.database.objects.GatheringSpotProfile
 import io.javalin.http.Context
 import org.json.simple.JSONObject
@@ -46,7 +46,7 @@ class TelemetryRoutes {
         val location = Location((spotData["x"] as Long).toInt(), (spotData["y"] as Long).toInt(), (spotData["z"] as Long).toInt())
         val spot = DatabaseManager.getGatheringSpot(location)
             ?: GatheringSpotProfile(location.toString(),
-                GatheringType.valueOf(spotData["type"] as String),
+                ProfessionType.valueOf(spotData["type"] as String),
                 GatheringMaterial.valueOf(spotData["material"] as String)
             )
 
