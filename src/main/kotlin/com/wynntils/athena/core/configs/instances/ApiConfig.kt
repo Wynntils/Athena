@@ -19,6 +19,8 @@ data class ApiConfig (
 
     val wynnGuildInfo: String = "https://api.wynncraft.com/public_api.php?action=guildStats&command=",
 
-    val wynnOnlinePlayers: String = "https://api.wynncraft.com/public_api.php?action=onlinePlayers"
+    val wynnOnlinePlayers: String = "https://api.wynncraft.com/public_api.php?action=onlinePlayers",
+
+    val wynnLeaderboards: String = "https://api.wynncraft.com/v2/leaderboards/player/"
 
 )

@@ -59,10 +59,11 @@ private fun main() {
     generalLog.info("Starting data caches refresh...")
     // caches
     CacheManager.refreshCache(MapLocationsCache())
-    CacheManager.refreshCache(ItemListCache())
+    CacheManager.refreshCache(LeaderboardCache())
     CacheManager.refreshCache(TerritoryListCache())
     CacheManager.refreshCache(ServerListCache())
     CacheManager.refreshCache(GatheringSpotsCache())
+    CacheManager.refreshCache(LeaderboardCache())
 
     generalLog.info(AsciiColor.GREEN + "All done, startup sequence completed!")
     ExternalNotifications.sendMessage(description = "Athena is online!", color = 65280)

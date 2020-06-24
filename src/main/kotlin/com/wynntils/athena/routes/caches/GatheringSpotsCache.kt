@@ -39,7 +39,7 @@ class GatheringSpotsCache: DataCache {
 
             obj["type"] = spot.material.toString()
             obj["lastSeen"] = spot.lastSeen
-            obj["reliability"] = spot.calculateReliability()
+            obj["reliability"] = reliability
 
             val location = obj.getOrCreate<JSONOrderedObject>("location")
             location["x"] = spot.getLocation().x
