@@ -20,7 +20,7 @@ data class FileTable(
         if (loaded) return
         val files = path.list() ?: return
 
-        profile("FileCabinet-FileTable-Load-${this.name.replace("-", "")}") { // performance profiling
+        profile("FileCabinet-FileTable-Load-${this.name.replace("-", "")}", false) { // performance profiling
             files.forEach { this.files.add(it) }
         }
 
@@ -65,7 +65,7 @@ data class FileTable(
         if (files.contains(name) && !overlap) return ActionResult.ALREADY_EXISTS
         files.add(name) // adds to the name cache
 
-        profile("FileCabinet-FileTable-Insert-${this.name.replace("-", "")}") { // performance profiling
+        profile("FileCabinet-FileTable-Insert-${this.name.replace("-", "")}", false) { // performance profiling
             if (data == null) return@profile
 
             val file = File(path, name)
@@ -123,7 +123,7 @@ data class FileTable(
     fun totalSize(): Long {
         var sizeSum = 0L
 
-        profile("FileCabinet-FileTable-TotalSize-${this.name.replace("-", "")}") { // performance profiling
+        profile("FileCabinet-FileTable-TotalSize-${this.name.replace("-", "")}", false) { // performance profiling
             files.map { c -> getFile(c) }.forEach {
                 sizeSum += it?.file?.length() ?: 0
             }

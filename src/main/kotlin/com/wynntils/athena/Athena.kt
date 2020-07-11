@@ -63,6 +63,7 @@ private fun main() {
     CacheManager.refreshCache(TerritoryListCache())
     CacheManager.refreshCache(ServerListCache())
     CacheManager.refreshCache(GatheringSpotsCache())
+    CacheManager.refreshCache(ItemListCache())
     CacheManager.refreshCache(LeaderboardCache())
 
     generalLog.info(AsciiColor.GREEN + "All done, startup sequence completed!")

@@ -7,7 +7,7 @@ import com.wynntils.athena.generalLog
 
 private val sections = HashMap<String, Section>()
 
-fun <T> profile(name: String, runnable: () -> T): T {
+fun <T> profile(name: String,notification: Boolean = true, runnable: () -> T): T {
     val time = nanoTime()
     val result = runnable()
     sections[name] = Section(name, nanoTime() - time)
@@ -15,6 +15,7 @@ fun <T> profile(name: String, runnable: () -> T): T {
     if ((nanoTime() - time) >= 200000000) {
         generalLog.warn("${name.replace("-", " -> ")} took more than 200ms to proceed!")
 
+        if (!notification) return result
         ExternalNotifications.sendMessage(
             title = null,
             description = "``${name.replace("-", " -> ")}`` took more than 200ms to proceed!",
