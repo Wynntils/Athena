@@ -14,6 +14,7 @@ data class ApiConfig (
 
     val wynnMapLocations: String = "https://api.wynncraft.com/public_api.php?action=mapLocations",
     val wynnMapLabels: String = "https://raw.githubusercontent.com/Wynntils/Data-Storage/master/map-labels.json",
+    val npcLocations: String = "https://raw.githubusercontent.com/Wynntils/Data-Storage/master/npc-locations.json",
 
     val wynnItems: String = "https://api.wynncraft.com/public_api.php?action=itemDB&category=all",
 
