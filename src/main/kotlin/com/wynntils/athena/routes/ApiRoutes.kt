@@ -369,7 +369,7 @@ class ApiRoutes {
             body["name"] as String,
             body["description"] as String,
             contactForm,
-            body["maxLimit"] as Int
+            (body["maxLimit"] as Long).toInt()
         )
 
         response["message"] = "Successfully created an API Key."
@@ -408,7 +408,7 @@ class ApiRoutes {
             return response
         }
 
-        apiKey.maxLimit = body["maxLimit"] as Int
+        apiKey.maxLimit = (body["maxLimit"] as Long).toInt()
         response["message"] = "Successfully changed API Key."
         response["apiKey"] = apiKey.id
 
