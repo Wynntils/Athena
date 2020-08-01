@@ -35,6 +35,16 @@ class MapLocationsCache: DataCache {
         val labels = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>();
 
         locations["labels"] = labels["labels"]
+
+        connection = URL(apiConfig.npcLocations).openConnection()
+        connection.setRequestProperty("User-Agent", generalConfig.userAgent)
+        connection.readTimeout = 5000
+        connection.connectTimeout = 5000
+
+        val npcLocations = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>();
+
+        locations["npc-locations"] = npcLocations["npc-locations"]
+
         return locations
     }
 
