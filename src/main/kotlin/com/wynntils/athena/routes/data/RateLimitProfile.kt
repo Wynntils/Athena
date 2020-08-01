@@ -5,11 +5,12 @@ import com.wynntils.athena.core.currentTimeMillis
 
 data class RateLimitProfile(
 
+    var maxRequests: Int,
+
     var requests: Int = 0,
-    var lastRequest: Long = currentTimeMillis(),
+    var releaseTime: Long = currentTimeMillis() + rateLimitConfig.timeout,
 
-    var rateLimited: Boolean = false
-
+    val rateLimited: Boolean = false
 ) {
 
     /**
@@ -18,25 +19,17 @@ data class RateLimitProfile(
      * @return if the user was Rate Limited
      */
     fun increaseRequest(): Boolean {
-        if (currentTimeMillis() - lastRequest >= rateLimitConfig.timeout) {
-            requests = 1
-            rateLimited = false
-            lastRequest = currentTimeMillis()
-            return false
-        }
-
         requests++
-        if (rateLimited || requests < rateLimitConfig.user) return false
+        if (!rateLimited && requests > maxRequests) return true
 
-        rateLimited = true
-        return true
+        return false
     }
 
     /**
      * @return if this object can be released
      */
     fun canBeRemoved(): Boolean {
-        return currentTimeMillis() - lastRequest >= rateLimitConfig.timeout
+        return currentTimeMillis() > releaseTime
     }
 
 }

@@ -3,6 +3,7 @@ package com.wynntils.athena.database
 import com.rethinkdb.RethinkDB.r
 import com.wynntils.athena.core.configs.databaseConfig
 import com.wynntils.athena.core.data.Location
+import com.wynntils.athena.database.objects.ApiKeyProfile
 import com.wynntils.athena.database.objects.GatheringSpotProfile
 import com.wynntils.athena.database.objects.GuildProfile
 import com.wynntils.athena.database.objects.UserProfile
@@ -72,6 +73,13 @@ object DatabaseManager {
         }
 
         return result
+    }
+
+    fun getApiKey(apiKey: String): ApiKeyProfile? {
+        val requestResult = r.table("apiKeys").get(apiKey).run(connection, ApiKeyProfile::class.java)
+        if (!requestResult.hasNext()) return null
+
+        return requestResult.first()
     }
 
 }

@@ -27,6 +27,8 @@ import kotlin.reflect.full.functions
 val routeLogger = Logger("routes", false)
 private val executor = Executors.newFixedThreadPool(generalConfig.routeThreads)
 
+val rateLimitIgnoredRoutes = ArrayList<String>()
+
 fun Javalin.registerRoutes(clazz: KClass<*>) {
     val instance = clazz.createInstance()
 
@@ -83,6 +85,8 @@ fun Javalin.registerRoutes(clazz: KClass<*>) {
         }
 
         val path = if (ann.ignoreBasePath) ann.path else "${basePath}${ann.path}"
+        if (ann.ignoreRateLimit) rateLimitIgnoredRoutes += path
+
         when (ann.type) {
             RouteType.GET -> get(path) { ctx -> triggerContext(ctx) }
             RouteType.POST -> post(path) { ctx -> triggerContext(ctx) }

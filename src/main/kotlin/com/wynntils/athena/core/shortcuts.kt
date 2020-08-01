@@ -24,6 +24,7 @@ val random = java.util.Random()
 
 val fileDateFormat = SimpleDateFormat("dd-MM-yyyy_hh-mm-ss")
 val textDateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm:ss")
+val logDateFormat = SimpleDateFormat("dd-MM-yyy")
 
 private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
@@ -79,10 +80,15 @@ fun Exception.toPlainString(): String {
 }
 
 // Context Stuff
-
 fun Context.validIp(): String {
-    return if (headerMap().containsKey("X-Real-IP")) header("X-Real-IP")!! // proxies use this header
-    else ip()
+    if (headerMap().containsKey("X-Forwarded-For")) {
+        val possibleIps = header("X-Forwarded-For")!!
+        if (!possibleIps.contains(',')) return possibleIps
+
+        return possibleIps.split(", ")[0]
+    }
+
+    return ip()
 }
 
 fun Context.generateRequestObject(): JSONObject {

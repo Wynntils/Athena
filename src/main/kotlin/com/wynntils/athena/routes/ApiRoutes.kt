@@ -9,12 +9,15 @@ import com.wynntils.athena.core.routes.enums.RouteType
 import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.database.DatabaseManager
 import com.wynntils.athena.database.enums.TextureResolution
+import com.wynntils.athena.database.objects.ApiKeyProfile
 import com.wynntils.athena.database.objects.UserProfile
 import com.wynntils.athena.routes.managers.GuildManager
 import io.javalin.http.Context
+import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.mindrot.jbcrypt.BCrypt
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * All api related routes
@@ -28,6 +31,8 @@ import java.util.*
  *  POST /setGuildColor/:apiKey
  *  POST /setUserPassword/:apiKey
  *  POST /getUserByPassword/:apiKey
+ *  POST /createApiKey/:apiKey
+ *  POST /changeApiKey/:apiKey
  *  GET /timings
  */
 @BasePath("/api")
@@ -336,6 +341,81 @@ class ApiRoutes {
     }
 
     /**
+     * Registers a new API key
+     * Required Body: name, description, adminContact, maxLimit
+     */
+    @Route(path = "/createApiKey/:apiKey", type = RouteType.POST)
+    fun createApiKey(ctx: Context): JSONOrderedObject {
+        val response = JSONOrderedObject()
+        if (!ctx.isAuthenticated()) {
+            ctx.status(401)
+
+            response["message"] = "Invalid API Authorization Key."
+            return response;
+        }
+
+        val body = ctx.body().asJSON<JSONObject>()
+        if (!body.contains("name") || !body.contains("description") || !body.contains("adminContact") || !body.contains("maxLimit")) {
+            ctx.status(400)
+
+            response["message"] = "Invalid body, expecting 'name', 'description', 'adminContact' and 'maxLimit'."
+            return response
+        }
+
+        val contactForm = ArrayList<String>()
+        (body["adminContact"] as JSONArray).forEach { contactForm.add(it as String) }
+
+        val apiKey = ApiKeyProfile(UUID.randomUUID().toString(),
+            body["name"] as String,
+            body["description"] as String,
+            contactForm,
+            body["maxLimit"] as Int
+        )
+
+        response["message"] = "Successfully created an API Key."
+        response["apiKey"] = apiKey.id
+
+        return response
+    }
+
+    /**
+     * Changes an API Key max limit
+     * Required Body: key, maxLimit
+     */
+    @Route(path = "/changeApiKey/:apiKey", type = RouteType.POST)
+    fun changeApikey(ctx: Context): JSONOrderedObject {
+        val response = JSONOrderedObject()
+        if (!ctx.isAuthenticated()) {
+            ctx.status(401)
+
+            response["message"] = "Invalid API Authorization Key."
+            return response;
+        }
+
+        val body = ctx.body().asJSON<JSONObject>()
+        if (!body.contains("key") || !body.contains("maxLimit")) {
+            ctx.status(400)
+
+            response["message"] = "Invalid body, expecting 'key' and 'maxLimit'."
+            return response
+        }
+
+        val apiKey = DatabaseManager.getApiKey(body["key"] as String);
+        if (apiKey == null) {
+            ctx.status(400)
+
+            response["message"] = "The provied API Key does not exists."
+            return response
+        }
+
+        apiKey.maxLimit = body["maxLimit"] as Int
+        response["message"] = "Successfully changed API Key."
+        response["apiKey"] = apiKey.id
+
+        return response
+    }
+
+    /**
      * The overall performance calculated for each route and similar stuff
      */
     @Route(path = "/timings", type = RouteType.GET)
@@ -358,6 +438,7 @@ class ApiRoutes {
 
         return result
     }
+
 
     private fun getUser(userParam: String): UserProfile? {
         return when {

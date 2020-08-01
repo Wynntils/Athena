@@ -15,6 +15,7 @@ annotation class Route(
     val path: String = "*",
     val type: RouteType,
     val errorCode: Int = 0,
-    val ignoreBasePath: Boolean = false
+    val ignoreBasePath: Boolean = false,
+    val ignoreRateLimit: Boolean = false
 
 )
