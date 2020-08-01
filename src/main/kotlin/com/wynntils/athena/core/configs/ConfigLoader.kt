@@ -18,6 +18,7 @@ val databaseConfig: DatabaseConfig = loadConfig(DatabaseConfig::class)!!
 val rateLimitConfig: RateLimitConfig = loadConfig(RateLimitConfig::class)!!
 val webHookConfig: WebHookConfig = loadConfig(WebHookConfig::class)!!
 val apiConfig: ApiConfig = loadConfig(ApiConfig::class)!!
+val emailConfig: EmailConfig = loadConfig(EmailConfig::class)!!
 
 /**
  * Loads and generates config files based on the class

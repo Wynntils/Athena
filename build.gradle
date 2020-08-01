@@ -21,6 +21,7 @@ dependencies {
     implementation "com.googlecode.json-simple:json-simple:1.1.1"
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.10.+"
     implementation "org.mindrot:jbcrypt:0.4"
+    implementation "org.simplejavamail:simple-java-mail:6.4.1"
 }
 
 compileKotlin {

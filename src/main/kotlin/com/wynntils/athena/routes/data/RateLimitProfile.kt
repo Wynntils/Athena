@@ -10,7 +10,7 @@ data class RateLimitProfile(
     var requests: Int = 0,
     var releaseTime: Long = currentTimeMillis() + rateLimitConfig.timeout,
 
-    val rateLimited: Boolean = false
+    var rateLimited: Boolean = false
 ) {
 
     /**
@@ -20,9 +20,12 @@ data class RateLimitProfile(
      */
     fun increaseRequest(): Boolean {
         requests++
-        if (!rateLimited && requests > maxRequests) return true
+        if (rateLimited || requests <= maxRequests) {
+            return false
+        }
 
-        return false
+        rateLimited = true
+        return true
     }
 
     /**

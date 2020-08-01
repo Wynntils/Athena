@@ -22,8 +22,8 @@ import javax.servlet.http.HttpServletResponse
 
 val random = java.util.Random()
 
-val fileDateFormat = SimpleDateFormat("dd-MM-yyyy_hh-mm-ss")
-val textDateFormat = SimpleDateFormat("dd/MM/yyyy hh:mm:ss")
+val fileDateFormat = SimpleDateFormat("dd-MM-yyyy_HH-mm-ss")
+val textDateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
 val logDateFormat = SimpleDateFormat("dd-MM-yyy")
 
 private val executor: ExecutorService = Executors.newSingleThreadExecutor()

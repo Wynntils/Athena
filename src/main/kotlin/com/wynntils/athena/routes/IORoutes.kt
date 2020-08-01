@@ -48,7 +48,7 @@ class IORoutes {
 
         if (profile.increaseRequest()) {
             routeLogger.warn("[RateLimit] $entry was rate limited for 10 minutes.")
-            apiKey?.sendRateLimitWarning()
+            apiKey?.sendRateLimitWarning(profile.requests)
         }
 
         // add default RateLimit headers

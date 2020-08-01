@@ -29,6 +29,7 @@ val generalLog = Logger("general")
 val errorLog = Logger("error")
 
 val cacheDatabase = FileCabinet.getOrCreateDatabase("caches")
+val templateDatabase = FileCabinet.getOrCreateDatabase("templates")
 
 private fun main() {
     RethinkDB.setResultMapper(mapper) // updates jackson mapper to support kotlin data classes
