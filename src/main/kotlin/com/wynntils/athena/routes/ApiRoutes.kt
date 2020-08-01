@@ -372,6 +372,8 @@ class ApiRoutes {
             (body["maxLimit"] as Long).toInt()
         )
 
+        apiKey.asyncSave()
+
         response["message"] = "Successfully created an API Key."
         response["apiKey"] = apiKey.id
 
