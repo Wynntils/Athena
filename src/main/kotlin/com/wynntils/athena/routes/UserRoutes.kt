@@ -103,7 +103,7 @@ class UserRoutes {
         return response
     }
 
-    @Route(path = "/getInfo", type = RouteType.POST)
+    @Route(path = "/getInfo", type = RouteType.POST, ignoreRateLimit = true)
     fun getInfo(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
 
