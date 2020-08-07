@@ -6,6 +6,7 @@ import com.wynntils.athena.core.cache.exceptions.UnexpectedCacheResponse
 import com.wynntils.athena.core.cache.interfaces.DataCache
 import com.wynntils.athena.core.configs.apiConfig
 import com.wynntils.athena.core.configs.generalConfig
+import com.wynntils.athena.core.getOrCreate
 import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.routes.managers.ItemManager
 import org.json.simple.JSONArray
@@ -32,10 +33,20 @@ class ItemListCache: DataCache {
         val result = JSONOrderedObject()
         val items = result.getOrCreate<JSONArray>("items")
 
+        val materialTypes = result.getOrCreate<JSONObject>("materialTypes")
+
         val originalItems = input["items"] as JSONArray
         for (i in originalItems) {
             val item = i as JSONObject
-            items.add(ItemManager.convertItem(item))
+
+            // store all item material types
+            val converted = ItemManager.convertItem(item)
+            if (converted["itemInfo"] != null) {
+                val itemInfo = converted["itemInfo"] as JSONObject
+                materialTypes.getOrCreate<JSONArray>(itemInfo["type"] as String).add(itemInfo["material"])
+            }
+
+            items.add(converted)
         }
 
         result["identificationOrder"] = ItemManager.getIdentificationOrder()
