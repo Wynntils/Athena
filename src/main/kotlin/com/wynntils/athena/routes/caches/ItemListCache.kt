@@ -43,7 +43,10 @@ class ItemListCache: DataCache {
             val converted = ItemManager.convertItem(item)
             if (converted["itemInfo"] != null) {
                 val itemInfo = converted["itemInfo"] as JSONOrderedObject
-                materialTypes.getOrCreate<JSONArray>(itemInfo["type"] as String).add(itemInfo["material"])
+                val typeArray = materialTypes.getOrCreate<JSONArray>(itemInfo["type"] as String);
+
+                val material = itemInfo["material"];
+                if (material != null && !typeArray.contains(material)) typeArray.add(material)
             }
 
             items.add(converted)
