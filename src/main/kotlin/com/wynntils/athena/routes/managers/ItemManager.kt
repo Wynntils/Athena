@@ -39,7 +39,7 @@ object ItemManager {
         }
 
         // outside tags
-        result["displayName"] = input.getOrDefault("displayName", input["name"]).toString().replace("֎", "") // cancer has ֎ in it name for a random reason
+        result["displayName"] = if (input.containsKey("displayName")) input["displayName"] else (input["name"] as String).replace("֎", "") // cancer has ֎ in it name for a random reason
         result["tier"] = (input["tier"] as String).toUpperCase()
         result["identified"] = input.getOrDefault("identified", false)
         result["powderAmount"] =  input["sockets"]
