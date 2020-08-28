@@ -34,6 +34,7 @@ class ItemListCache: DataCache {
         val items = result.getOrCreate<JSONArray>("items")
 
         val materialTypes = result.getOrCreate<JSONObject>("materialTypes")
+        val translatedReferences = result.getOrCreate<JSONObject>("translatedReferences")
 
         val originalItems = input["items"] as JSONArray
         for (i in originalItems) {
@@ -48,6 +49,8 @@ class ItemListCache: DataCache {
                 val material = itemInfo["material"];
                 if (material != null && !typeArray.contains(material)) typeArray.add(material)
             }
+
+            if (item.containsKey("displayName")) translatedReferences[item["name"]] = item["displayName"]
 
             items.add(converted)
         }
