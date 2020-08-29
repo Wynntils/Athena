@@ -456,7 +456,7 @@ class ApiRoutes {
         }
 
         response["messsage"] = "Successfully located user '${body["configName"]}' configuration."
-        response["result"] = configFiles[body["configName"]]
+        response["result"] = (configFiles[body["configName"]] as String).asJSON()
         return response
     }
 
