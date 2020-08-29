@@ -33,6 +33,7 @@ import kotlin.collections.ArrayList
  *  POST /getUserByPassword/:apiKey
  *  POST /createApiKey/:apiKey
  *  POST /changeApiKey/:apiKey
+ *  POST /getUserConfig/:apikEY
  *  GET /timings
  */
 @BasePath("/api")
@@ -414,6 +415,48 @@ class ApiRoutes {
         response["message"] = "Successfully changed API Key."
         response["apiKey"] = apiKey.id
 
+        return response
+    }
+
+    /**
+     * Requests a cloud user configuration
+     * Required Body: user, configName
+     */
+    @Route(path = "/getUserConfig/:apiKey", type = RouteType.POST)
+    fun getUserConfig(ctx: Context): JSONOrderedObject {
+        val response = JSONOrderedObject()
+        if (!ctx.isAuthenticated()) {
+            ctx.status(401)
+
+            response["message"] = "Invalid API Authorization Key."
+            return response;
+        }
+
+        val body = ctx.body().asJSON<JSONObject>()
+        if (!body.contains("user") || !body.contains("configName")) {
+            ctx.status(400)
+
+            response["message"] = "Invalid body, expecting 'user' and 'configName'."
+            return response
+
+        }
+
+        val user = getUser(body["user"] as String)
+        if (user == null) {
+            ctx.status(400)
+
+            response["message"] = "There's no users with the provided parameters."
+            return response;
+        }
+
+        val configFiles = user.getConfigFiles()
+
+        if (!configFiles.containsKey(body["configName"])) {
+            return response
+        }
+
+        response["messsage"] = "Successfully located user '${body["configName"]}' configuration."
+        response["result"] = configFiles[body["configName"]]
         return response
     }
 
