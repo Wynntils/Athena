@@ -450,8 +450,16 @@ class ApiRoutes {
         }
 
         val configFiles = user.getConfigFiles()
+        if (body["configName"]!! == "list") {
+            response["messsage"] = "Successfully located found all user configs."
+
+            val result = response.getOrCreate<JSONArray>("result");
+            result.addAll(configFiles.keys)
+            return response
+        }
 
         if (!configFiles.containsKey(body["configName"])) {
+            response["message"] = "The provided config does not exists."
             return response
         }
 

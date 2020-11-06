@@ -4,8 +4,9 @@ import com.wynntils.athena.core.nanoTime
 import com.wynntils.athena.core.profiler.data.Section
 import com.wynntils.athena.core.utils.ExternalNotifications
 import com.wynntils.athena.generalLog
+import java.util.*
 
-private val sections = HashMap<String, Section>()
+private val sections = WeakHashMap<String, Section>()
 
 fun <T> profile(name: String,notification: Boolean = true, runnable: () -> T): T {
     val time = nanoTime()
