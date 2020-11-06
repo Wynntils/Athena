@@ -49,7 +49,7 @@ data class FileReference(
      * @param data the data you want to write
      */
     fun write(data: ByteArray) {
-        profile("FileCabinet-FileTable-FileReference-WriteBytes-${file.name}") { // performance profiling
+        profile("FileCabinet-FileTable-FileReference-WriteBytes") { // performance profiling
             val writer = FileOutputStream(file)
             writer.write(data)
             writer.close()
@@ -62,7 +62,7 @@ data class FileReference(
      * @param data the data you want to write
      */
     fun write(data: String) {
-        profile("FileCabinet-FileTable-FileReference-WriteString-${file.name}") {
+        profile("FileCabinet-FileTable-FileReference-WriteString") {
             val writer = FileWriter(file)
             writer.write(data)
             writer.close()

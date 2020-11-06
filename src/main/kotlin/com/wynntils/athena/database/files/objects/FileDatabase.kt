@@ -19,7 +19,7 @@ data class FileDatabase(
         if (loaded) return this
         val folders = path.list() ?: return this
 
-        profile("FileCabinet-FileDatabase-Load-$name") { // performance profiling
+        profile("FileCabinet-FileDatabase-Load") { // performance profiling
             folders.forEach { createTable(it) }
         }
 
@@ -98,7 +98,7 @@ data class FileDatabase(
     fun findFiles(name: String, limit: Int = 10): List<FileReference> {
         val finalList = ArrayList<FileReference>()
 
-        profile("FileCabinet-FileDatabase-FindFiles-${this.name}-$name") { // performance profiling
+        profile("FileCabinet-FileDatabase-FindFiles") { // performance profiling
             var found = 0
             for (table in tables.values) {
                 if (found >= limit || !table.hasFile(name)) continue
@@ -118,7 +118,7 @@ data class FileDatabase(
     fun totalSize(): Long {
         var sizeSum = 0L
 
-        profile("FileCabinet-FileDatabase-TotalSize-$name") { // performance profiling
+        profile("FileCabinet-FileDatabase-TotalSize") { // performance profiling
             tables.values.forEach {
                 sizeSum += it.totalSize()
             }
