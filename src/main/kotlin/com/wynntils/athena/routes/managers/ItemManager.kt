@@ -209,6 +209,59 @@ object ItemManager {
 
         return result
     }
+	
+    fun getInternalIdentifications(): JSONObject {
+        val result = JSONObject();
+    	
+        result["STRENGHTPOINTS"] = "rawStrength"
+        result["DEXTERITYPOINTS"] = "rawDexterity"
+        result["INTELLIGENCEPOINTS"] = "rawIntelligence"
+        result["DEFENSEPOINTS"] = "rawDefence"
+        result["AGILITYPOINTS"] = "rawAgility"
+        result["DAMAGEBONUS"] = "mainAttackDamage"
+        result["DAMAGEBONUSRAW"] = "rawMainAttackNeutralDamage"
+        result["SPELLDAMAGE"] = "spellDamage"
+        result["SPELLDAMAGERAW"] = "rawNeutralSpellDamage"
+        result["HEALTHREGEN"] = "healthRegen"
+        result["HEALTHREGENRAW"] = "rawHealthRegen"
+        result["HEALTHBONUS"] = "rawHealth"
+        result["POISON"] = "poison"
+        result["LIFESTEAL"] = "lifeSteal"
+        result["MANAREGEN"] = "manaRegen"
+        result["MANASTEAL"] = "manaSteal"
+        result["SPELL_COST_PCT_1"] = "1stSpellCost"
+        result["SPELL_COST_RAW_1"] = "raw1stSpellCost"
+        result["SPELL_COST_PCT_2"] = "2ndSpellCost"
+        result["SPELL_COST_RAW_2"] = "raw2ndSpellCost"
+        result["SPELL_COST_PCT_3"] = "3rdSpellCost"
+        result["SPELL_COST_RAW_3"] = "raw3rdSpellCost"
+        result["SPELL_COST_PCT_4"] = "4thSpellCost"
+        result["SPELL_COST_RAW_4"] = "raw4thSpellCost"
+        result["THORNS"] = "thorns"
+        result["REFLECTION"] = "reflection"
+        result["ATTACKSPEED"] = "attackSpeed"
+        result["SPEED"] = "walkSpeed"
+        result["EXPLODING"] = "exploding"
+        result["SOULPOINTS"] = "soulPointRegen"
+        result["STAMINA"] = "sprint"
+        result["STAMINA_REGEN"] = "sprintRegen"
+        result["JUMP_HEIGHT"] = "rawJumpHeight"
+        result["XPBONUS"] = "xpBonus"
+        result["LOOTBONUS"] = "lootBonus"
+        result["EMERALDSTEALING"] = "stealing"
+        result["EARTHDAMAGEBONUS"] = "earthDamage"
+        result["THUNDERDAMAGEBONUS"] = "thunderDamage"
+        result["WATERDAMAGEBONUS"] = "waterDamage"
+        result["FIREDAMAGEBONUS"] = "fireDamage"
+        result["AIRDAMAGEBONUS"] = "airDamage"
+        result["EARTHDEFENSE"] = "earthDefence"
+        result["THUNDERDEFENSE"] = "thunderDefence"
+        result["WATERDEFENSE"] = "waterDefence"
+        result["FIREDEFENSE"] = "fireDefence"
+        result["AIRDEFENSE"] = "airDefence"
+    	
+        return result
+    }
 
     private fun translateStatusName(raw: String): String? {
         return when(raw) {

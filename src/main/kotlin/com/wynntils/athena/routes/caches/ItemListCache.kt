@@ -56,6 +56,7 @@ class ItemListCache: DataCache {
         }
 
         result["identificationOrder"] = ItemManager.getIdentificationOrder()
+        result["internalIdentifications"] = ItemManager.getInternalIdentifications()
 
         return result
     }
