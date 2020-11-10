@@ -210,8 +210,8 @@ object ItemManager {
         return result
     }
 	
-    fun getInternalIdentifications(): JSONObject {
-        val result = JSONObject();
+    fun getInternalIdentifications(): JSONOrderedObject {
+        val result = JSONOrderedObject()
     	
         result["STRENGHTPOINTS"] = "rawStrength"
         result["DEXTERITYPOINTS"] = "rawDexterity"
