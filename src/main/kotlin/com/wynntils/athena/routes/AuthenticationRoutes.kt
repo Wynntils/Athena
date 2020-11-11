@@ -69,7 +69,7 @@ class AuthenticationRoutes {
 
         ctx.status(200)
         response["message"] = "Authentication code generated."
-        response["authToken"] = user.authToken as String
+        response["authToken"] = user.authToken.toString()
 
         response["configFiles"] = user.getConfigFiles()
 
