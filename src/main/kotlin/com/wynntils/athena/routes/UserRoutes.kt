@@ -124,7 +124,7 @@ class UserRoutes {
         }
 
         val user = response.getOrCreate<JSONOrderedObject>("user")
-        user["accountType"] = userProfile.accountType
+        user["accountType"] = userProfile.accountType.toString()
 
         val cosmetic = user.getOrCreate<JSONOrderedObject>("cosmetics")
         cosmetic["hasCape"] = userProfile.cosmeticInfo.hasCape()
