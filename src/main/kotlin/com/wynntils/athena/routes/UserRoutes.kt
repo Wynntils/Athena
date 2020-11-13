@@ -2,16 +2,19 @@ package com.wynntils.athena.routes
 
 import com.wynntils.athena.core.asJSON
 import com.wynntils.athena.core.getOrCreate
+import com.wynntils.athena.core.isAuthenticated
 import com.wynntils.athena.core.routes.annotations.BasePath
 import com.wynntils.athena.core.routes.annotations.Route
 import com.wynntils.athena.core.routes.enums.RouteType
 import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.core.utils.ZLibHelper
 import com.wynntils.athena.database.DatabaseManager
+import com.wynntils.athena.database.enums.TextureResolution
 import com.wynntils.athena.routes.managers.CapeManager
 import io.javalin.http.Context
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
+import org.mindrot.jbcrypt.BCrypt
 import java.util.*
 
 /**
@@ -103,6 +106,84 @@ class UserRoutes {
         return response
     }
 
+    /**
+     * Sets the user password
+     * Required Body: authToken, password
+     */
+    @Route(path = "/setUserPassword", type = RouteType.POST)
+    fun setUserPassword(ctx: Context): JSONOrderedObject {
+        val response = JSONOrderedObject()
+        val body = ctx.body().asJSON<JSONObject>()
+        if (!body.contains("authToken") || !body.contains("password")) {
+            ctx.status(400)
+
+            response["message"] = "Invalid body, expecting 'authToken' and 'password'."
+            return response
+        }
+
+        val user = DatabaseManager.getUserProfile(ctx.formParams("authToken").first())
+        if (user == null) {
+            ctx.status(401)
+
+            response["message"] = "The provided Authorization Token is invalid."
+            return response
+        }
+
+        user.password = BCrypt.hashpw(body["password"] as String, BCrypt.gensalt(12))
+        user.asyncSave()
+
+        response["message"] = "Successfully set user account password."
+        return response
+    }
+
+    /**
+     * Sets the user cosmetic texture based on it SHA-1
+     * Required Body: authToken, cosmeticObject
+     */
+    @Route(path = "/updateCosmetics", type = RouteType.POST)
+    fun setCosmeticTexture(ctx: Context): JSONOrderedObject {
+        val response = JSONOrderedObject()
+        val body = ctx.body().asJSON<JSONObject>()
+        if (!body.contains("authToken") || !body.contains("cosmetics")) {
+            ctx.status(400)
+
+            response["message"] = "Invalid body, expecting 'authToken' and 'cosmetics'."
+            return response
+        }
+
+        val user = DatabaseManager.getUserProfile(ctx.formParams("authToken").first())
+        if (user == null) {
+            ctx.status(401)
+
+            response["message"] = "The provided Authorization Token is invalid."
+            return response
+        }
+
+
+        val cosmetics = body.getOrCreate<JSONObject>("cosmetics")
+        if (cosmetics.contains("texture"))
+            user.cosmeticInfo.capeTexture = cosmetics["texture"] as String
+        if (cosmetics.contains("isElytra"))
+            user.cosmeticInfo.elytraEnabled = cosmetics["isElytra"] as Boolean
+        if (cosmetics.containsKey("maxResolution"))
+            user.cosmeticInfo.maxResolution = TextureResolution.valueOf(cosmetics["maxResolution"] as String)
+        if (cosmetics.containsKey("allowAnimated"))
+            user.cosmeticInfo.allowAnimated = cosmetics["allowAnimated"] as Boolean
+
+        if (cosmetics.contains("parts")) {
+            val parts = cosmetics.getOrCreate<JSONObject>("parts")
+            for (part in parts.keys) {
+                user.cosmeticInfo.parts[part as String] = parts[part] as Boolean
+            }
+        }
+
+        user.asyncSave()
+
+        response["message"] = "Updated users cosmetics successfully."
+        return response
+    }
+
+
     @Route(path = "/getInfo", type = RouteType.POST, ignoreRateLimit = true)
     fun getInfo(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
@@ -129,6 +210,7 @@ class UserRoutes {
         val cosmetic = user.getOrCreate<JSONOrderedObject>("cosmetics")
         cosmetic["hasCape"] = userProfile.cosmeticInfo.hasCape()
         cosmetic["hasElytra"] = userProfile.cosmeticInfo.hasElytra()
+        cosmetic["isElytra"] = userProfile.cosmeticInfo.elytraEnabled
 
         // TODO add parts
         cosmetic["hasEars"] = userProfile.cosmeticInfo.hasPart("ears")
