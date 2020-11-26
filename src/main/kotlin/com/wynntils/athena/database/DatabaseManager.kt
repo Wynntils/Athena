@@ -42,9 +42,7 @@ object DatabaseManager {
         val result = ArrayList<UserProfile>()
         val requestResult = r.table("users").filter(r.hashMap("username", name)).run(connection, UserProfile::class.java)
 
-        while (requestResult.hasNext()) {
-            result += requestResult.next()!!
-        }
+        requestResult.forEach { result.add(it) }
 
         return result
     }
@@ -68,9 +66,7 @@ object DatabaseManager {
         if (!requestResult.hasNext()) return emptyList();
 
         val result = ArrayList<GatheringSpotProfile>()
-        while (requestResult.hasNext()) {
-            result += requestResult.next() ?: continue
-        }
+        requestResult.forEach { result.add(it) }
 
         return result
     }
