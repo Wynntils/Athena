@@ -25,5 +25,4 @@ enum class ProfessionType(
 
     OVERALL("", "overall/all")
 
-
 }

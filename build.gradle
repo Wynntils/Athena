@@ -15,7 +15,7 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect:1.3.21"
 
-    implementation "com.rethinkdb:rethinkdb-driver:2.4.2"
+    implementation "com.rethinkdb:rethinkdb-driver:2.4.4"
     implementation "org.slf4j:slf4j-nop:1.7.26"
     implementation "io.javalin:javalin:3.7.0"
     implementation "com.googlecode.json-simple:json-simple:1.1.1"

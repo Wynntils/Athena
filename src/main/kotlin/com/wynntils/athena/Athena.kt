@@ -43,6 +43,7 @@ private fun main() {
     server = Javalin.create {
         it.defaultContentType = "application/json"
         it.showJavalinBanner = false
+        it.asyncRequestTimeout = 1000 * 15
     }.start(generalConfig.port)
     server.setupExceptions()
 
