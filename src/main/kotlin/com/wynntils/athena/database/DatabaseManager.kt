@@ -1,6 +1,7 @@
 package com.wynntils.athena.database
 
 import com.rethinkdb.RethinkDB.r
+import com.rethinkdb.net.Result
 import com.wynntils.athena.core.configs.databaseConfig
 import com.wynntils.athena.core.data.Location
 import com.wynntils.athena.database.objects.ApiKeyProfile
@@ -10,7 +11,7 @@ import com.wynntils.athena.database.objects.UserProfile
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import kotlin.collections.ArrayList
+import java.util.concurrent.TimeUnit
 
 object DatabaseManager {
 
@@ -25,57 +26,51 @@ object DatabaseManager {
 
     fun getUserProfile(id: UUID, create: Boolean = true): UserProfile? {
         val requestResult = r.table("users").get(id.toString()).run(connection, UserProfile::class.java)
-        if (!requestResult.hasNext()) return if (create) UserProfile(id) else null
-
-        return requestResult.first() ?: if (create) UserProfile(id) else null
+        return getResult(requestResult).firstOrNull() ?: if (create) UserProfile(id) else null
     }
 
     fun getUserProfile(token: String): UserProfile? {
         val requestResult = r.table("users").filter(r.hashMap("authToken", token))
             .limit(1).run(connection, UserProfile::class.java)
-        if (!requestResult.hasNext()) return null
 
-        return requestResult.first()
+        return getResult(requestResult).firstOrNull()
     }
 
     fun getUsersProfiles(name: String): List<UserProfile> {
-        val result = ArrayList<UserProfile>()
         val requestResult = r.table("users").filter(r.hashMap("username", name)).run(connection, UserProfile::class.java)
-
-        requestResult.forEach { result.add(it) }
-
-        return result
+        return getResult(requestResult)
     }
 
     fun getGuildProfile(name: String): GuildProfile? {
         val requestResult = r.table("guilds").get(name).run(connection, GuildProfile::class.java)
-        if (!requestResult.hasNext()) return null
-
-        return requestResult.first()
+        return getResult(requestResult).firstOrNull()
     }
 
     fun getGatheringSpot(location: Location): GatheringSpotProfile? {
         val requestResult = r.table("gathering").get(location.toString()).run(connection, GatheringSpotProfile::class.java)
-        if (!requestResult.hasNext()) return null
-
-        return requestResult.first()
+        return getResult(requestResult).firstOrNull()
     }
 
     fun getAllGatheringSpots(): List<GatheringSpotProfile> {
         val requestResult = r.table("gathering").run(connection, GatheringSpotProfile::class.java)
-        if (!requestResult.hasNext()) return emptyList();
-
-        val result = ArrayList<GatheringSpotProfile>()
-        requestResult.forEach { result.add(it) }
-
-        return result
+        return getResult(requestResult)
     }
 
     fun getApiKey(apiKey: String): ApiKeyProfile? {
         val requestResult = r.table("apiKeys").get(apiKey).run(connection, ApiKeyProfile::class.java)
-        if (!requestResult.hasNext()) return null
+        return getResult(requestResult).firstOrNull()
+    }
 
-        return requestResult.first()
+    private fun <T: Any> getResult(result: Result<T>): List<T> {
+        val resultArray = ArrayList<T>()
+
+        try {
+            while (result.hasNext()) {
+                result.next(10, TimeUnit.SECONDS)?.let { resultArray.add(it) }
+            }
+        } catch (ignored: Exception) { }
+
+        return resultArray
     }
 
 }
