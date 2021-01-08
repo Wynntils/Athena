@@ -29,6 +29,12 @@ object IngredientManager {
         result["tier"] = input["tier"]
         result["level"] = input["level"]
         result["untradeable"] = input.getOrDefault("untradeable", false)
+
+        // material
+        val sprite = input["sprite"] as JSONObject
+        result["material"] = "${sprite["id"]}:${sprite["damage"]}"
+
+        // professions
         result["professions"] = input["skills"]
 
         // statuses
