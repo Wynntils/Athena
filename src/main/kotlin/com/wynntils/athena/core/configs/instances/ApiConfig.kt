@@ -22,6 +22,9 @@ data class ApiConfig (
 
     val wynnOnlinePlayers: String = "https://api.wynncraft.com/public_api.php?action=onlinePlayers",
 
-    val wynnLeaderboards: String = "https://api.wynncraft.com/v2/leaderboards/player/"
+    val wynnLeaderboards: String = "https://api.wynncraft.com/v2/leaderboards/player/",
+
+    val wynnIngredients: String = "https://api.wynncraft.com/v2/ingredient/search/skills/%5Etailoring,armouring," +
+            "jeweling,cooking,woodworking,weaponsmithing,alchemism,scribing"
 
 )
