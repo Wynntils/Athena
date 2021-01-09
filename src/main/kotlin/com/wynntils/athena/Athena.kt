@@ -67,6 +67,7 @@ private fun main() {
     CacheManager.refreshCache(GatheringSpotsCache())
     CacheManager.refreshCache(ItemListCache())
     CacheManager.refreshCache(LeaderboardCache())
+    CacheManager.refreshCache(IngredientListCache())
 
     generalLog.info(AsciiColor.GREEN + "All done, startup sequence completed!")
     ExternalNotifications.sendMessage(description = "Athena is online!", color = 65280)
