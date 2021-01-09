@@ -41,6 +41,8 @@ class IngredientListCache: DataCache {
             items.add(converted)
         }
 
+        result["headTextures"] = IngredientManager.getHeadTextures()
+
         return result
     }
 
