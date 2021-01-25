@@ -46,8 +46,14 @@ class TerritoryListCache: DataCache {
             final["attacker"] = wynn["attacker"]
             final["level"] = 1 // not used
 
-            if (wynn.containsKey("location")) // some territories have missing location data
-                final["location"] = wynn["location"]
+            if (wynn.containsKey("location")) {// some territories have missing location data
+                val location = final.getOrCreate<JSONOrderedObject>("location")
+                val wynnLocation = wynn["location"] as JSONObject
+                location["startX"] = wynnLocation["startX"]
+                location["startZ"] = wynnLocation["startY"] // y-z mismatch
+                location["endX"] = wynnLocation["endX"]
+                location["endZ"] = wynnLocation["endY"]
+            }
         }
 
         return response
