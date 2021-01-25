@@ -45,7 +45,9 @@ class TerritoryListCache: DataCache {
             final["acquired"] = wynn["acquired"]
             final["attacker"] = wynn["attacker"]
             final["level"] = 1 // not used
-            final["location"] = wynn["location"]
+
+            if (wynn.containsKey("location")) // some territories have missing location data
+                final["location"] = wynn["location"]
         }
 
         return response
