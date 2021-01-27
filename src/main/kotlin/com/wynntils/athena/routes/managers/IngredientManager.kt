@@ -127,6 +127,8 @@ object IngredientManager {
             "XPBONUS" -> "xpBonus"
             "LOOTBONUS" -> "lootBonus"
             "LOOT_QUALITY" -> "lootQuality"
+            "GATHER_XP_BONUS" -> "gatherXPBonus"
+            "GATHER_SPEED" -> "gatherSpeed"
             "EMERALDSTEALING" -> "stealing"
             "EARTHDAMAGEBONUS" -> "earthDamage"
             "THUNDERDAMAGEBONUS" -> "thunderDamage"
