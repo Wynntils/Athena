@@ -15,6 +15,7 @@ import io.javalin.http.Context
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.util.*
 import javax.imageio.ImageIO
@@ -133,20 +134,24 @@ class CapeRoutes {
                 continue
             }
 
-            val data = file.content.readBytes()
-            val image = ImageIO.read(ByteArrayInputStream(data))
+            val image = ImageIO.read(ByteArrayInputStream(file.content.readBytes()))
 
             // image checksum
             if (image == null) {
                 fileResult["message"] = "The provided file is not a PNG image."
                 continue
             }
-            if ((image.width + image.height) % 32 != 0) {
+            if (image.width % 64 != 0 || image.height % (image.width / 2) != 0) {
                 fileResult["message"] = "The image needs to be multiple of 64x32."
                 continue
             }
 
-            val hash = Hash.SHA1.hash(data)
+            CapeManager.maskCape(image)
+            val bos = ByteArrayOutputStream()
+            ImageIO.write(image, "png", bos)
+            val maskedImage = bos.toByteArray();
+
+            val hash = Hash.SHA1.hash(maskedImage)
             fileResult["sha-1"] = hash
             if (CapeManager.isApproved(hash)) {
                 fileResult["message"] = "The provided cape is already approved."
@@ -162,7 +167,7 @@ class CapeRoutes {
             }
 
             fileResult["message"] = "Added to the queue."
-            CapeManager.queueCape(data)
+            CapeManager.queueCape(maskedImage)
         }
 
         return result

@@ -4,13 +4,18 @@ import com.wynntils.athena.core.configs.generalConfig
 import com.wynntils.athena.core.enums.Hash
 import com.wynntils.athena.core.utils.ExternalNotifications
 import com.wynntils.athena.database.files.FileCabinet
+import java.awt.image.BufferedImage
 import java.io.InputStream
 import java.util.*
+import javax.imageio.ImageIO
 
 object CapeManager {
 
     val token = UUID.randomUUID().toString().replace("-", "")
     val database = FileCabinet.getOrCreateDatabase("capes")
+
+    private val capeMask = ImageIO.read(javaClass.getResource("cape_mask.png"))
+    private val maskPixels = capeMask.getRGB(0, 0, capeMask.width, capeMask.height, null, 0, capeMask.width)
 
     /**
      * Get's the approved cape image file based on the cape SHA-1
@@ -168,4 +173,20 @@ object CapeManager {
         return table.hasFile(sha1)
     }
 
+    /**
+     * Masks an image, only where the mask contains white will the image contain visible pixels.
+     * This operation occurs inline
+     */
+    fun maskCape(cape: BufferedImage) {
+        val scale = cape.width / capeMask.width
+        val capePixels = cape.getRGB(0, 0, cape.width, cape.height, null, 0, cape.width)
+
+        for (y in 0 until cape.height) {
+            for (x in 0 until cape.width) {
+                capePixels[x + y * cape.width] = capePixels[x + y * cape.width] and maskPixels[((x / scale) + ((y / scale) * capeMask.width)) % maskPixels.size]
+            }
+        }
+
+        cape.setRGB(0, 0, cape.width, cape.height, capePixels, 0, cape.width)
+    }
 }

@@ -37,6 +37,14 @@ jar {
     }
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDir "src/main/resources"
+        }
+    }
+}
+
 shadowJar.archiveName = "WynntilsAthena-${versionObj}.jar"
 
 class Version {
