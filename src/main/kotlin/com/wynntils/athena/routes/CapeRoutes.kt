@@ -29,6 +29,7 @@ import javax.imageio.ImageIO
  *  GET /user/:uuid
  *  GET /list
  *  GET /queue/get/:id
+ *  GET /queue/list
  *  GET /queue/approve/:token/:sha1
  *  GET /queue/ban/:token/:sha1
  *  POST /queue/upload/:token
@@ -101,6 +102,16 @@ class CapeRoutes {
         if (CapeManager.isApproved(id)) return CapeManager.getCape(id)
 
         return CapeManager.getQueuedCape(id)
+    }
+
+    @Route(path = "/queue/list", type = RouteType.GET)
+    fun queueList(ctx: Context): JSONOrderedObject {
+        val response = JSONOrderedObject()
+
+        val result = response.getOrCreate<JSONArray>("result")
+        CapeManager.listQueuedCapes().forEach { result.add(it) }
+
+        return response
     }
 
     @Route(path = "/queue/upload/:token", type = RouteType.POST)

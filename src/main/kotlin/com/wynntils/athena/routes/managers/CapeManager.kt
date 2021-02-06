@@ -81,6 +81,15 @@ object CapeManager {
     }
 
     /**
+     * List all queued capes
+     *
+     * @return a HashSet containing all queued cape's SHA-1s
+     */
+    fun listQueuedCapes(): HashSet<String> {
+        return database.getOrCreateTable("queue").listFiles()
+    }
+
+    /**
      * Insert a cape to the analyse process
      *
      * @param data the cape byte array
