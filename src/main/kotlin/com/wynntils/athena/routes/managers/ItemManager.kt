@@ -1,12 +1,16 @@
 package com.wynntils.athena.routes.managers
 
+import com.wynntils.athena.core.asJSON
 import com.wynntils.athena.core.utils.JSONOrderedObject
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
+import java.io.FileReader
 
 object ItemManager {
 
     fun convertItem(input: JSONObject): JSONOrderedObject {
+        val wynnbuilderIDs = FileReader(javaClass.getResource("wynnbuilderIDs.json").file).readText().asJSON<JSONObject>()
+
         val result = JSONOrderedObject()
 
         fun isFixed(raw: String): Boolean {
@@ -44,6 +48,7 @@ object ItemManager {
         result["identified"] = input.getOrDefault("identified", false)
         result["powderAmount"] =  input["sockets"]
         result["attackSpeed"] = input["attackSpeed"]
+        result["wynnbuilderId"] = if (wynnbuilderIDs.getOrDefault(input["name"],-1)!=-1) wynnbuilderIDs[input["name"]] else wynnbuilderIDs.getOrDefault(result["displayName"], -1)
 
         // item info
         val itemInfo = result.getOrCreate<JSONOrderedObject>("itemInfo")
@@ -168,7 +173,7 @@ object ItemManager {
         order["sprint"] = 33
         order["sprintRegen"] = 34
         order["rawJumpHeight"] = 35
-        //eigth group {XP/Gathering stuff}
+        //eighth group {XP/Gathering stuff}
         order["soulPointRegen"] = 36
         order["lootBonus"] = 37
         order["lootQuality"] = 38
