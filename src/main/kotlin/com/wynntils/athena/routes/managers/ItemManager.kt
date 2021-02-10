@@ -48,7 +48,7 @@ object ItemManager {
         result["identified"] = input.getOrDefault("identified", false)
         result["powderAmount"] =  input["sockets"]
         result["attackSpeed"] = input["attackSpeed"]
-        result["wynnbuilderId"] = if (wynnbuilderIDs.getOrDefault(input["name"],-1)!=-1) wynnbuilderIDs[input["name"]] else wynnbuilderIDs.getOrDefault(result["displayName"], -1)
+        result["wynnbuilderId"] = wynnbuilderIDs.getOrDefault(input["name"],wynnbuilderIDs.getOrDefault(result["displayName"], -1))
 
         // item info
         val itemInfo = result.getOrCreate<JSONOrderedObject>("itemInfo")
