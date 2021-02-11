@@ -8,8 +8,9 @@ import java.io.FileReader
 
 object ItemManager {
 
+    private val wynnbuilderIDs = FileReader(javaClass.getResource("wynnbuilderIDs.json").file).readText().asJSON<JSONObject>()
+
     fun convertItem(input: JSONObject): JSONOrderedObject {
-        val wynnbuilderIDs = FileReader(javaClass.getResource("wynnbuilderIDs.json").file).readText().asJSON<JSONObject>()
 
         val result = JSONOrderedObject()
 
