@@ -19,6 +19,7 @@ import org.json.simple.JSONObject
 import java.io.InputStream
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.findAnnotation
@@ -67,10 +68,14 @@ fun Javalin.registerRoutes(clazz: KClass<*>) {
             }
 
             fun getAsyncResponse() = CompletableFuture<InputStream>().apply {
-                executor.submit {
+                val future = executor.submit {
                     val response = parseResponse() ?: return@submit
                     complete(response)
                 }
+
+                // set a timeout operation, kill and clean the thread after execution
+                future.get(5, TimeUnit.SECONDS)
+                future.cancel(true)
             }
 
             fun getSyncResponse() {

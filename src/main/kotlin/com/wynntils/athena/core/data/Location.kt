@@ -29,4 +29,5 @@ data class Location(
         }
 
     }
+
 }

@@ -1,5 +1,6 @@
 package com.wynntils.athena.database
 
+import com.github.benmanes.caffeine.cache.Caffeine
 import com.rethinkdb.RethinkDB.r
 import com.rethinkdb.net.Result
 import com.wynntils.athena.core.configs.databaseConfig
@@ -24,16 +25,27 @@ object DatabaseManager {
 
     val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
+    // caches
+    private val userProfiles = Caffeine.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build<UUID, UserProfile>()
+    private val reverseLookup = Caffeine.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).build<String, UUID>()
+
     fun getUserProfile(id: UUID, create: Boolean = true): UserProfile? {
-        val requestResult = r.table("users").get(id.toString()).run(connection, UserProfile::class.java)
-        return getResult(requestResult).firstOrNull() ?: if (create) UserProfile(id) else null
+        return userProfiles.get(id) {
+            val requestResult = r.table("users").get(id.toString()).run(connection, UserProfile::class.java)
+            getResult(requestResult).firstOrNull() ?: if (create) UserProfile(id) else null
+        }
     }
 
     fun getUserProfile(token: String): UserProfile? {
-        val requestResult = r.table("users").filter(r.hashMap("authToken", token))
-            .limit(1).run(connection, UserProfile::class.java)
+        return reverseLookup.get(token) {
+            val requestResult = r.table("users").getAll(token).optArg("index", "authToken")
+                .limit(1).run(connection, UserProfile::class.java)
 
-        return getResult(requestResult).firstOrNull()
+            val result = getResult(requestResult).firstOrNull() ?: return@get null
+
+            userProfiles.put(result.id, result)
+            return@get result.id
+        }?.let { userProfiles.getIfPresent(it) }
     }
 
     fun getUsersProfiles(name: String): List<UserProfile> {
