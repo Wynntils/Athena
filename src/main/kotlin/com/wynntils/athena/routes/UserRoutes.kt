@@ -136,54 +136,6 @@ class UserRoutes {
         return response
     }
 
-    /**
-     * Sets the user cosmetic texture based on it SHA-1
-     * Required Body: authToken, cosmeticObject
-     */
-    @Route(path = "/updateCosmetics", type = RouteType.POST)
-    fun setCosmeticTexture(ctx: Context): JSONOrderedObject {
-        val response = JSONOrderedObject()
-        val body = ctx.body().asJSON<JSONObject>()
-        if (!body.contains("authToken") || !body.contains("cosmetics")) {
-            ctx.status(400)
-
-            response["message"] = "Invalid body, expecting 'authToken' and 'cosmetics'."
-            return response
-        }
-
-        val user = DatabaseManager.getUserProfile(ctx.formParams("authToken").first())
-        if (user == null) {
-            ctx.status(401)
-
-            response["message"] = "The provided Authorization Token is invalid."
-            return response
-        }
-
-
-        val cosmetics = body.getOrCreate<JSONObject>("cosmetics")
-        if (cosmetics.contains("texture"))
-            user.cosmeticInfo.capeTexture = cosmetics["texture"] as String
-        if (cosmetics.contains("isElytra"))
-            user.cosmeticInfo.elytraEnabled = cosmetics["isElytra"] as Boolean
-        if (cosmetics.containsKey("maxResolution"))
-            user.cosmeticInfo.maxResolution = TextureResolution.valueOf(cosmetics["maxResolution"] as String)
-        if (cosmetics.containsKey("allowAnimated"))
-            user.cosmeticInfo.allowAnimated = cosmetics["allowAnimated"] as Boolean
-
-        if (cosmetics.contains("parts")) {
-            val parts = cosmetics.getOrCreate<JSONObject>("parts")
-            for (part in parts.keys) {
-                user.cosmeticInfo.parts[part as String] = parts[part] as Boolean
-            }
-        }
-
-        user.asyncSave()
-
-        response["message"] = "Updated users cosmetics successfully."
-        return response
-    }
-
-
     @Route(path = "/getInfo", type = RouteType.POST, ignoreRateLimit = true)
     fun getInfo(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
@@ -210,7 +162,6 @@ class UserRoutes {
         val cosmetic = user.getOrCreate<JSONOrderedObject>("cosmetics")
         cosmetic["hasCape"] = userProfile.cosmeticInfo.hasCape()
         cosmetic["hasElytra"] = userProfile.cosmeticInfo.hasElytra()
-        cosmetic["isElytra"] = userProfile.cosmeticInfo.elytraEnabled
 
         // TODO add parts
         cosmetic["hasEars"] = userProfile.cosmeticInfo.hasPart("ears")
