@@ -14,6 +14,7 @@ import com.wynntils.athena.routes.managers.CapeManager
 import io.javalin.http.Context
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
+import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -140,18 +141,13 @@ class CapeRoutes {
                 fileResult["message"] = "The provided file excess the 500kb limit."
                 continue
             }
-            if (file.extension != ".png") {
+            if (file.extension != ".png" || file.contentType != "image/png") {
                 fileResult["message"] = "The provided file is not a PNG image."
                 continue
             }
 
-            val image = ImageIO.read(ByteArrayInputStream(file.content.readBytes()))
+            val image = readBytesAsImage(file.content.readBytes())
 
-            // image checksum
-            if (image == null) {
-                fileResult["message"] = "The provided file is not a PNG image."
-                continue
-            }
             if (image.width % 64 != 0 || image.height % (image.width / 2) != 0) {
                 fileResult["message"] = "The image needs to be multiple of 64x32."
                 continue
@@ -237,4 +233,16 @@ class CapeRoutes {
         return false
     }
 
+    private fun readBytesAsImage(bytes: ByteArray): BufferedImage {
+        val image = ImageIO.read(ByteArrayInputStream(bytes))
+        return if (image.type != BufferedImage.TYPE_INT_ARGB) {
+            val convertedImage = BufferedImage(image.width, image.height, BufferedImage.TYPE_INT_ARGB)
+            val g = convertedImage.createGraphics();
+            g.drawImage(image, 0, 0, image.width, image.height, null)
+            g.dispose()
+            convertedImage
+        } else {
+            image
+        }
+    }
 }
