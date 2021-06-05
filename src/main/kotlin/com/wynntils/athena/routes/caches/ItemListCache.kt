@@ -37,6 +37,7 @@ class ItemListCache: DataCache {
         val translatedReferences = result.getOrCreate<JSONObject>("translatedReferences")
 
         val originalItems = input["items"] as JSONArray
+        val itemsMap = HashMap<String, JSONOrderedObject>()
         for (i in originalItems) {
             val item = i as JSONObject
 
@@ -51,8 +52,23 @@ class ItemListCache: DataCache {
             }
 
             if (item.containsKey("displayName")) translatedReferences[item["name"]] = item["displayName"]
-
+            itemsMap[item["name"] as String] = converted
             items.add(converted)
+        }
+        
+        val wynnBuilder = URL(apiConfig.wynnBuilderIDs).openConnection()
+        wynnBuilder.setRequestProperty("User-Agent", generalConfig.userAgent)
+        wynnBuilder.readTimeout = 20000
+        wynnBuilder.connectTimeout = 20000
+
+        val wynnBuilderInput = wynnBuilder.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>()
+        if (wynnBuilderInput.containsKey("items")) {
+            val wynnBuilderItems = wynnBuilderInput["items"] as JSONArray
+            for (i in wynnBuilderItems) {
+                val wynnBuilderItem = i as JSONObject
+                val item = itemsMap[wynnBuilderItem["name"] as String]
+                item?.put("wynnBuilderID", wynnBuilderItem["id"])
+            }
         }
 
         result["identificationOrder"] = ItemManager.getIdentificationOrder()

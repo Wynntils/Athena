@@ -25,6 +25,8 @@ data class ApiConfig (
     val wynnLeaderboards: String = "https://api.wynncraft.com/v2/leaderboards/player/",
 
     val wynnIngredients: String = "https://api.wynncraft.com/v2/ingredient/search/skills/%5Etailoring,armouring," +
-            "jeweling,cooking,woodworking,weaponsmithing,alchemism,scribing"
+            "jeweling,cooking,woodworking,weaponsmithing,alchemism,scribing",
+
+    val wynnBuilderIDs: String = "https://wynnbuilder.github.io/compress.json"
 
 )
