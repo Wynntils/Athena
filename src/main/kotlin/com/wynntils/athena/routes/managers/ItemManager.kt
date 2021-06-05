@@ -213,7 +213,7 @@ object ItemManager {
     fun getInternalIdentifications(): JSONOrderedObject {
         val result = JSONOrderedObject()
     	
-        result["STRENGHTPOINTS"] = "rawStrength"
+        result["STRENGTHPOINTS"] = "rawStrength"
         result["DEXTERITYPOINTS"] = "rawDexterity"
         result["INTELLIGENCEPOINTS"] = "rawIntelligence"
         result["DEFENSEPOINTS"] = "rawDefence"
