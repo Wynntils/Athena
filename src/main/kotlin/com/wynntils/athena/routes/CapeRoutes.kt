@@ -141,12 +141,12 @@ class CapeRoutes {
                 fileResult["message"] = "The provided file excess the 500kb limit."
                 continue
             }
-            if (file.extension != ".png" || file.contentType != "image/png") {
-                fileResult["message"] = "The provided file is not a PNG image."
-                continue
-            }
 
             val image = readBytesAsImage(file.content.readBytes())
+            if (image === null) {
+                fileResult["message"] = "The provided file is not a valid image."
+                continue
+            }
 
             if (image.width % 64 != 0 || image.height % (image.width / 2) != 0) {
                 fileResult["message"] = "The image needs to be multiple of 64x32."
@@ -233,9 +233,10 @@ class CapeRoutes {
         return false
     }
 
-    private fun readBytesAsImage(bytes: ByteArray): BufferedImage {
+    private fun readBytesAsImage(bytes: ByteArray): BufferedImage? {
         val image = ImageIO.read(ByteArrayInputStream(bytes))
-        return if (image.type != BufferedImage.TYPE_INT_ARGB) {
+
+        return if (image != null && image.type != BufferedImage.TYPE_INT_ARGB) {
             val convertedImage = BufferedImage(image.width, image.height, BufferedImage.TYPE_INT_ARGB)
             val g = convertedImage.createGraphics();
             g.drawImage(image, 0, 0, image.width, image.height, null)
