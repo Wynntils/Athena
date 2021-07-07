@@ -55,7 +55,7 @@ class ItemListCache: DataCache {
             itemsMap[item["name"] as String] = converted
             items.add(converted)
         }
-        
+
         val wynnBuilder = URL(apiConfig.wynnBuilderIDs).openConnection()
         wynnBuilder.setRequestProperty("User-Agent", generalConfig.userAgent)
         wynnBuilder.readTimeout = 20000
@@ -73,6 +73,7 @@ class ItemListCache: DataCache {
 
         result["identificationOrder"] = ItemManager.getIdentificationOrder()
         result["internalIdentifications"] = ItemManager.getInternalIdentifications()
+        result["majorIdentifications"] = ItemManager.getMajorIdentifications()
 
         return result
     }

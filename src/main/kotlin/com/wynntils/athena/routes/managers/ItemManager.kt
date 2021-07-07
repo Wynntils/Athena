@@ -1,6 +1,7 @@
 package com.wynntils.athena.routes.managers
 
 import com.wynntils.athena.core.utils.JSONOrderedObject
+import com.wynntils.athena.database.enums.MajorIdentification
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 
@@ -209,10 +210,10 @@ object ItemManager {
 
         return result
     }
-	
+
     fun getInternalIdentifications(): JSONOrderedObject {
         val result = JSONOrderedObject()
-    	
+
         result["STRENGTHPOINTS"] = "rawStrength"
         result["DEXTERITYPOINTS"] = "rawDexterity"
         result["INTELLIGENCEPOINTS"] = "rawIntelligence"
@@ -259,7 +260,19 @@ object ItemManager {
         result["WATERDEFENSE"] = "waterDefence"
         result["FIREDEFENSE"] = "fireDefence"
         result["AIRDEFENSE"] = "airDefence"
-    	
+
+        return result
+    }
+
+    fun getMajorIdentifications(): JSONOrderedObject {
+        val result = JSONOrderedObject()
+
+        for (id in MajorIdentification.values()) {
+            val entry = result.getOrCreate<JSONOrderedObject>(id.name)
+            entry["name"] = id.displayname
+            entry["description"] = id.description
+        }
+
         return result
     }
 
