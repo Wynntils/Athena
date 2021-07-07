@@ -87,16 +87,6 @@ object ItemManager {
         // Pure Copy
         val statuses = result.getOrCreate<JSONOrderedObject>("statuses")
 
-        if (input.containsKey("majorIds")) {
-            val majorIds = result.getOrCreate<JSONArray>("majorIdentifications")
-
-            for (id in input["majorIds"] as JSONArray) {
-                try {
-                    majorIds.add(MajorIdentification.valueOf(id as String).getJSON())
-                } catch (e: IllegalArgumentException) { } // missing major id
-            }
-        }
-
         result["majorIds"] = input.getOrDefault("majorIds", null)
         result["restriction"] = input["restrictions"]
         result["lore"] = input["addedLore"]
@@ -270,6 +260,18 @@ object ItemManager {
         result["WATERDEFENSE"] = "waterDefence"
         result["FIREDEFENSE"] = "fireDefence"
         result["AIRDEFENSE"] = "airDefence"
+
+        return result
+    }
+
+    fun getMajorIdentifications(): JSONOrderedObject {
+        val result = JSONOrderedObject()
+
+        for (id in MajorIdentification.values()) {
+            val entry = result.getOrCreate<JSONOrderedObject>(id.name)
+            entry["name"] = id.displayname
+            entry["description"] = id.description
+        }
 
         return result
     }
