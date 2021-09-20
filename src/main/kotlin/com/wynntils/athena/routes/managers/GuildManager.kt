@@ -18,11 +18,15 @@ object GuildManager {
      * Returns or try to generate a Guild Profile
      * @return a GuildProfile instance if present
      */
-    fun getGuildData(name: String): GuildProfile? {
+    fun getGuildData(name: String?): GuildProfile? {
         return weakCache.getOrPut(name) { DatabaseManager.getGuildProfile(name) ?: generateGuildData(name) }
     }
 
-    private fun generateGuildData(name: String): GuildProfile? {
+    private fun generateGuildData(name: String?): GuildProfile? {
+        if (name == null) {
+            return GuildProfile("None", "NONE", "#fffff")
+        }
+
         val connection = URL("${apiConfig.wynnGuildInfo}${name.replace(" ", "%20")}").openConnection()
         connection.setRequestProperty("User-Agent", generalConfig.userAgent)
         connection.setRequestProperty("apikey", apiConfig.wynnApiToken)

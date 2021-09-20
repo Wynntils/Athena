@@ -53,7 +53,9 @@ object DatabaseManager {
         return getResult(requestResult)
     }
 
-    fun getGuildProfile(name: String): GuildProfile? {
+    fun getGuildProfile(name: String?): GuildProfile? {
+        if (name == null) return null
+
         val requestResult = r.table("guilds").get(name).run(connection, GuildProfile::class.java)
         return getResult(requestResult).firstOrNull()
     }

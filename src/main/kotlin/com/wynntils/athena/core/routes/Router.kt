@@ -84,7 +84,7 @@ fun Javalin.registerRoutes(clazz: KClass<*>) {
             }
 
             profile("Routes-${ann.type}-${ann.path}") {
-                if (ann.type.isHTTPRequest) ctx.result(getAsyncResponse())
+                if (ann.type.isHTTPRequest) ctx.future(getAsyncResponse())
                 else getSyncResponse()
             }
         }

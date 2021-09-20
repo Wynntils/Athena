@@ -30,7 +30,7 @@ class TerritoryListCache: DataCache {
 
         val response = JSONOrderedObject()
         val result = response.getOrCreate<JSONOrderedObject>("territories")
-        for(name in wynnTerritories.keys) {
+        for (name in wynnTerritories.keys) {
             name as String
 
             val wynn = wynnTerritories[name] as JSONObject

@@ -101,7 +101,7 @@ object CapeManager {
         table.insertFile(sha1, data, false)
 
         // send webhook confirmation
-        ExternalNotifications.sendMessage(
+        ExternalNotifications.sendCapeMessage(
             title = "A new cape needs approval!",
             description = "➡️ **Choose:** [Approve](${generalConfig.baseUrl}capes/queue/approve/$token/$sha1) " +
                     "or [Ban](${generalConfig.baseUrl}capes/queue/ban/$token/$sha1)\n**SHA-1:** $sha1",
@@ -124,7 +124,7 @@ object CapeManager {
         queueTable.getFile(sha1)!!.moveTo(approvedTable)
 
         // queue message
-        ExternalNotifications.sendMessage(
+        ExternalNotifications.sendCapeMessage(
             title = "A cape was approved",
             description = "➡️ **SHA-1**: $sha1",
             color = 65280
@@ -145,7 +145,7 @@ object CapeManager {
         queueTable.getFile(sha1)!!.moveTo(bannedTable)
 
         // queue message
-        ExternalNotifications.sendMessage(
+        ExternalNotifications.sendCapeMessage(
             title = "A cape was banned",
             description = "➡️ **SHA-1**: $sha1",
             color = 16711680

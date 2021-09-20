@@ -21,7 +21,8 @@ fun <T> profile(name: String,notification: Boolean = true, runnable: () -> T): T
         ExternalNotifications.sendMessage(
             title = null,
             description = "``${name.replace("-", " -> ")}`` took ${difference/1000000} ms to proceed!",
-            color = 16711680)
+            color = 16711680
+        )
     }
 
     return result
