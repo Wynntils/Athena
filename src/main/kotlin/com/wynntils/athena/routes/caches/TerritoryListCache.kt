@@ -36,7 +36,7 @@ class TerritoryListCache: DataCache {
             val wynn = wynnTerritories[name] as JSONObject
             val final = result.getOrCreate<JSONOrderedObject>(name)
 
-            val guild = GuildManager.getGuildData(wynn["guild"] as String)!!
+            val guild = GuildManager.getGuildData(wynn["guild"] as String?)!!
 
             final["territory"] = wynn["territory"]
             final["guild"] = guild.id
