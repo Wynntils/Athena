@@ -39,7 +39,7 @@ import javax.imageio.ImageIO
 @BasePath("/capes")
 class CapeRoutes {
 
-    @Route(path = "/get/:id", type = RouteType.GET)
+    @Route(path = "/get/{id}", type = RouteType.GET)
     fun getCape(ctx: Context): InputStream {
         ctx.header("Access-Control-Allow-Origin", "*")
         ctx.contentType("image/png")
@@ -47,7 +47,7 @@ class CapeRoutes {
         return CapeManager.getCape(ctx.pathParam("id"))
     }
 
-    @Route(path = "/user/:uuid", type = RouteType.GET)
+    @Route(path = "/user/{uuid}", type = RouteType.GET)
     fun getUserCape(ctx: Context): InputStream {
         ctx.header("Access-Control-Allow-Origin", "*")
         ctx.contentType("image/png")
@@ -66,7 +66,7 @@ class CapeRoutes {
         return response;
     }
 
-    @Route(path = "/delete/:token", type = RouteType.POST)
+    @Route(path = "/delete/{token}", type = RouteType.POST)
     fun delete(ctx: Context): JSONOrderedObject {
         val result = JSONOrderedObject()
         if (!verifyToken(ctx.pathParam("token"))) {
@@ -96,7 +96,7 @@ class CapeRoutes {
         return result
     }
 
-    @Route(path = "/queue/get/:id", type = RouteType.GET)
+    @Route(path = "/queue/get/{id}", type = RouteType.GET)
     fun getAnalyseCape(ctx: Context): InputStream {
         ctx.contentType("image/png")
         val id = ctx.pathParam("id")
@@ -115,7 +115,7 @@ class CapeRoutes {
         return response
     }
 
-    @Route(path = "/queue/upload/:token", type = RouteType.POST)
+    @Route(path = "/queue/upload/{token}", type = RouteType.POST)
     fun uploadCape(ctx: Context): JSONObject {
         val result = JSONObject()
         if (!verifyToken(ctx.pathParam("token"))) {
@@ -180,7 +180,7 @@ class CapeRoutes {
         return result
     }
 
-    @Route(path = "/queue/approve/:token/:sha1", type = RouteType.GET)
+    @Route(path = "/queue/approve/{token}/{sha1}", type = RouteType.GET)
     fun approveCape(ctx: Context): JSONObject {
         val result = JSONObject()
         if (!ctx.isHuman()) {
@@ -203,7 +203,7 @@ class CapeRoutes {
         return result
     }
 
-    @Route(path = "/queue/ban/:token/:sha1", type = RouteType.GET)
+    @Route(path = "/queue/ban/{token}/{sha1}", type = RouteType.GET)
     fun banCape(ctx: Context): JSONObject {
         val result = JSONObject()
         if (!ctx.isHuman()) {
@@ -246,4 +246,5 @@ class CapeRoutes {
             image
         }
     }
+
 }

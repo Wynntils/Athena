@@ -17,7 +17,6 @@ import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.mindrot.jbcrypt.BCrypt
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * All api related routes
@@ -43,7 +42,7 @@ class ApiRoutes {
      * Returns information about the provided user
      * Required Body: user
      */
-    @Route("/getUser/:apiKey", type = RouteType.POST)
+    @Route("/getUser/{apiKey}", type = RouteType.POST)
     fun getUser(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
@@ -104,7 +103,7 @@ class ApiRoutes {
      * Sets the user account type
      * Required Body: user, type
      */
-    @Route(path = "/setAccountType/:apiKey", type = RouteType.POST)
+    @Route(path = "/setAccountType/{apiKey}", type = RouteType.POST)
     fun setUserAccount(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
@@ -142,7 +141,7 @@ class ApiRoutes {
      * Sets the user cosmetic texture based on it SHA-1
      * Required Body: user, cosmeticObject
      */
-    @Route(path = "/updateCosmetics/:apiKey", type = RouteType.POST)
+    @Route(path = "/updateCosmetics/{apiKey}", type = RouteType.POST)
     fun setCosmeticTexture(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
@@ -195,7 +194,7 @@ class ApiRoutes {
      * Sets guild territory color
      * Required Body: guild, color
      */
-    @Route(path = "/setGuildColor/:apiKey", type = RouteType.POST)
+    @Route(path = "/setGuildColor/{apiKey}", type = RouteType.POST)
     fun setGuildColor(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
@@ -240,7 +239,7 @@ class ApiRoutes {
      * Sets the user password
      * Required Body: token, password
      */
-    @Route(path = "/setUserPassword/:apiKey", type = RouteType.POST)
+    @Route(path = "/setUserPassword/{apiKey}", type = RouteType.POST)
     fun setUserPassword(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
@@ -277,7 +276,7 @@ class ApiRoutes {
      * Gets the user profile and check if the provided password is valid
      * Required Body: user, password
      */
-    @Route(path = "/getUserByPassword/:apiKey", type = RouteType.POST)
+    @Route(path = "/getUserByPassword/{apiKey}", type = RouteType.POST)
     fun getUserByPassword(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
@@ -345,7 +344,7 @@ class ApiRoutes {
      * Registers a new API key
      * Required Body: name, description, adminContact, maxLimit
      */
-    @Route(path = "/createApiKey/:apiKey", type = RouteType.POST)
+    @Route(path = "/createApiKey/{apiKey}", type = RouteType.POST)
     fun createApiKey(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
@@ -385,7 +384,7 @@ class ApiRoutes {
      * Changes an API Key max limit
      * Required Body: key, maxLimit
      */
-    @Route(path = "/changeApiKey/:apiKey", type = RouteType.POST)
+    @Route(path = "/changeApiKey/{apiKey}", type = RouteType.POST)
     fun changeApikey(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {
@@ -422,7 +421,7 @@ class ApiRoutes {
      * Requests a cloud user configuration
      * Required Body: user, configName
      */
-    @Route(path = "/getUserConfig/:apiKey", type = RouteType.POST)
+    @Route(path = "/getUserConfig/{apiKey}", type = RouteType.POST)
     fun getUserConfig(ctx: Context): JSONOrderedObject {
         val response = JSONOrderedObject()
         if (!ctx.isAuthenticated()) {

@@ -24,7 +24,7 @@ class CacheRoutes {
     /**
      * Returns the cache based on the provided name
      */
-    @Route(path = "/get/:name", type = RouteType.GET)
+    @Route(path = "/get/{name}", type = RouteType.GET)
     fun getCache(ctx: Context): String {
         val cache = ctx.pathParam("name")
         if (!CacheManager.isCached(cache)) {
