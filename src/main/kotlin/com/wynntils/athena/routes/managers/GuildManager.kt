@@ -24,7 +24,7 @@ object GuildManager {
 
     private fun generateGuildData(name: String?): GuildProfile? {
         if (name == null) {
-            return GuildProfile("None", "NONE", "#fffff")
+            return GuildProfile("None", "NONE", "#ffffff")
         }
 
         val connection = URL("${apiConfig.wynnGuildInfo}${name.replace(" ", "%20")}").openConnection()
