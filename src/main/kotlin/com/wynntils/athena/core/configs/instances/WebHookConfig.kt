@@ -5,7 +5,7 @@ import com.wynntils.athena.core.configs.annotations.Settings
 @Settings(name = "webhook-config")
 data class WebHookConfig(
 
-    val discordLogUrl: String = "your-url",
+    val discord_log_url: String = "your-url",
     val discordCapesUrl: String = "your-url",
     val discordUsername: String = "Athena",
     val discordAvatar: String = "https://cdn.wynntils.com/athena_logo_1600x1600.png",

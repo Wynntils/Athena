@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets
 object ExternalNotifications {
 
     fun sendMessage(title: String? = null, description: String? = null, color: Int? = null, imageUrl: String? = null, footer: String? = null) {
-        sendMessage(webHookConfig.discordLogUrl, title, description, color, imageUrl, footer)
+        sendMessage(webHookConfig.discord_log_url, title, description, color, imageUrl, footer)
     }
 
     fun sendCapeMessage(title: String? = null, description: String? = null, color: Int? = null, imageUrl: String? = null, footer: String? = null) {
