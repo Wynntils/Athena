@@ -17,6 +17,7 @@ data class ApiConfig (
     val npcLocations: String = "https://raw.githubusercontent.com/Wynntils/Data-Storage/master/npc-locations.json",
 
     val wynnItems: String = "https://api.wynncraft.com/public_api.php?action=itemDB&category=all",
+    val wynnItemChanges: String = "https://raw.githubusercontent.com/Wynntils/Data-Storage/master/item-changes.json",
 
     val wynnGuildInfo: String = "https://api.wynncraft.com/public_api.php?action=guildStats&command=",
 
