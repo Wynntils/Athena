@@ -139,13 +139,16 @@ object ItemManager {
             val statuses = item.getOrCreate<JSONOrderedObject>("statuses")
             val changed = changes["statuses"] as JSONObject
             for (key in changed.keys) {
-                val value = changed[key] as Number
+                val changedStatus = changed[key] as JSONObject
+                val value = changedStatus["baseValue"] as Number
                 if (value.toInt() == 0) {
                     statuses.remove(key)
                     continue
                 }
 
                 val status = statuses.getOrCreate<JSONOrderedObject>(key as String)
+                status["type"] = changedStatus["type"]
+                status["isFixed"] = changedStatus["isFixed"]
                 status["baseValue"] = value
             }
         }
