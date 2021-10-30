@@ -7,7 +7,9 @@ enum class AccountType {
     DONATOR,
     CONTENT_TEAM,
     HELPER,
-    MODERATOR;
+    MODERATOR,
+    DEVELOPER,
+    ADMINISTRATOR;
 
     companion object {
 
