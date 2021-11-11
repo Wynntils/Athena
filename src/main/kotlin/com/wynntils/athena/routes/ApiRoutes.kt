@@ -12,6 +12,7 @@ import com.wynntils.athena.database.enums.TextureResolution
 import com.wynntils.athena.database.objects.ApiKeyProfile
 import com.wynntils.athena.database.objects.UserProfile
 import com.wynntils.athena.routes.managers.GuildManager
+import com.wynntils.athena.routes.managers.ItemManager
 import io.javalin.http.Context
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
@@ -32,7 +33,8 @@ import java.util.*
  *  POST /getUserByPassword/:apiKey
  *  POST /createApiKey/:apiKey
  *  POST /changeApiKey/:apiKey
- *  POST /getUserConfig/:apikEY
+ *  POST /getUserConfig/:apiKey
+ *  GET /getIdentificationOrder
  *  GET /timings
  */
 @BasePath("/api")
@@ -465,6 +467,11 @@ class ApiRoutes {
         response["messsage"] = "Successfully located user '${body["configName"]}' configuration."
         response["result"] = (configFiles[body["configName"]] as String).asJSON()
         return response
+    }
+
+    @Route(path = "/getIdentificationOrder", type = RouteType.GET)
+    fun getIdentificationOrder(ctx: Context): JSONOrderedObject {
+        return ItemManager.getIdentificationOrder()
     }
 
     /**
