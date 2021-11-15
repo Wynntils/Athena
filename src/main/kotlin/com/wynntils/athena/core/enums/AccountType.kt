@@ -5,10 +5,11 @@ enum class AccountType {
     NORMAL,
     BANNED,
     DONATOR,
-    CONTENT_TEAM,
+    CREATIVE_TEAM,
     HELPER,
     MODERATOR,
     DEVELOPER,
+    WEB_ADMINISTRATOR;
     ADMINISTRATOR;
 
     companion object {
