@@ -9,7 +9,7 @@ enum class AccountType {
     HELPER,
     MODERATOR,
     DEVELOPER,
-    WEB_ADMINISTRATOR;
+    WEB_ADMINISTRATOR,
     ADMINISTRATOR;
 
     companion object {
