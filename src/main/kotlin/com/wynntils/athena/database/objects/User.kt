@@ -8,19 +8,19 @@ import com.wynntils.athena.database.data.CosmeticInfo
 import com.wynntils.athena.database.data.DiscordInfo
 import com.wynntils.athena.database.files.FileCabinet
 import com.wynntils.athena.database.files.objects.FileTable
-import com.wynntils.athena.database.interfaces.RethinkObject
+import com.wynntils.athena.database.interfaces.DatabaseObject
 import java.nio.charset.StandardCharsets
 import java.util.*
 import kotlin.collections.HashMap
 
-data class UserProfile(
-    override val id: UUID,
+data class User(
+    override val _id: UUID,
 
     var username: String= "",
     var lastActivity: Long = currentTimeMillis(),
     var accountType: AccountType = AccountType.NORMAL,
 
-    var authToken: UUID = UUID.randomUUID(), // the user authentication token
+    var authToken: String = UUID.randomUUID().toString(), // the user authentication token
     var password: String = "", // hashed user password
 
     var latestVersion: String = "", // last version user used
@@ -29,14 +29,14 @@ data class UserProfile(
     var cosmeticInfo: CosmeticInfo = CosmeticInfo(), // cosmetic stuff
     var discordInfo: DiscordInfo? = DiscordInfo("", ""), // discord stuff
 
-    override val table: String = "users"
-): RethinkObject {
+    override val table: String = "user"
+): DatabaseObject {
 
     @JsonIgnore
     private var configFiles: FileTable? = null
 
     private fun getConfigTable(): FileTable {
-        if (configFiles == null) configFiles = FileCabinet.getOrCreateDatabase("userConfigs").getOrCreateTable(id.toString());
+        if (configFiles == null) configFiles = FileCabinet.getOrCreateDatabase("userConfigs").getOrCreateTable(_id.toString());
 
         return configFiles!!
     }
@@ -59,8 +59,8 @@ data class UserProfile(
         getConfigTable().insertFile(name, data, true)
     }
 
-    fun updateAccount(name: String, version: String): UUID {
-        authToken = UUID.randomUUID()
+    fun updateAccount(name: String, version: String): String {
+        authToken = UUID.randomUUID().toString()
         lastActivity = currentTimeMillis()
         username = name
 

@@ -5,13 +5,13 @@ import com.wynntils.athena.core.email.enums.EmailTemplate
 import com.wynntils.athena.core.email.objects.EmailRecipient
 import com.wynntils.athena.core.logDateFormat
 import com.wynntils.athena.core.textDateFormat
-import com.wynntils.athena.database.interfaces.RethinkObject
+import com.wynntils.athena.database.interfaces.DatabaseObject
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-data class ApiKeyProfile(
-    override val id: String,
+data class ApiKey(
+    override val _id: String,
 
     var name: String,
     var description: String,
@@ -21,8 +21,8 @@ data class ApiKeyProfile(
 
     var dailyRequests: HashMap<String, Int> = HashMap(),
 
-    override val table: String = "apiKeys"
-): RethinkObject {
+    override val table: String = "apiKey"
+): DatabaseObject {
 
     fun addRequest() {
         val date = logDateFormat.format(Date());

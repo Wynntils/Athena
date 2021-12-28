@@ -10,6 +10,7 @@ import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.core.utils.ZLibHelper
 import com.wynntils.athena.database.DatabaseManager
 import com.wynntils.athena.database.enums.TextureResolution
+import com.wynntils.athena.errorLog
 import com.wynntils.athena.routes.managers.CapeManager
 import io.javalin.http.Context
 import org.json.simple.JSONArray
@@ -71,6 +72,7 @@ class UserRoutes {
             ctx.status(400)
 
             response["message"] = "Expecting MultiPart Form, containing 'authToken' and 'config'."
+            errorLog.info("Expecting MultiPart Form, containing 'authToken' and 'config'.")
             return response
         }
 
@@ -79,6 +81,7 @@ class UserRoutes {
             ctx.status(401)
 
             response["message"] = "The provided Authorization Token is invalid."
+            errorLog.info("The provided Authorization Token is invalid.")
             return response
         }
 

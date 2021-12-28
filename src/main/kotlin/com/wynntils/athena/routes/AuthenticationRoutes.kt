@@ -8,6 +8,7 @@ import com.wynntils.athena.core.routes.annotations.Route
 import com.wynntils.athena.core.routes.enums.RouteType
 import com.wynntils.athena.core.toDashedUUID
 import com.wynntils.athena.database.DatabaseManager
+import com.wynntils.athena.errorLog
 import com.wynntils.athena.generalLog
 import com.wynntils.athena.routes.data.MinecraftFakeAuth
 import io.javalin.http.Context
@@ -42,18 +43,21 @@ class AuthenticationRoutes {
      */
     @Route(path = "/responseEncryption", type = RouteType.POST)
     fun responseEncryption(ctx: Context): JSONObject {
+        generalLog.info("Calling /responseEncryption")
         val response = JSONObject()
         val body = ctx.body().asJSON<JSONObject>()
 
         if (!body.containsKey("username") || !body.containsKey("key") || !body.containsKey("version")) {
             ctx.status(400)
             response["message"] = "Expecting parameters 'username', 'key' and 'version'."
+            errorLog.info("Username or Key is null.")
             return response
         }
 
         if (body["username"] !is String || body["key"] !is String) {
             ctx.status(401)
             response["message"] = "Username or Key is null."
+            errorLog.info("Username or Key is null.")
             return response
         }
 
@@ -61,6 +65,7 @@ class AuthenticationRoutes {
         if (profile == null) {
             ctx.status(401)
             response["message"] = "The provided username or key is invalid."
+            errorLog.info("The provided username or key is invalid.")
             return response
         }
 

@@ -6,12 +6,12 @@ import com.wynntils.athena.core.data.Location
 import com.wynntils.athena.core.maxLimit
 import com.wynntils.athena.database.enums.GatheringMaterial
 import com.wynntils.athena.database.enums.ProfessionType
-import com.wynntils.athena.database.interfaces.RethinkObject
+import com.wynntils.athena.database.interfaces.DatabaseObject
 import java.util.*
 import kotlin.collections.HashSet
 
-data class GatheringSpotProfile(
-    override val id: String,
+data class GatheringSpot(
+    override val _id: String,
 
     val type: ProfessionType,
     val material: GatheringMaterial,
@@ -19,8 +19,8 @@ data class GatheringSpotProfile(
     var lastSeen: Long = currentTimeMillis(),
     val users: HashSet<UUID> = HashSet(),
 
-    override val table: String = "gathering"
-): RethinkObject {
+    override val table: String = "gatheringSpot"
+): DatabaseObject {
 
     @JsonIgnore
     private var location: Location? = null
@@ -57,7 +57,7 @@ data class GatheringSpotProfile(
      * @return a Location object
      */
     fun getLocation(): Location {
-        if (location == null) location = Location.fromString(id)
+        if (location == null) location = Location.fromString(_id)
 
         return location!!
     }

@@ -3,7 +3,6 @@ package com.wynntils.athena
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.rethinkdb.RethinkDB
 import com.wynntils.athena.core.cache.CacheManager
 import com.wynntils.athena.core.configs.generalConfig
 import com.wynntils.athena.core.enums.AsciiColor
@@ -32,8 +31,6 @@ val cacheDatabase = FileCabinet.getOrCreateDatabase("caches")
 val templateDatabase = FileCabinet.getOrCreateDatabase("templates")
 
 private fun main() {
-    RethinkDB.setResultMapper(mapper) // updates jackson mapper to support kotlin data classes
-
     printCoolLogo()
 
     FileCabinet.loadDatabases()
@@ -48,6 +45,14 @@ private fun main() {
     server.setupExceptions()
 
     generalLog.info("WebServer Started, Registering Routes...")
+
+    server.before { ctx ->
+        run {
+            generalLog.debug("Incoming Request: " + ctx.req.pathInfo)
+        }
+    }
+
+    server.after { ctx -> run { generalLog.debug("Response code: " + ctx.res.status) } }
 
     // routes
     server.registerRoutes(AuthenticationRoutes::class)
