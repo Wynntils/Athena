@@ -315,7 +315,7 @@ object ItemManager {
             "bonusAirDefense" -> "airDefence"
             "jumpHeight" -> "rawJumpHeight"
             "rainbowSpellDamageRaw" -> "rawSpellDamage"
-            "gatherXpBonus" -> "gatherXPBonus"
+            "gatherXpBonus" -> "gatherXpBonus"
             "attackSpeedBonus" -> "attackSpeed"
 
             //same ones
