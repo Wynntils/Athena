@@ -10,7 +10,7 @@ import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.database.DatabaseManager
 import com.wynntils.athena.database.enums.TextureResolution
 import com.wynntils.athena.database.objects.ApiKey
-import com.wynntils.athena.database.objects.User
+import com.wynntils.athena.database.objects.Users
 import com.wynntils.athena.routes.managers.GuildManager
 import io.javalin.http.Context
 import org.json.simple.JSONArray
@@ -492,7 +492,7 @@ class ApiRoutes {
     }
 
 
-    private fun getUser(userParam: String): User? {
+    private fun getUser(userParam: String): Users? {
         return when {
             userParam.startsWith("uuid-") ->
                 DatabaseManager.getUserProfile(UUID.fromString(userParam.replace("uuid-", "")), false)

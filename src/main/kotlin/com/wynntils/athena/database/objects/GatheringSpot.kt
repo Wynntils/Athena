@@ -17,7 +17,7 @@ data class GatheringSpot(
     val material: GatheringMaterial,
 
     var lastSeen: Long = currentTimeMillis(),
-    val users: HashSet<UUID> = HashSet(),
+    val users: HashSet<String> = HashSet(),
 
     override val table: String = "gatheringSpot"
 ): DatabaseObject {

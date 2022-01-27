@@ -2,9 +2,9 @@ package com.wynntils.athena.database.interfaces
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.wynntils.athena.database.DatabaseManager
-import org.litote.kmongo.Id
 import org.litote.kmongo.deleteOneById
 import org.litote.kmongo.getCollection
+import org.litote.kmongo.save
 
 @JsonIgnoreProperties(value = [ "table" ])
 interface DatabaseObject {
@@ -13,8 +13,7 @@ interface DatabaseObject {
     val _id: Any
 
     private fun save(): DatabaseObject{
-//        r.table(table).insert(this).optArg("conflict", "replace").runNoReply(DatabaseManager.connection)
-        DatabaseManager.db.getCollection<DatabaseObject>(table).insertOne(this)
+        DatabaseManager.db.getCollection<DatabaseObject>(table).save(this)
 
         return this
     }

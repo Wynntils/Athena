@@ -7,8 +7,8 @@ import com.wynntils.athena.core.configs.databaseConfig
 import com.wynntils.athena.core.data.Location
 import com.wynntils.athena.database.objects.ApiKey
 import com.wynntils.athena.database.objects.GatheringSpot
-import com.wynntils.athena.database.objects.Guild
-import com.wynntils.athena.database.objects.User
+import com.wynntils.athena.database.objects.Guilds
+import com.wynntils.athena.database.objects.Users
 import org.bson.UuidRepresentation
 import org.litote.kmongo.*
 import java.util.*
@@ -27,22 +27,22 @@ object DatabaseManager {
 
     val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
-    fun getUserProfile(id: UUID, create: Boolean = true): User? {
-        return db.getCollection<User>().findOneById(id) ?: if (create) User(id) else null
+    fun getUserProfile(id: UUID, create: Boolean = true): Users? {
+        return db.getCollection<Users>().findOneById(id) ?: if (create) Users(id.toString()) else null
     }
 
-    fun getUserProfile(token: String): User? {
-        return db.getCollection<User>().findOne(User::authToken eq token)
+    fun getUserProfile(token: String): Users? {
+        return db.getCollection<Users>().findOne(Users::authToken eq token)
     }
 
-    fun getUsersProfiles(name: String): List<User> {
-        return db.getCollection<User>().find(User::username eq name).toList()
+    fun getUsersProfiles(name: String): List<Users> {
+        return db.getCollection<Users>().find(Users::username eq name).toList()
     }
 
-    fun getGuildProfile(name: String?): Guild? {
+    fun getGuildProfile(name: String?): Guilds? {
         if (name == null) return null
 
-        return db.getCollection<Guild>().findOneById(name)
+        return db.getCollection<Guilds>().findOneById(name)
     }
 
     fun getGatheringSpot(location: Location): GatheringSpot? {

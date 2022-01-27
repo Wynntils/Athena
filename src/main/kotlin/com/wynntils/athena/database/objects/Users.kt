@@ -13,8 +13,8 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 import kotlin.collections.HashMap
 
-data class User(
-    override val _id: UUID,
+data class Users(
+    override val _id: String,
 
     var username: String= "",
     var lastActivity: Long = currentTimeMillis(),
@@ -29,7 +29,7 @@ data class User(
     var cosmeticInfo: CosmeticInfo = CosmeticInfo(), // cosmetic stuff
     var discordInfo: DiscordInfo? = DiscordInfo("", ""), // discord stuff
 
-    override val table: String = "user"
+    override val table: String = "users"
 ): DatabaseObject {
 
     @JsonIgnore
