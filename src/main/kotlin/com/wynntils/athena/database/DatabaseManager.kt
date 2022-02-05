@@ -28,7 +28,7 @@ object DatabaseManager {
     val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
     fun getUserProfile(id: UUID, create: Boolean = true): Users? {
-        return db.getCollection<Users>().findOneById(id) ?: if (create) Users(id.toString()) else null
+        return db.getCollection<Users>().findOne(Users::_id eq id.toString()) ?: if (create) Users(id.toString()) else null
     }
 
     fun getUserProfile(token: String): Users? {
