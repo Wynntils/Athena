@@ -32,7 +32,7 @@ class JSONOrderedObject : LinkedHashMap<Any?, Any?>, MutableMap<Any?, Any?>, JSO
         writeJSONString(this, out)
     }
 
-    inline fun <reified T: JSONAware> getOrCreate(key: String): T {
+    inline fun <reified T : JSONAware> getOrCreate(key: String): T {
         return getOrPut(key, { T::class.java.newInstance() }) as T
     }
 

@@ -86,7 +86,7 @@ data class FileReference(
      * @return SUCCESS, ALREADY_EXISTS or INVALID_FILE
      */
     fun moveTo(destination: FileTable): ActionResult {
-        if(copyTo(destination) == ActionResult.ALREADY_EXISTS)
+        if (copyTo(destination) == ActionResult.ALREADY_EXISTS)
             return ActionResult.ALREADY_EXISTS
 
         return origin.deleteFile(file.name)
@@ -130,7 +130,7 @@ data class FileReference(
      * Converts the file bytes into an JsonElement of T
      * @return a JsonElement equivalent to T
      */
-    inline fun <reified T: JSONAware> asJson(): T {
+    inline fun <reified T : JSONAware> asJson(): T {
         return mapper.readValue(retrieveBytes(), T::class.java)
     }
 

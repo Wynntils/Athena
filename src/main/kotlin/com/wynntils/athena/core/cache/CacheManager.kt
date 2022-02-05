@@ -29,7 +29,7 @@ object CacheManager {
         fun registerResult(result: String) {
             val resultHash = Hash.MD5.hash(result.toByteArray(StandardCharsets.UTF_8))
             val nextRefresh = if (info.refreshRate == 0) 0L else {
-                    currentTimeMillis() + (1000 * info.refreshRate)
+                currentTimeMillis() + (1000 * info.refreshRate)
             }
 
             cacheTable.insertFile("${info.name}.json", result.toByteArray(StandardCharsets.UTF_8), true)

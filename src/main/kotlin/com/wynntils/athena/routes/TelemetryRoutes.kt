@@ -10,7 +10,7 @@ import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.database.DatabaseManager
 import com.wynntils.athena.database.enums.GatheringMaterial
 import com.wynntils.athena.database.enums.ProfessionType
-import com.wynntils.athena.database.objects.GatheringSpotProfile
+import com.wynntils.athena.database.objects.GatheringSpot
 import io.javalin.http.Context
 import org.json.simple.JSONObject
 
@@ -30,7 +30,10 @@ class TelemetryRoutes {
         }
 
         val spotData = body["spot"] as JSONObject
-        if (!spotData.contains("type") || !spotData.contains("material") || !spotData.contains("x") || !spotData.containsKey("y") || !spotData.containsKey("z")) {
+        if (!spotData.contains("type") || !spotData.contains("material") || !spotData.contains("x") || !spotData.containsKey(
+                "y"
+            ) || !spotData.containsKey("z")
+        ) {
             response["message"] = "The 'spot' object is expecting the parameters 'type', 'material', 'x', 'y,' 'z'."
             return response
         }
@@ -43,14 +46,16 @@ class TelemetryRoutes {
             return response
         }
 
-        val location = Location((spotData["x"] as Long).toInt(), (spotData["y"] as Long).toInt(), (spotData["z"] as Long).toInt())
+        val location =
+            Location((spotData["x"] as Long).toInt(), (spotData["y"] as Long).toInt(), (spotData["z"] as Long).toInt())
         val spot = DatabaseManager.getGatheringSpot(location)
-            ?: GatheringSpotProfile(location.toString(),
+            ?: GatheringSpot(
+                location.toString(),
                 ProfessionType.valueOf(spotData["type"] as String),
                 GatheringMaterial.valueOf(spotData["material"] as String)
             )
 
-        spot.users.add(user.id)
+        spot.users.add(user._id)
         spot.lastSeen = currentTimeMillis()
 
         spot.asyncSave()

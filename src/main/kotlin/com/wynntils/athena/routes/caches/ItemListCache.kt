@@ -15,7 +15,7 @@ import java.net.URL
 import java.nio.charset.StandardCharsets
 
 @CacheInfo(name = "itemList", refreshRate = 86400)
-class ItemListCache: DataCache {
+class ItemListCache : DataCache {
 
     /**
      * Cache the rearranged version of the Wynncraft Items
@@ -61,7 +61,8 @@ class ItemListCache: DataCache {
         wynnBuilder.readTimeout = 20000
         wynnBuilder.connectTimeout = 20000
 
-        val wynnBuilderInput = wynnBuilder.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>()
+        val wynnBuilderInput =
+            wynnBuilder.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>()
         if (wynnBuilderInput.containsKey("items")) {
             val wynnBuilderItems = wynnBuilderInput["items"] as JSONArray
             for (i in wynnBuilderItems) {

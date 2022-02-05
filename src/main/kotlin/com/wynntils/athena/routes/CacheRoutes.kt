@@ -49,7 +49,7 @@ class CacheRoutes {
         response["message"] = "Successfully grabbed cache hashes."
 
         val result = response.getOrCreate<JSONObject>("result")
-        for(entry in CacheManager.getCaches()) {
+        for (entry in CacheManager.getCaches()) {
             result[entry.key] = entry.value.hash
         }
 

@@ -24,7 +24,7 @@ val emailConfig: EmailConfig = loadConfig(EmailConfig::class)!!
  * Loads and generates config files based on the class
  * The receipt class needs to have the Settings annotation
  */
-private inline fun <reified T:Any> loadConfig(clazz: KClass<*>): T? {
+private inline fun <reified T : Any> loadConfig(clazz: KClass<*>): T? {
     val ann = clazz.findAnnotation<Settings>() ?: return null
 
     configFolder.mkdirs()

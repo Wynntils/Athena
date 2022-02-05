@@ -33,7 +33,7 @@ private val uuidPattern = Pattern.compile("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{
 private val userAgentPattern = Pattern.compile("(Chrome|Opera|Firefox|Safari|Edge)")
 private val colorHexPattern = Pattern.compile("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})\$")
 
-fun currentTimeMillis():Long {
+fun currentTimeMillis(): Long {
     return System.currentTimeMillis()
 }
 
@@ -57,11 +57,11 @@ fun String.isColorHex(): Boolean {
     return colorHexPattern.matcher(this).matches()
 }
 
-inline fun <reified T: JSONAware> JSONObject.getOrCreate(key: String): T {
-    return getOrPut(key, { T::class.java.newInstance() }) as T
+inline fun <reified T : JSONAware> JSONObject.getOrCreate(key: String): T {
+    return getOrPut(key) { T::class.java.getDeclaredConstructor().newInstance() } as T
 }
 
-fun <K: Any, V: Any?> HashMap<K, V>.cleanNull() {
+fun <K : Any, V : Any?> HashMap<K, V>.cleanNull() {
     val it = iterator()
     while (it.hasNext()) {
         val next = it.next()
@@ -122,7 +122,7 @@ fun InputStream.toPlainString(): String {
     return bufferedReader(StandardCharsets.UTF_8).use(BufferedReader::readText)
 }
 
-inline fun <reified T: JSONAware> String.asJSON(): T {
+inline fun <reified T : JSONAware> String.asJSON(): T {
     return JSONParser().parse(this) as T
 }
 
@@ -137,29 +137,32 @@ fun maxLimit(max: Int, current: Int): Int {
 }
 
 fun printCoolLogo() {
-    println(AsciiColor.RED.ascii + "\n" +
-        "[========================================] \n" +
-        "[                 .'.                    ] Athena is the codename for the\n" +
-        "[                .oO;.                   ] Wynntils Account Management System.\n" +
-        "[                 ,KX0l                  ] \n" +
-        "[                 'OMMK,                 ] It handles every single account,\n" +
-        "[                 :XMMX;                 ] socket connection, cape, configuration and more.\n" +
-        "[                ,0MMMO':c               ] every configuration and more.\n" +
-        "[               :KMMWXl'OK;              ] \n" +
-        "[             'xNMMWx,,dWMd              ] This is not suspposed to be run by third parties.\n" +
-        "[           .lKMMMWx;;xWMMO.             ] We (The Wynntils Team) are not going to help\n" +
-        "[          ;OWMMMXl:OWWMMMx. ;o.         ] you with setting up or with issues surrounding Athena.\n" +
-        "[        .oNMMMW0:cKMMMMMK;  :N0,        ] \n" +
-        "[       .dWMMMWx,oNMMMMMK;   cWM0'       ] Athena is licensed over AGLP 3.0, check the\n" +
-        "[       ,KMMMWx'dWMMMMM0,   .kMMN:       ] repository license for more information.\n" +
-        "[       'OMMM0'cNMMMMMX;   .xWMMN:       ] \n" +
-        "[        cNMMd.dMMMMMMXl.'c0WMMMO.       ] Copyright © Wynntils Team 2018 - 2020\n" +
-        "[         lXMx.oMMMMMMMWXNWMMMMX:        ] https://wynntils.com\n" +
-        "[          ;0K;'0MMMMMMMMMMMMMXc         ] https://github.com/Wynntils\n" +
-        "[           .ll.'xXMMMMMMMMMNx,          ] https://github.com/Wynntils/Athena\n" +
-        "[             ..  .:dxkOOkdc'            ] \n" + AsciiColor.YELLOW.ascii +
-        "[             Wynntils Athena            ] Use this at your own risk.\n" +
-        "[                  v2.0.0                ] And thanks for supporting Wynntils :)\n" +
-        "[========================================] \n" + AsciiColor.RESET.ascii
+    println(
+        """
+            ${AsciiColor.RED.ascii}
+            [========================================] 
+            [                 .'.                    ] Athena is the codename for the
+            [                .oO;.                   ] Wynntils Account Management System.
+            [                 ,KX0l                  ] 
+            [                 'OMMK,                 ] It handles every single account,
+            [                 :XMMX;                 ] socket connection, cape, configuration and more.
+            [                ,0MMMO':c               ] every configuration and more.
+            [               :KMMWXl'OK;              ] 
+            [             'xNMMWx,,dWMd              ] This is not supposed to be run by third parties.
+            [           .lKMMMWx;;xWMMO.             ] We (The Wynntils Team) are not going to help
+            [          ;OWMMMXl:OWWMMMx. ;o.         ] you with setting up or with issues surrounding Athena.
+            [        .oNMMMW0:cKMMMMMK;  :N0,        ] 
+            [       .dWMMMWx,oNMMMMMK;   cWM0'       ] Athena is licensed over AGLP 3.0, check the
+            [       ,KMMMWx'dWMMMMM0,   .kMMN:       ] repository license for more information.
+            [       'OMMM0'cNMMMMMX;   .xWMMN:       ] 
+            [        cNMMd.dMMMMMMXl.'c0WMMMO.       ] Copyright © Wynntils Team 2018 - 2022
+            [         lXMx.oMMMMMMMWXNWMMMMX:        ] https://wynntils.com
+            [          ;0K;'0MMMMMMMMMMMMMXc         ] https://github.com/Wynntils
+            [           .ll.'xXMMMMMMMMMNx,          ] https://github.com/Wynntils/Athena
+            [             ..  .:dxkOOkdc'            ]${AsciiColor.YELLOW.ascii} 
+            [             Wynntils Athena            ] Use this at your own risk.
+            [                  v3.0.0                ] And thanks for supporting Wynntils :)
+            [========================================] 
+            ${AsciiColor.RESET.ascii}""".trimIndent()
     )
 }

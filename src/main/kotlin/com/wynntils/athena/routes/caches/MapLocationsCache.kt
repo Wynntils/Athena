@@ -11,7 +11,7 @@ import java.net.URL
 import java.nio.charset.StandardCharsets
 
 @CacheInfo(name = "mapLocations", refreshRate = 86400)
-class MapLocationsCache: DataCache {
+class MapLocationsCache : DataCache {
 
     /**
      * A direct cache of wynn's map locations API
@@ -41,7 +41,8 @@ class MapLocationsCache: DataCache {
         connection.readTimeout = 5000
         connection.connectTimeout = 5000
 
-        val npcLocations = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>();
+        val npcLocations =
+            connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>();
 
         locations["npc-locations"] = npcLocations["npc-locations"]
 

@@ -12,7 +12,11 @@ enum class AccountType {
     companion object {
 
         fun valueOr(input: String, or: AccountType = NORMAL): AccountType {
-            return try { valueOf(input) }catch (ex: Exception) { or }
+            return try {
+                valueOf(input)
+            } catch (ex: Exception) {
+                or
+            }
         }
 
     }

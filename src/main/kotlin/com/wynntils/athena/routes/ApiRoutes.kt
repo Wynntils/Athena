@@ -9,8 +9,8 @@ import com.wynntils.athena.core.routes.enums.RouteType
 import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.database.DatabaseManager
 import com.wynntils.athena.database.enums.TextureResolution
-import com.wynntils.athena.database.objects.ApiKeyProfile
-import com.wynntils.athena.database.objects.UserProfile
+import com.wynntils.athena.database.objects.ApiKey
+import com.wynntils.athena.database.objects.Users
 import com.wynntils.athena.routes.managers.GuildManager
 import io.javalin.http.Context
 import org.json.simple.JSONArray
@@ -69,7 +69,7 @@ class ApiRoutes {
         }
 
         val result = response.getOrCreate<JSONOrderedObject>("result")
-        result["uuid"] = user.id.toString()
+        result["uuid"] = user._id.toString()
         result["username"] = user.username
         result["accountType"] = user.accountType.toString()
         result["authToken"] = user.authToken.toString()
@@ -310,7 +310,7 @@ class ApiRoutes {
         }
 
         val result = response.getOrCreate<JSONOrderedObject>("result")
-        result["uuid"] = user.id.toString()
+        result["uuid"] = user._id.toString()
         result["username"] = user.username
         result["accountType"] = user.accountType.toString()
         result["authToken"] = user.authToken.toString()
@@ -355,7 +355,10 @@ class ApiRoutes {
         }
 
         val body = ctx.body().asJSON<JSONObject>()
-        if (!body.contains("name") || !body.contains("description") || !body.contains("adminContact") || !body.contains("maxLimit")) {
+        if (!body.contains("name") || !body.contains("description") || !body.contains("adminContact") || !body.contains(
+                "maxLimit"
+            )
+        ) {
             ctx.status(400)
 
             response["message"] = "Invalid body, expecting 'name', 'description', 'adminContact' and 'maxLimit'."
@@ -365,7 +368,8 @@ class ApiRoutes {
         val contactForm = ArrayList<String>()
         (body["adminContact"] as JSONArray).forEach { contactForm.add(it as String) }
 
-        val apiKey = ApiKeyProfile(UUID.randomUUID().toString(),
+        val apiKey = ApiKey(
+            UUID.randomUUID().toString(),
             body["name"] as String,
             body["description"] as String,
             contactForm,
@@ -375,7 +379,7 @@ class ApiRoutes {
         apiKey.asyncSave()
 
         response["message"] = "Successfully created an API Key."
-        response["apiKey"] = apiKey.id
+        response["apiKey"] = apiKey._id
 
         return response
     }
@@ -412,7 +416,7 @@ class ApiRoutes {
 
         apiKey.maxLimit = (body["maxLimit"] as Long).toInt()
         response["message"] = "Successfully changed API Key."
-        response["apiKey"] = apiKey.id
+        response["apiKey"] = apiKey._id
 
         return response
     }
@@ -479,7 +483,7 @@ class ApiRoutes {
 
             var lastObject = result
             for (i in instances.indices) {
-                if (i == instances.size-1) {
+                if (i == instances.size - 1) {
                     lastObject[instances[i]] = "${section.time.div(1000000L)}ms"
                     continue
                 }
@@ -492,7 +496,7 @@ class ApiRoutes {
     }
 
 
-    private fun getUser(userParam: String): UserProfile? {
+    private fun getUser(userParam: String): Users? {
         return when {
             userParam.startsWith("uuid-") ->
                 DatabaseManager.getUserProfile(UUID.fromString(userParam.replace("uuid-", "")), false)
