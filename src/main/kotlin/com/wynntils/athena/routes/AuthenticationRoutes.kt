@@ -49,14 +49,12 @@ class AuthenticationRoutes {
         if (!body.containsKey("username") || !body.containsKey("key") || !body.containsKey("version")) {
             ctx.status(400)
             response["message"] = "Expecting parameters 'username', 'key' and 'version'."
-            errorLog.info("Username or Key is null.")
             return response
         }
 
         if (body["username"] !is String || body["key"] !is String) {
             ctx.status(401)
             response["message"] = "Username or Key is null."
-            errorLog.info("Username or Key is null.")
             return response
         }
 
@@ -64,7 +62,6 @@ class AuthenticationRoutes {
         if (profile == null) {
             ctx.status(401)
             response["message"] = "The provided username or key is invalid."
-            errorLog.info("The provided username or key is invalid.")
             return response
         }
 

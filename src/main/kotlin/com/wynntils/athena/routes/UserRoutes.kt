@@ -81,7 +81,6 @@ class UserRoutes {
             ctx.status(401)
 
             response["message"] = "The provided Authorization Token is invalid."
-            errorLog.info("The provided Authorization Token is invalid.")
             return response
         }
 
