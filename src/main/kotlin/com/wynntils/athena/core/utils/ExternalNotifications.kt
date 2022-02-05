@@ -10,15 +10,34 @@ import java.nio.charset.StandardCharsets
 
 object ExternalNotifications {
 
-    fun sendMessage(title: String? = null, description: String? = null, color: Int? = null, imageUrl: String? = null, footer: String? = null) {
+    fun sendMessage(
+        title: String? = null,
+        description: String? = null,
+        color: Int? = null,
+        imageUrl: String? = null,
+        footer: String? = null
+    ) {
         sendMessage(webHookConfig.discordLogUrl, title, description, color, imageUrl, footer)
     }
 
-    fun sendCapeMessage(title: String? = null, description: String? = null, color: Int? = null, imageUrl: String? = null, footer: String? = null) {
+    fun sendCapeMessage(
+        title: String? = null,
+        description: String? = null,
+        color: Int? = null,
+        imageUrl: String? = null,
+        footer: String? = null
+    ) {
         sendMessage(webHookConfig.discordCapesUrl, title, description, color, imageUrl, footer)
     }
 
-    private fun sendMessage(url: String, title: String? = null, description: String? = null, color: Int? = null, imageUrl: String? = null, footer: String? = null) {
+    private fun sendMessage(
+        url: String,
+        title: String? = null,
+        description: String? = null,
+        color: Int? = null,
+        imageUrl: String? = null,
+        footer: String? = null
+    ) {
         runAsync {
             val body = JSONObject()
             body["username"] = webHookConfig.discordUsername
@@ -52,10 +71,13 @@ object ExternalNotifications {
         runAsync {
             val body = JSONObject()
             body["chat_id"] = webHookConfig.telegramChannel
-            body["text"] = "*${title?:""}*\n${description?:""}\n${imageUrl?:""}"
+            body["text"] = "*${title ?: ""}*\n${description ?: ""}\n${imageUrl ?: ""}"
             body["parse_mode"] = "markdown"
 
-            makeRequest(webHookConfig.telegramUrl.format(webHookConfig.telegramKey), body.toString().toByteArray(StandardCharsets.UTF_8))
+            makeRequest(
+                webHookConfig.telegramUrl.format(webHookConfig.telegramKey),
+                body.toString().toByteArray(StandardCharsets.UTF_8)
+            )
         }
     }
 

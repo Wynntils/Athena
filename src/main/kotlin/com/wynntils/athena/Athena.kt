@@ -46,13 +46,8 @@ private fun main() {
 
     generalLog.info("WebServer Started, Registering Routes...")
 
-    server.before { ctx ->
-        run {
-            generalLog.debug("Incoming Request: " + ctx.req.pathInfo)
-        }
-    }
-
-    server.after { ctx -> run { generalLog.debug("Response code: " + ctx.res.status) } }
+//    server.before { ctx -> run { generalLog.debug("Incoming Request: " + ctx.req.pathInfo) } }
+//    server.after { ctx -> run { generalLog.debug("Response code: " + ctx.res.status) } }
 
     // routes
     server.registerRoutes(AuthenticationRoutes::class)

@@ -10,7 +10,7 @@ import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 
 @CacheInfo(name = "gatheringSpots", refreshRate = 3600) // refreshes every 1 hour
-class GatheringSpotsCache: DataCache {
+class GatheringSpotsCache : DataCache {
 
     override fun generateCache(): JSONOrderedObject {
         val result = JSONOrderedObject()

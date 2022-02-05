@@ -13,7 +13,7 @@ import java.net.URL
 import java.nio.charset.StandardCharsets
 
 @CacheInfo(name = "leaderboard", refreshRate = 3600)
-class LeaderboardCache: DataCache {
+class LeaderboardCache : DataCache {
 
     override fun generateCache(): JSONOrderedObject {
         val result = JSONOrderedObject()
@@ -39,7 +39,7 @@ class LeaderboardCache: DataCache {
         return result
     }
 
-    private fun getLeaderBoard(leaderboard: String): JSONObject  {
+    private fun getLeaderBoard(leaderboard: String): JSONObject {
         val connection = URL("${apiConfig.wynnLeaderboards}$leaderboard").openConnection()
         connection.setRequestProperty("User-Agent", generalConfig.userAgent)
         connection.setRequestProperty("apikey", apiConfig.wynnApiToken)

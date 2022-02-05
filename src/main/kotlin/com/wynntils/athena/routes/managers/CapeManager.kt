@@ -192,7 +192,8 @@ object CapeManager {
 
         for (y in 0 until cape.height) {
             for (x in 0 until cape.width) {
-                capePixels[x + y * cape.width] = capePixels[x + y * cape.width] and maskPixels[((x / scale) + ((y / scale) * capeMask.width)) % maskPixels.size]
+                capePixels[x + y * cape.width] =
+                    capePixels[x + y * cape.width] and maskPixels[((x / scale) + ((y / scale) * capeMask.width)) % maskPixels.size]
             }
         }
 

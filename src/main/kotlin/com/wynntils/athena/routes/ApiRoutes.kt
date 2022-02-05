@@ -355,7 +355,10 @@ class ApiRoutes {
         }
 
         val body = ctx.body().asJSON<JSONObject>()
-        if (!body.contains("name") || !body.contains("description") || !body.contains("adminContact") || !body.contains("maxLimit")) {
+        if (!body.contains("name") || !body.contains("description") || !body.contains("adminContact") || !body.contains(
+                "maxLimit"
+            )
+        ) {
             ctx.status(400)
 
             response["message"] = "Invalid body, expecting 'name', 'description', 'adminContact' and 'maxLimit'."
@@ -365,7 +368,8 @@ class ApiRoutes {
         val contactForm = ArrayList<String>()
         (body["adminContact"] as JSONArray).forEach { contactForm.add(it as String) }
 
-        val apiKey = ApiKey(UUID.randomUUID().toString(),
+        val apiKey = ApiKey(
+            UUID.randomUUID().toString(),
             body["name"] as String,
             body["description"] as String,
             contactForm,
@@ -479,7 +483,7 @@ class ApiRoutes {
 
             var lastObject = result
             for (i in instances.indices) {
-                if (i == instances.size-1) {
+                if (i == instances.size - 1) {
                     lastObject[instances[i]] = "${section.time.div(1000000L)}ms"
                     continue
                 }

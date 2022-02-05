@@ -13,7 +13,7 @@ import java.net.URL
 import java.nio.charset.StandardCharsets
 
 @CacheInfo(name = "serverList", refreshRate = 30)
-class ServerListCache: DataCache {
+class ServerListCache : DataCache {
 
     private var firstSeem = HashMap<String, Long>()
 
@@ -30,13 +30,14 @@ class ServerListCache: DataCache {
         connection.readTimeout = 5000
         connection.connectTimeout = 5000
 
-        val onlinePlayers =  connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>()
+        val onlinePlayers =
+            connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>()
 
         val servers = result.getOrCreate<JSONOrderedObject>("servers")
 
         // generating server data
         val validServers = ArrayList<String>()
-        for(key in onlinePlayers.keys) {
+        for (key in onlinePlayers.keys) {
             key as String
             if (key == "request") continue
 

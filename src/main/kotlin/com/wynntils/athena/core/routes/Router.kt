@@ -40,7 +40,7 @@ fun Javalin.registerRoutes(clazz: KClass<*>) {
 
         fun triggerContext(ctx: Context, log: Boolean = true) {
             if (ann.type != RouteType.ERROR && (ctx.resultFuture() != null || ctx.resultStream() != null)) return // allow middlewares to block the output
-            if (log) routeLogger.info("[${ann.type}] ${ctx.validIp() } -----> ${ann.path}")
+            if (log) routeLogger.info("[${ann.type}] ${ctx.validIp()} -----> ${ann.path}")
 
             fun parseResponse(): InputStream? {
                 try {

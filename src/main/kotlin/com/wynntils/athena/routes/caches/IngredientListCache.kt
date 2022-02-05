@@ -14,7 +14,7 @@ import java.net.URL
 import java.nio.charset.StandardCharsets
 
 @CacheInfo(name = "ingredientList", refreshRate = 86400)
-class IngredientListCache: DataCache {
+class IngredientListCache : DataCache {
 
     /**
      * Cache the rearranged version of the Wynncraft Ingredients

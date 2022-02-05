@@ -9,4 +9,4 @@ data class Guilds(
     var color: String = "",
 
     override val table: String = "guilds"
-): DatabaseObject
+) : DatabaseObject

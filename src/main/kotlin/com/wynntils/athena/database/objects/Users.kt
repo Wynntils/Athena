@@ -11,12 +11,11 @@ import com.wynntils.athena.database.files.objects.FileTable
 import com.wynntils.athena.database.interfaces.DatabaseObject
 import java.nio.charset.StandardCharsets
 import java.util.*
-import kotlin.collections.HashMap
 
 data class Users(
     override val _id: String,
 
-    var username: String= "",
+    var username: String = "",
     var lastActivity: Long = currentTimeMillis(),
     var accountType: AccountType = AccountType.NORMAL,
 
@@ -30,13 +29,14 @@ data class Users(
     var discordInfo: DiscordInfo? = DiscordInfo("", ""), // discord stuff
 
     override val table: String = "users"
-): DatabaseObject {
+) : DatabaseObject {
 
     @JsonIgnore
     private var configFiles: FileTable? = null
 
     private fun getConfigTable(): FileTable {
-        if (configFiles == null) configFiles = FileCabinet.getOrCreateDatabase("userConfigs").getOrCreateTable(_id.toString());
+        if (configFiles == null) configFiles =
+            FileCabinet.getOrCreateDatabase("userConfigs").getOrCreateTable(_id.toString());
 
         return configFiles!!
     }
@@ -45,7 +45,8 @@ data class Users(
         val configMap = mutableMapOf<String, String>()
 
         for (name in (getConfigTable().listFiles())) {
-            configMap[name] = ZLibHelper.inflate(getConfigTable().getFile(name)!!.retrieveBytes()).toString(StandardCharsets.UTF_8)
+            configMap[name] =
+                ZLibHelper.inflate(getConfigTable().getFile(name)!!.retrieveBytes()).toString(StandardCharsets.UTF_8)
         }
 
         return configMap

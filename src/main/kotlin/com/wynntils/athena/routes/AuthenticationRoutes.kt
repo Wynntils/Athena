@@ -43,7 +43,6 @@ class AuthenticationRoutes {
      */
     @Route(path = "/responseEncryption", type = RouteType.POST)
     fun responseEncryption(ctx: Context): JSONObject {
-        generalLog.info("Calling /responseEncryption")
         val response = JSONObject()
         val body = ctx.body().asJSON<JSONObject>()
 
@@ -79,7 +78,7 @@ class AuthenticationRoutes {
         response["configFiles"] = user.getConfigFiles()
 
         val hashes = response.getOrCreate<JSONObject>("hashes")
-        for(entry in CacheManager.getCaches()) {
+        for (entry in CacheManager.getCaches()) {
             hashes[entry.key] = entry.value.hash
         }
 

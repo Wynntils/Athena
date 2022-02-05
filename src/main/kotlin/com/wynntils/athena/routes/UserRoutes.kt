@@ -2,14 +2,12 @@ package com.wynntils.athena.routes
 
 import com.wynntils.athena.core.asJSON
 import com.wynntils.athena.core.getOrCreate
-import com.wynntils.athena.core.isAuthenticated
 import com.wynntils.athena.core.routes.annotations.BasePath
 import com.wynntils.athena.core.routes.annotations.Route
 import com.wynntils.athena.core.routes.enums.RouteType
 import com.wynntils.athena.core.utils.JSONOrderedObject
 import com.wynntils.athena.core.utils.ZLibHelper
 import com.wynntils.athena.database.DatabaseManager
-import com.wynntils.athena.database.enums.TextureResolution
 import com.wynntils.athena.errorLog
 import com.wynntils.athena.routes.managers.CapeManager
 import io.javalin.http.Context
@@ -68,7 +66,9 @@ class UserRoutes {
     @Route(path = "/uploadConfigs", type = RouteType.POST)
     fun uploadConfigs(ctx: Context): JSONObject {
         val response = JSONObject()
-        if (!ctx.isMultipartFormData() || ctx.formParams("authToken").isEmpty() || ctx.uploadedFiles("config").isEmpty()) {
+        if (!ctx.isMultipartFormData() || ctx.formParams("authToken").isEmpty() || ctx.uploadedFiles("config")
+                .isEmpty()
+        ) {
             ctx.status(400)
 
             response["message"] = "Expecting MultiPart Form, containing 'authToken' and 'config'."

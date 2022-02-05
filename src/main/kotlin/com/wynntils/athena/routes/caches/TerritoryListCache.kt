@@ -12,7 +12,7 @@ import java.net.URL
 import java.nio.charset.StandardCharsets
 
 @CacheInfo(name = "territoryList", refreshRate = 30)
-class TerritoryListCache: DataCache {
+class TerritoryListCache : DataCache {
 
     /**
      * Generates the cache based on Wynn's Territory Data

@@ -30,7 +30,10 @@ class TelemetryRoutes {
         }
 
         val spotData = body["spot"] as JSONObject
-        if (!spotData.contains("type") || !spotData.contains("material") || !spotData.contains("x") || !spotData.containsKey("y") || !spotData.containsKey("z")) {
+        if (!spotData.contains("type") || !spotData.contains("material") || !spotData.contains("x") || !spotData.containsKey(
+                "y"
+            ) || !spotData.containsKey("z")
+        ) {
             response["message"] = "The 'spot' object is expecting the parameters 'type', 'material', 'x', 'y,' 'z'."
             return response
         }
@@ -43,9 +46,11 @@ class TelemetryRoutes {
             return response
         }
 
-        val location = Location((spotData["x"] as Long).toInt(), (spotData["y"] as Long).toInt(), (spotData["z"] as Long).toInt())
+        val location =
+            Location((spotData["x"] as Long).toInt(), (spotData["y"] as Long).toInt(), (spotData["z"] as Long).toInt())
         val spot = DatabaseManager.getGatheringSpot(location)
-            ?: GatheringSpot(location.toString(),
+            ?: GatheringSpot(
+                location.toString(),
                 ProfessionType.valueOf(spotData["type"] as String),
                 GatheringMaterial.valueOf(spotData["material"] as String)
             )

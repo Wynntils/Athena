@@ -3,7 +3,7 @@ package com.wynntils.athena.core.configs.instances
 import com.wynntils.athena.core.configs.annotations.Settings
 
 @Settings(name = "api-config")
-data class ApiConfig (
+data class ApiConfig(
 
     val wynnApiToken: String = "<insert-here>",
 

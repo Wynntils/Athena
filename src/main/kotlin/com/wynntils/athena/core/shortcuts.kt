@@ -155,7 +155,7 @@ fun printCoolLogo() {
             [       .dWMMMWx,oNMMMMMK;   cWM0'       ] Athena is licensed over AGLP 3.0, check the
             [       ,KMMMWx'dWMMMMM0,   .kMMN:       ] repository license for more information.
             [       'OMMM0'cNMMMMMX;   .xWMMN:       ] 
-            [        cNMMd.dMMMMMMXl.'c0WMMMO.       ] Copyright © Wynntils Team 2018 - 2020
+            [        cNMMd.dMMMMMMXl.'c0WMMMO.       ] Copyright © Wynntils Team 2018 - 2022
             [         lXMx.oMMMMMMMWXNWMMMMX:        ] https://wynntils.com
             [          ;0K;'0MMMMMMMMMMMMMXc         ] https://github.com/Wynntils
             [           .ll.'xXMMMMMMMMMNx,          ] https://github.com/Wynntils/Athena
