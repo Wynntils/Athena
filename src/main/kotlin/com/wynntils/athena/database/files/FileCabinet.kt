@@ -43,7 +43,7 @@ object FileCabinet {
      * @return the FileDatabase object or null
      */
     fun getDatabase(name: String): FileDatabase? {
-       return databaseList.getOrDefault(name, null)
+        return databaseList.getOrDefault(name, null)
     }
 
     /**

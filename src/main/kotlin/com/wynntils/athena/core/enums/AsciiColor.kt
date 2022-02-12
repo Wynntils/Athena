@@ -25,7 +25,7 @@ enum class AsciiColor(
         fun removeColors(input: String): String {
             var output = input
 
-            for(color in values()) {
+            for (color in values()) {
                 output = output.replace(color.ascii, "")
             }
 

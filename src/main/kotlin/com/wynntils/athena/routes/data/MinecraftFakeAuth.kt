@@ -51,7 +51,8 @@ class MinecraftFakeAuth {
                 encrypted
             ) // decrypts the client sent shared key using our private key
 
-            val verificationKey = BigInteger(getServerHash(sharedKey)).toString(16) // converts the server hash to string
+            val verificationKey =
+                BigInteger(getServerHash(sharedKey)).toString(16) // converts the server hash to string
             val url = apiConfig.mojangAuth.format(username, verificationKey)
 
             val connection = URL(url).openConnection() as HttpsURLConnection // open connection to Mojang server api

@@ -50,14 +50,16 @@ class Logger(
     }
 
     fun info(message: String) {
-        val finalMessage = "[INFO] [${textDateFormat.format(Date())}] " + AsciiColor.BLUE.ascii + message + AsciiColor.RESET.ascii
+        val finalMessage =
+            "[INFO] [${textDateFormat.format(Date())}] " + AsciiColor.BLUE.ascii + message + AsciiColor.RESET.ascii
         if (print) println(finalMessage)
 
         writeString(AsciiColor.removeColors(finalMessage))
     }
 
     fun warn(message: String) {
-        val finalMessage = "[WARN] [${textDateFormat.format(Date())}] " + AsciiColor.RED.ascii + message + AsciiColor.RESET.ascii
+        val finalMessage =
+            "[WARN] [${textDateFormat.format(Date())}] " + AsciiColor.RED.ascii + message + AsciiColor.RESET.ascii
         if (print) println(finalMessage)
 
         writeString(AsciiColor.removeColors(finalMessage))
@@ -73,7 +75,8 @@ class Logger(
     }
 
     fun debug(message: String) {
-        val finalMessage = "[DEBUG] [${textDateFormat.format(Date())}] " + AsciiColor.YELLOW.ascii + message + AsciiColor.RESET.ascii
+        val finalMessage =
+            "[DEBUG] [${textDateFormat.format(Date())}] " + AsciiColor.YELLOW.ascii + message + AsciiColor.RESET.ascii
         if (print) println(finalMessage)
 
         writeString(AsciiColor.removeColors(finalMessage))

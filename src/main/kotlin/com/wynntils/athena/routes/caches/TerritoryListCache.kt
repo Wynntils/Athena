@@ -12,7 +12,7 @@ import java.net.URL
 import java.nio.charset.StandardCharsets
 
 @CacheInfo(name = "territoryList", refreshRate = 30)
-class TerritoryListCache: DataCache {
+class TerritoryListCache : DataCache {
 
     /**
      * Generates the cache based on Wynn's Territory Data
@@ -39,7 +39,7 @@ class TerritoryListCache: DataCache {
             val guild = GuildManager.getGuildData(wynn["guild"] as String?)!!
 
             final["territory"] = wynn["territory"]
-            final["guild"] = guild.id
+            final["guild"] = guild._id
             final["guildPrefix"] = guild.prefix
             final["guildColor"] = guild.color
             final["acquired"] = wynn["acquired"]

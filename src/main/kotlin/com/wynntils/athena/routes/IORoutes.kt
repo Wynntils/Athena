@@ -10,7 +10,7 @@ import com.wynntils.athena.core.routes.rateLimitIgnoredRoutes
 import com.wynntils.athena.core.routes.routeLogger
 import com.wynntils.athena.core.validIp
 import com.wynntils.athena.database.DatabaseManager
-import com.wynntils.athena.database.objects.ApiKeyProfile
+import com.wynntils.athena.database.objects.ApiKey
 import com.wynntils.athena.routes.data.RateLimitProfile
 import io.javalin.http.Context
 import org.json.simple.JSONObject
@@ -30,7 +30,7 @@ class IORoutes {
 
         var entry: String = ctx.validIp()
         var maxLimit: Int = rateLimitConfig.user
-        var apiKey: ApiKeyProfile? = null
+        var apiKey: ApiKey? = null
 
         // check for API Keys
         if (ctx.header("W-ApiKey") != null) {
@@ -38,7 +38,7 @@ class IORoutes {
             if (apiKey != null) {
                 apiKey.addRequest()
 
-                entry = apiKey.id
+                entry = apiKey._id
                 maxLimit = apiKey.maxLimit
             }
         }

@@ -8,6 +8,7 @@ import com.wynntils.athena.core.routes.annotations.Route
 import com.wynntils.athena.core.routes.enums.RouteType
 import com.wynntils.athena.core.toDashedUUID
 import com.wynntils.athena.database.DatabaseManager
+import com.wynntils.athena.errorLog
 import com.wynntils.athena.generalLog
 import com.wynntils.athena.routes.data.MinecraftFakeAuth
 import io.javalin.http.Context
@@ -74,7 +75,7 @@ class AuthenticationRoutes {
         response["configFiles"] = user.getConfigFiles()
 
         val hashes = response.getOrCreate<JSONObject>("hashes")
-        for(entry in CacheManager.getCaches()) {
+        for (entry in CacheManager.getCaches()) {
             hashes[entry.key] = entry.value.hash
         }
 

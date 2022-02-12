@@ -8,7 +8,7 @@ import java.util.*
 
 private val sections = WeakHashMap<String, Section>()
 
-fun <T> profile(name: String,notification: Boolean = true, runnable: () -> T): T {
+fun <T> profile(name: String, notification: Boolean = true, runnable: () -> T): T {
     val time = nanoTime()
     val result = runnable()
     sections[name] = Section(name, nanoTime() - time)
@@ -20,7 +20,7 @@ fun <T> profile(name: String,notification: Boolean = true, runnable: () -> T): T
         if (!notification) return result
         ExternalNotifications.sendMessage(
             title = null,
-            description = "``${name.replace("-", " -> ")}`` took ${difference/1000000} ms to proceed!",
+            description = "``${name.replace("-", " -> ")}`` took ${difference / 1000000} ms to proceed!",
             color = 16711680
         )
     }

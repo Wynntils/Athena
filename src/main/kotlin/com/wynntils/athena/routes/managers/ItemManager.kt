@@ -13,7 +13,7 @@ object ItemManager {
         fun isFixed(raw: String): Boolean {
             if (input["identified"] == true) return true
 
-            return when(raw) {
+            return when (raw) {
                 "rawStrength" -> true
                 "rawDexterity" -> true
                 "rawIntelligence" -> true
@@ -40,10 +40,14 @@ object ItemManager {
         }
 
         // outside tags
-        result["displayName"] = if (input.containsKey("displayName")) input["displayName"] else (input["name"] as String).replace("֎", "") // cancer has ֎ in it name for a random reason
+        result["displayName"] =
+            if (input.containsKey("displayName")) input["displayName"] else (input["name"] as String).replace(
+                "֎",
+                ""
+            ) // cancer has ֎ in it name for a random reason
         result["tier"] = (input["tier"] as String).toUpperCase()
         result["identified"] = input.getOrDefault("identified", false)
-        result["powderAmount"] =  input["sockets"]
+        result["powderAmount"] = input["sockets"]
         result["attackSpeed"] = input["attackSpeed"]
 
         // item info
@@ -95,7 +99,8 @@ object ItemManager {
             val value = input[key]
 
             if (key == "armorType") {
-                itemInfo["material"] = "minecraft:${value}_${itemInfo["type"]}".toLowerCase().replace("chain", "chainmail")
+                itemInfo["material"] =
+                    "minecraft:${value}_${itemInfo["type"]}".toLowerCase().replace("chain", "chainmail")
                 continue
             }
             if (key == "material" && value != null) {
@@ -277,7 +282,7 @@ object ItemManager {
     }
 
     private fun translateStatusName(raw: String): String? {
-        return when(raw) {
+        return when (raw) {
             "spellCostPct1" -> "1stSpellCost"
             "spellCostPct2" -> "2ndSpellCost"
             "spellCostPct3" -> "3rdSpellCost"
