@@ -31,14 +31,6 @@ object ItemManager {
             else "PERCENTAGE"
         }
 
-        fun ignoreZero(input: Any?): Any? {
-            if (input == null) return null
-
-            if (input is Number) return if (input.toInt() == 0) null else input
-            else if (input is String) return if (input.isEmpty() || input == "0-0") return null else input
-            return input
-        }
-
         // outside tags
         result["displayName"] =
             if (input.containsKey("displayName")) input["displayName"] else (input["name"] as String).replace(
@@ -126,6 +118,45 @@ object ItemManager {
         result.cleanNull()
 
         return result
+    }
+
+    fun updateItem(item: JSONOrderedObject, changelog: JSONObject) {
+        fun updateCategory(item: JSONOrderedObject, changes: JSONObject, category: String) {
+            if (changes.containsKey(category)) {
+                val original = item.getOrCreate<JSONOrderedObject>(category)
+                val changed = changes[category] as JSONObject
+                for (key in changed.keys) {
+                    original[key] = ignoreZero(changed[key])
+                }
+                original.cleanNull()
+            }
+        }
+
+        val itemName = item["displayName"]
+        val changes = changelog[itemName] as JSONObject
+
+        updateCategory(item, changes, "requirements")
+        updateCategory(item, changes, "damageTypes")
+        updateCategory(item, changes, "defenseTypes")
+
+        // must be handled separately since structure is different
+        if (changes.containsKey("statuses")) {
+            val statuses = item.getOrCreate<JSONOrderedObject>("statuses")
+            val changed = changes["statuses"] as JSONObject
+            for (key in changed.keys) {
+                val changedStatus = changed[key] as JSONObject
+                val value = changedStatus["baseValue"] as Number
+                if (value.toInt() == 0) {
+                    statuses.remove(key)
+                    continue
+                }
+
+                val status = statuses.getOrCreate<JSONOrderedObject>(key as String)
+                status["type"] = changedStatus["type"]
+                status["isFixed"] = changedStatus["isFixed"]
+                status["baseValue"] = value
+            }
+        }
     }
 
     fun getIdentificationOrder(): JSONOrderedObject {
@@ -341,6 +372,14 @@ object ItemManager {
             "reflection" -> "reflection"
             else -> null
         }
+    }
+
+    private fun ignoreZero(input: Any?): Any? {
+        if (input == null) return null
+
+        if (input is Number) return if (input.toInt() == 0) null else input
+        else if (input is String) return if (input.isEmpty() || input == "0-0") return null else input
+        return input
     }
 
 }

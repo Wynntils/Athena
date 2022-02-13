@@ -30,6 +30,15 @@ class ItemListCache : DataCache {
         val input = connection.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>()
         if (!input.containsKey("items")) throw UnexpectedCacheResponse()
 
+        val changelog = URL(apiConfig.wynnItemChanges).openConnection()
+        changelog.setRequestProperty("User-Agent", generalConfig.userAgent)
+        changelog.readTimeout = 20000
+        changelog.connectTimeout = 20000
+
+        val changelogInput = changelog.getInputStream().readBytes().toString(StandardCharsets.UTF_8).asJSON<JSONObject>()
+        val changes = changelogInput.getOrCreate<JSONObject>("changes")
+        val newItems = changelogInput.getOrCreate<JSONArray>("items")
+
         val result = JSONOrderedObject()
         val items = result.getOrCreate<JSONArray>("items")
 
@@ -41,19 +50,30 @@ class ItemListCache : DataCache {
         for (i in originalItems) {
             val item = i as JSONObject
 
-            // store all item material types
+            // convert item and apply changes, if necessary
             val converted = ItemManager.convertItem(item)
+            if (changes.containsKey(converted["displayName"])) {
+                ItemManager.updateItem(converted, changes)
+            }
+
+            // store all item material types
             if (converted["itemInfo"] != null) {
                 val itemInfo = converted["itemInfo"] as JSONOrderedObject
-                val typeArray = materialTypes.getOrCreate<JSONArray>(itemInfo["type"] as String);
+                val typeArray = materialTypes.getOrCreate<JSONArray>(itemInfo["type"] as String)
 
-                val material = itemInfo["material"];
+                val material = itemInfo["material"]
                 if (material != null && !typeArray.contains(material)) typeArray.add(material)
             }
 
             if (item.containsKey("displayName")) translatedReferences[item["name"]] = item["displayName"]
             itemsMap[item["name"] as String] = converted
             items.add(converted)
+        }
+
+        // add new items from changelog
+        for (i in newItems) {
+            val item = i as JSONObject
+            items.add(item)
         }
 
         val wynnBuilder = URL(apiConfig.wynnBuilderIDs).openConnection()
